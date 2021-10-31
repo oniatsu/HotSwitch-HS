@@ -1,0 +1,49 @@
+local SETTING_KEY = "hotswitch-hs"
+
+--[[
+
+data format:
+
+settings = {
+    {
+        app = "Google Chrome",
+        keys = {
+            "d",
+            "r",
+        }
+    },
+    {
+        app = "メール",
+        keys = {
+            "m",
+        }
+    },
+}
+
+]]
+
+local SettingsProvider = {}
+
+SettingsProvider.new = function()
+    local obj = {}
+
+    obj.get = function()
+        local settings = hs.settings.get(SETTING_KEY)
+        if settings == nil then
+            settings = {}
+        end
+        return settings
+    end
+
+    obj.set = function(value)
+        hs.settings.set(SETTING_KEY, value)
+    end
+
+    obj.clear = function()
+        hs.settings.clear(SETTING_KEY)
+    end
+
+    return obj
+end
+
+return SettingsProvider
