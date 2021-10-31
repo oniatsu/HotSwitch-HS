@@ -34,10 +34,12 @@ If the file does not exist, create it.
 
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
-hs.hotkey.bind({"command"}, ".", function()
+hs.hotkey.bind({"command"}, ".", function() -- Set any keybind you like
   hotswitchHs.openOrClose()
 end)
 ```
+
+[Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
 
 ## 4. Run Hammerspoon
 
