@@ -25,11 +25,6 @@ local function openOrClose()
         -- utils.log(t2-t1) -- 70ms
         -- utils.log(t3-t2) -- 50ms
         -- utils.log(t4-t3) -- 30ms
-
-        -- for debug
-        -- hs.timer.doAfter(1, function()
-        --     panel:close()
-        -- end)
     end
 end
 
