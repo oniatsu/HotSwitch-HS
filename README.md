@@ -1,5 +1,7 @@
 # What is HotSwitch-HS
 
+![preview](https://user-images.githubusercontent.com/5919569/139591542-a4f22e7f-2f37-4c7d-a20f-7fa94df13acb.png)
+
 HotSwitch-HS is a window switcher using 2 stroke hotkey for macOS.
 
 It provides fastest window switching, no matter how many windows there are.
