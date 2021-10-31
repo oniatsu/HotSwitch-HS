@@ -12,11 +12,12 @@ HotSwitch-HS uses Hammerspoon, and is rewrited for replacement of [HotSwitch](ht
 
 ## 1. Install [Hammerspoon](https://www.hammerspoon.org/)
 
-## 2. Download [HotSwitch-HS](https://github.com/oniatsu/HotSwitch-HS/tags)
+## 2. Download HotSwitch-HS
 
-## 3. Move the `hotswitch-hs/` folder to your `~/.hammerspoon/`
-
-Command: `$ mv hotswitch-hs/ ~/.hammerspoon/`
+In terminal, execute a command.
+```bash
+git clone https://github.com/oniatsu/HotSwitch-HS.git ~/.hammerspoon/hotswitch-hs
+```
 
 Directory tree is like this:
 ```
@@ -24,15 +25,28 @@ Directory tree is like this:
 ▾ hotswitch-hs/
   ▸ modules/
     hotswitch-hs.lua
+    README.md
   init.lua
 ```
 
-## 4. Put a code at your Hammerspoon's `~/.hammerspoon/init.lua`
+## 3. Put a code at your Hammerspoon's `~/.hammerspoon/init.lua`
+If the file does not exist, create it.
+
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
 hs.hotkey.bind({"command"}, ".", function()
   hotswitchHs.openOrClose()
 end)
+```
+
+## 4. Run Hammerspoon
+
+# Updating
+
+Execute these command at terminal.
+```
+cd ~/.hammerspoon/hotswitch-hs
+git pull
 ```
 
 # Usage
