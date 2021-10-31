@@ -41,6 +41,10 @@ end)
 
 ## 4. Run Hammerspoon
 
+# Usage
+
+It's same as [HotSwitch](https://oniatsu.github.io/HotSwitch/).
+
 # Updating
 
 Execute these command at terminal.
@@ -48,10 +52,6 @@ Execute these command at terminal.
 cd ~/.hammerspoon/hotswitch-hs
 git pull
 ```
-
-# Usage
-
-It's same as [HotSwitch](https://oniatsu.github.io/HotSwitch/).
 
 # Advanced usage
 
