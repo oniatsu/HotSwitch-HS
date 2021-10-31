@@ -6,7 +6,7 @@ HotSwitch-HS is a window switcher using 2 stroke hotkey for macOS.
 
 It provides fastest window switching, no matter how many windows there are.
 
-HotSwitch-HS uses Hammerspoon, and is rewriten for a substitution of [HotSwitch](https://github.com/oniatsu/HotSwitch).
+HotSwitch-HS uses Hammerspoon, and is rewritten for a substitution of [HotSwitch](https://github.com/oniatsu/HotSwitch).
 
 # Installation
 
