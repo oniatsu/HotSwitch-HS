@@ -14,7 +14,7 @@ HotSwitch-HS uses Hammerspoon, and is rewritten for a substitution of [HotSwitch
 
 ## 2. Download HotSwitch-HS
 
-In terminal, execute a command.
+In terminal, execute a command. You need to place a directory to `hotswitch-hs`.
 ```bash
 git clone https://github.com/oniatsu/HotSwitch-HS.git ~/.hammerspoon/hotswitch-hs
 ```
@@ -53,6 +53,7 @@ Check these.
 
 - If a keybind you set is not enabled, open Hammerspoon console and check some error messages. First, click Hammerspoon's menubar icon, second click `Console...`.
 - If you want to clear HotSwtich-HS's all settings, execute code `hotswitchHs.clearSettings()` at `~/.hammerspoon/init.lua`.
+- Update HotSwtich-HS. `cd ~/.hammerspoon/hotswitch-hs && git pull`
 
 # Updating
 
