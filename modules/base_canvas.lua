@@ -20,7 +20,7 @@ BaseCanvas.new = function(canvas, windows)
         -- local checkTime = util.checkTime.new()
         self:showRectangle(orderedWindows)
         -- checkTime:diff() -- 3ms - necessary
-        self:showText(orderedWindows)
+        self:showWindowInfo(orderedWindows)
         -- checkTime:diff() -- 35ms - necessary
     end
 
@@ -91,13 +91,12 @@ BaseCanvas.new = function(canvas, windows)
         })
     end
 
-    obj.showText = function(self, orderedWindows)
+    obj.getKeyStatuses = function(self)
         local settings = self.settingsProvider.get()
 
-        -- get setting keys
         local windowIdBasedOrderedWindows = self.windows:getWindowIdBasedOrderedWindows()
 
-        self.keyStatuses = {}
+        local keyStatuses = {}
         for i = 1, #windowIdBasedOrderedWindows do
             local window = windowIdBasedOrderedWindows[i]
 
@@ -109,7 +108,7 @@ BaseCanvas.new = function(canvas, windows)
                 local setting = settings[j]
                 if setting.app == appName then
                     if setting.keys[1] ~= nil then
-                        table.insert(self.keyStatuses, {
+                        table.insert(keyStatuses, {
                             app = appName,
                             windowId = windowId,
                             key = setting.keys[1],
@@ -122,96 +121,122 @@ BaseCanvas.new = function(canvas, windows)
             end
         end
 
-        -- append elements
+        return keyStatuses
+    end
+
+    obj.showWindowInfo = function(self, orderedWindows)
+        self.keyStatuses = self:getKeyStatuses()
+
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
 
-            local windowId = window:id()
-
-            local keyText = ""
-            for j = 1, #self.keyStatuses do
-                local keyStatus = self.keyStatuses[j]
-                if keyStatus.windowId == windowId then
-                    keyText = keyStatus.key
-                    break
-                end
-            end
-
-            -- key
-            self.baseCanvas:appendElements({
-                frame = {
-                    x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING,
-                    y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                    h = canvasConstants.ROW_HEIGHT,
-                    w = canvasConstants.KEY_W
-                },
-                text = hs.styledtext.new(keyText, {
-                    font = {
-                        name = ".AppleSystemUIFont",
-                        size = canvasConstants.FONT_SIZE
-                    },
-                    color = {
-                        alpha = canvasConstants.TEXT_ALPHA,
-                        blue = canvasConstants.TEXT_WHITE_VALUE,
-                        green = canvasConstants.TEXT_WHITE_VALUE,
-                        red = canvasConstants.TEXT_WHITE_VALUE
-                    }
-                }),
-                type = "text"
-            })
-
-            -- app name
-            local appName = window:application():name()
-            self.baseCanvas:appendElements({
-                frame = {
-                    x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING + canvasConstants.KEY_W,
-                    y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                    h = canvasConstants.ROW_HEIGHT,
-                    w = canvasConstants.APP_NAME_W
-                },
-                text = hs.styledtext.new(appName, {
-                    font = {
-                        name = ".AppleSystemUIFont",
-                        size = canvasConstants.FONT_SIZE
-                    },
-                    color = {
-                        alpha = canvasConstants.TEXT_ALPHA,
-                        blue = canvasConstants.TEXT_WHITE_VALUE,
-                        green = canvasConstants.TEXT_WHITE_VALUE,
-                        red = canvasConstants.TEXT_WHITE_VALUE
-                    }
-                }),
-                type = "text"
-            })
-
-            -- window name
-            local windowName = window:title()
-            self.baseCanvas:appendElements({
-                frame = {
-                    x = canvasConstants.PADDING * 2 + canvasConstants.KEY_W + canvasConstants.KEY_LEFT_PADDING +
-                        canvasConstants.APP_NAME_W,
-                    y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                    h = canvasConstants.ROW_HEIGHT,
-                    w = canvasConstants.PANEL_W - canvasConstants.KEY_W - canvasConstants.APP_NAME_W -
-                        canvasConstants.PADDING * 5
-                },
-                text = hs.styledtext.new(windowName, {
-                    font = {
-                        name = ".AppleSystemUIFont",
-                        size = canvasConstants.FONT_SIZE
-                    },
-                    color = {
-                        alpha = canvasConstants.TEXT_ALPHA,
-                        blue = canvasConstants.TEXT_WHITE_VALUE,
-                        green = canvasConstants.TEXT_WHITE_VALUE,
-                        red = canvasConstants.TEXT_WHITE_VALUE
-                    }
-                }),
-                type = "text"
-            })
+            self:showEachKeyText(i, window)
+            -- self:showEachAppName(i, window)
+            self:showEachAppIcon(i, window)
+            self:showEachWindowTitle(i, window)
         end
 
         self.baseCanvas:show()
+    end
+
+    obj.showEachKeyText = function(self, i, window)
+        local windowId = window:id()
+
+        local keyText = ""
+        for j = 1, #self.keyStatuses do
+            local keyStatus = self.keyStatuses[j]
+            if keyStatus.windowId == windowId then
+                keyText = keyStatus.key
+                break
+            end
+        end
+
+        self.baseCanvas:appendElements({
+            frame = {
+                x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING,
+                y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
+                h = canvasConstants.ROW_HEIGHT,
+                w = canvasConstants.KEY_W
+            },
+            text = hs.styledtext.new(keyText, {
+                font = {
+                    name = ".AppleSystemUIFont",
+                    size = canvasConstants.FONT_SIZE
+                },
+                color = {
+                    alpha = canvasConstants.TEXT_ALPHA,
+                    blue = canvasConstants.TEXT_WHITE_VALUE,
+                    green = canvasConstants.TEXT_WHITE_VALUE,
+                    red = canvasConstants.TEXT_WHITE_VALUE
+                }
+            }),
+            type = "text"
+        })
+    end
+
+    obj.showEachAppName = function(self, i, window)
+        local appName = window:application():name()
+        self.baseCanvas:appendElements({
+            frame = {
+                x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING + canvasConstants.KEY_W,
+                y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
+                h = canvasConstants.ROW_HEIGHT,
+                w = canvasConstants.APP_NAME_W
+            },
+            text = hs.styledtext.new(appName, {
+                font = {
+                    name = ".AppleSystemUIFont",
+                    size = canvasConstants.FONT_SIZE
+                },
+                color = {
+                    alpha = canvasConstants.TEXT_ALPHA,
+                    blue = canvasConstants.TEXT_WHITE_VALUE,
+                    green = canvasConstants.TEXT_WHITE_VALUE,
+                    red = canvasConstants.TEXT_WHITE_VALUE
+                }
+            }),
+            type = "text"
+        })
+    end
+
+    obj.showEachAppIcon = function(self, i, window)
+        local bundleID = window:application():bundleID()
+        self.baseCanvas:appendElements({
+            frame = {
+                x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING + canvasConstants.KEY_W,
+                y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
+                h = canvasConstants.ROW_HEIGHT - 3,
+                w = canvasConstants.APP_ICON_W - 3
+            },
+            image = hs.image.imageFromAppBundle(bundleID),
+            imageScaling = "scaleToFit",
+            type = "image"
+        })
+    end
+
+    obj.showEachWindowTitle = function(self, i, window)
+        local windowName = window:title()
+        self.baseCanvas:appendElements({
+            frame = {
+                x = canvasConstants.PADDING * 3 + canvasConstants.KEY_W + canvasConstants.KEY_LEFT_PADDING + canvasConstants.APP_ICON_W,
+                y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
+                h = canvasConstants.ROW_HEIGHT,
+                w = canvasConstants.PANEL_W - canvasConstants.KEY_W - canvasConstants.APP_ICON_W - canvasConstants.PADDING * 6
+            },
+            text = hs.styledtext.new(windowName, {
+                font = {
+                    name = ".AppleSystemUIFont",
+                    size = canvasConstants.FONT_SIZE
+                },
+                color = {
+                    alpha = canvasConstants.TEXT_ALPHA,
+                    blue = canvasConstants.TEXT_WHITE_VALUE,
+                    green = canvasConstants.TEXT_WHITE_VALUE,
+                    red = canvasConstants.TEXT_WHITE_VALUE
+                }
+            }),
+            type = "text"
+        })
     end
 
     obj.hide = function(self)

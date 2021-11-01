@@ -1,16 +1,19 @@
 local canvasConstants = {
     FONT_SIZE = 17,
 
-    PANEL_W = 600,
+    PANEL_W = 520,
+
     PADDING = 10,
-    KEY_W = 30,
+    KEY_W = 24,
     KEY_LEFT_PADDING = 10,
-    APP_NAME_W = 160,
     ROW_HEIGHT = 26,
+
+    APP_ICON_W = 26,
+    APP_NAME_W = 160,
 
     OUTLINE_RECTANGLE_ALPHA = 0.5,
     INLINE_RECTANGLE_ALPHA = 0.7,
-    SELECTED_ROW_ALPHA = 0.3,
+    SELECTED_ROW_ALPHA = 0.2,
     TEXT_ALPHA = 1,
 
     TEXT_WHITE_VALUE = 0.92
