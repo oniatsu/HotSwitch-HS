@@ -22,6 +22,7 @@ local function openOrClose()
         hotkeys.panel:open()
         -- local t4 = hs.timer.secondsSinceEpoch() * 1000
 
+        -- Check these speed for opening panel
         -- utils.log(t2-t1) -- 70ms
         -- utils.log(t3-t2) -- 50ms
         -- utils.log(t4-t3) -- 30ms
