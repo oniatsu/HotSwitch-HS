@@ -15,20 +15,13 @@ BaseCanvas.new = function(canvas, windows)
     obj.keyStatuses = {} -- { {app: "foo", windowId = 123, key = a, window = window} }
 
     obj.show = function(self)
-        -- Perhaps, creating and deleting is wおshow/hide に変更した方が良さそう
-
-        -- local t1 = hs.timer.secondsSinceEpoch() * 1000
         local orderedWindows = self.windows:getCachedOrderedWindowsOrFetch()
-        -- local t2 = hs.timer.secondsSinceEpoch() * 1000
 
+        -- local checkTime = util.checkTime.new()
         self:showRectangle(orderedWindows)
-        -- local t3 = hs.timer.secondsSinceEpoch() * 1000
+        -- checkTime:diff() -- 3ms - necessary
         self:showText(orderedWindows)
-        -- local t4 = hs.timer.secondsSinceEpoch() * 1000
-
-        -- utils.log(t2-t1) -- 70ms -> 0ms
-        -- utils.log(t3-t2) -- 5ms -> 2ms
-        -- utils.log(t4-t3) -- 70ms -> 25ms -> 25ms
+        -- checkTime:diff() -- 35ms - necessary
     end
 
     obj.showRectangle = function(self, orderedWindows)
@@ -46,6 +39,8 @@ BaseCanvas.new = function(canvas, windows)
                 w = canvasConstants.PANEL_W
             }
 
+            -- TODO: treat canvas as a standart window
+
             -- self.baseCanvas:behavior("fullScreenPrimary")
             -- self.baseCanvas:level()
             -- utils.log(self.baseCanvas:behavior())
@@ -57,7 +52,7 @@ BaseCanvas.new = function(canvas, windows)
             -- invisibleWindows = hs.window.invisibleWindows()[1]
             -- hs.window.invisibleWindows()[1]:focus()
 
-            -- utils.log(hs.timer.secondsSinceEpoch())
+            -- util.log(hs.timer.secondsSinceEpoch())
         end
 
         self.baseCanvas:replaceElements({

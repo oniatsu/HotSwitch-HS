@@ -35,60 +35,42 @@ Hotkeys.new = function()
 
     obj.allHotkeys = {}
 
-    obj.bind = function(self)
+    obj.create = function(self)
         if #self.allHotkeys == 0 then
-            self:bindSpecialKeys()
-            self:bindCharacterKeys(ALL_KEYS, false)
-            self:bindCharacterKeys(SHIFTABLE_KEYS, true)
+            self:createSpecialKeys()
+            self:createCharacterKeys(ALL_KEYS, false)
+            self:createCharacterKeys(SHIFTABLE_KEYS, true)
         end
     end
 
-    obj.unbind = function(self)
+    obj.enable = function(self)
+        -- local checkTime = util.checkTime.new()
+        for i = 1, #self.allHotkeys do
+            self.allHotkeys[i]:enable()
+        end
+        -- checkTime:diff() -- 40ms - necessary
+    end
+
+    obj.disable = function(self)
         if self.allHotkeys == nil then
-            util.log("hotkeys.lua (obj.unbind) : self.allHotkeys is null")
+            util.log("ERROR: hotkeys.lua (obj.disable) : self.allHotkeys is null")
         end
 
         for i = 1, #self.allHotkeys do
-            self.allHotkeys[i]:delete()
+            self.allHotkeys[i]:disable()
         end
-
-        self.allHotkeys = {}
     end
 
-    obj.bindSpecialKeys = function(self)
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "down", function()
-            self:next()
-        end, nil, function()
-            self:next()
-        end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "up", function()
-            self:previous()
-        end, nil, function()
-            self:previous()
-        end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "tab", function()
-            self:next()
-        end, nil, function()
-            self:next()
-        end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({"shift"}, "tab", function()
-            self:previous()
-        end, nil, function()
-            self:previous()
-        end))
-
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "return", function()
-            self:returnAction()
-        end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "space", function()
-            self:spaceAction()
-        end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "delete", function()
-            self:deleteAction()
-        end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "escape", function()
-            self:escapeAction()
-        end))
+    obj.createSpecialKeys = function(self)
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "down", function() self:next() end, nil, function() self:next() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "up", function() self:previous() end, nil, function() self:previous() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "tab", function() self:next() end, nil, function() self:next() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({"shift"}, "tab", function() self:previous() end, nil, function() self:previous() end))
+        
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "return", function() self:returnAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "space", function() self:spaceAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "delete", function() self:deleteAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "escape", function() self:escapeAction() end))
     end
 
     obj.next = function(self)
@@ -126,7 +108,7 @@ Hotkeys.new = function()
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self:unbind()
+        self:disable()
         self.panel:close()
 
         self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]:focus()
@@ -147,7 +129,7 @@ Hotkeys.new = function()
             self.isRegistrationMode = false
             self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
         else
-            self:unbind()
+            self:disable()
             self.panel:close()
         end
     end
@@ -196,7 +178,7 @@ Hotkeys.new = function()
         self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
     end
 
-    obj.bindCharacterKeys = function(self, keys, isShiftable)
+    obj.createCharacterKeys = function(self, keys, isShiftable)
         local keybindModifier
         if isShiftable then
             keybindModifier = {"shift"}
@@ -207,7 +189,7 @@ Hotkeys.new = function()
         for i = 1, #keys do
             local key = keys[i]
 
-            table.insert(self.allHotkeys, hs.hotkey.bind(keybindModifier, key, function()
+            table.insert(self.allHotkeys, hs.hotkey.new(keybindModifier, key, function()
                 if isShiftable then
                     key = key:upper()
                 end
@@ -293,13 +275,10 @@ Hotkeys.new = function()
                     end
 
                     if targetWindow ~= nil then
-                        self:unbind()
+                        self:disable()
                         self.panel:close()
 
                         targetWindow:focus()
-                    else
-                        -- self:unbind()
-                        -- self.panel:close()
                     end
                 end
             end))

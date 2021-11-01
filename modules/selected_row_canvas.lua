@@ -12,8 +12,6 @@ SelectedRowCanvas.new = function(canvas, windows, position)
     obj.windows = windows
     obj.position = position
 
-    -- TODO: change create/delete to show/hide
-
     obj.createSelectedRow = function(self)
         local orderedWindows = self.windows:getCachedOrderedWindowsOrFetch()
         local panelH = #orderedWindows * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 4

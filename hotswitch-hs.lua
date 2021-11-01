@@ -3,29 +3,28 @@ local util = require("hotswitch-hs/modules/util")
 local Hotkeys = require("hotswitch-hs/modules/hotkeys")
 local SettingsProvider = require("hotswitch-hs/modules/settings_provider")
 
-local hotkeys = nil
+local hotkeys = Hotkeys.new()
+
 local function main()
-    hotkeys = Hotkeys.new()
+    hotkeys:create()
 end
 
 local function openOrClose()
     if hotkeys.panel.isOpen then
-        hotkeys:unbind()
+        -- local checkTime = util.checkTime.new(false)
+        hotkeys:disable()
+        -- checkTime:diff() -- 40ms
         hotkeys.panel:close()
+        -- checkTime:diff() -- 10ms
     else
-        -- local t1 = hs.timer.secondsSinceEpoch() * 1000
+        -- local checkTime = util.checkTime.new()
         hotkeys.windows:refreshOrderedWindows()
-        -- local t2 = hs.timer.secondsSinceEpoch() * 1000
+        -- checkTime:diff() -- 40ms - necessary
 
-        hotkeys:bind()
-        -- local t3 = hs.timer.secondsSinceEpoch() * 1000
+        hotkeys:enable()
+        -- checkTime:diff() -- 50ms - necessary
         hotkeys.panel:open()
-        -- local t4 = hs.timer.secondsSinceEpoch() * 1000
-
-        -- Check these speed for opening panel
-        -- utils.log(t2-t1) -- 70ms
-        -- utils.log(t3-t2) -- 50ms
-        -- utils.log(t4-t3) -- 30ms
+        -- checkTime:diff() -- 30ms - necessary
     end
 end
 
