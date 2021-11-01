@@ -13,11 +13,17 @@ settings = {
         }
     },
     {
-        app = "メール",
+        app = "Mail",
         keys = {
             "m",
         }
     },
+    {
+        app = "Calendar",
+        keys = {
+            "c",
+        }
+    }
 }
 
 ]]
