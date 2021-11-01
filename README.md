@@ -65,4 +65,4 @@ git pull
 
 # Development note
 
-- Pay attention to lua's gavage collection
+- Pay attention to lua's garvage collection.
