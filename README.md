@@ -51,7 +51,7 @@ It's same as [HotSwitch](https://oniatsu.github.io/HotSwitch/).
 
 Check these.
 
-- If a keybind you set is not enabled, open Hammerspoon console and check some error messages. First, click Hammerspoon's menubar icon, second click `Console...`.
+- If a keybind you set is not enabled, open Hammerspoon console and check some error messages. First, click Hammerspoon's menubar icon. Second, click `Console...`.
 - If you want to clear HotSwtich-HS's all settings, execute code `hotswitchHs.clearSettings()` at `~/.hammerspoon/init.lua`.
 - Update HotSwtich-HS. `cd ~/.hammerspoon/hotswitch-hs && git pull`
 
