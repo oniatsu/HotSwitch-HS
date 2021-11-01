@@ -45,7 +45,26 @@ end)
 
 # Usage
 
-It's same as [HotSwitch](https://oniatsu.github.io/HotSwitch/).
+## The way of key registration
+
+1. Open HotSwitch-HS panel. (Sample code: `command + .`. You can change any keybind.)
+2. Select any window on lists. (Press `Tab` or cursor keys.)
+3. Chanege the panel to registeration mode. (Press `Space`.)
+4. Register **a fixed key** to the window. (Press any character keys. `a`, `b`, `c`, etc.)
+
+## The way of switching windows
+
+1. Open HotSwitch-HS panel. (Sample code: `command + .`. You can change any keybind.)
+2. Switch the target window by using **a fixed key**. (Press a key you registered.)
+
+It looks like that 2 stroke hotkey is working to activate any windows.
+The important thing is that **the 2 stroke key bind is fixed anytime**.
+
+That is why window switching by HotSwitch-HS is always fastest.
+
+## The way of key deletion
+
+If you want to delete a registered key combined with a window, select the window on lists and press `Delete`.
 
 # If you have some probrems,
 
