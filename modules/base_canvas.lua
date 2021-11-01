@@ -27,7 +27,7 @@ BaseCanvas.new = function(canvas, windows)
     obj.showRectangle = function(self, orderedWindows)
         local panelH = #orderedWindows * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 4
 
-        local mainScreenFrame = hs.window.focusedWindow():screen():frame()
+        local mainScreenFrame = hs.window.frontmostWindow():screen():frame()
         local panelX = mainScreenFrame.x + mainScreenFrame.w / 2 - canvasConstants.PANEL_W / 2
         local panelY = mainScreenFrame.y + mainScreenFrame.h / 2 - panelH / 2
 
