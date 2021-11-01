@@ -39,7 +39,7 @@ BaseCanvas.new = function(canvas, windows)
         local panelY = mainScreenFrame.y + mainScreenFrame.h / 2 - panelH / 2
 
         if self.baseCanvas == nil then
-            self.baseCanvas = self.canvas.new{
+            self.baseCanvas = self.canvas.new {
                 x = panelX,
                 y = panelY,
                 h = panelH,
@@ -52,7 +52,7 @@ BaseCanvas.new = function(canvas, windows)
             -- utils.log(self.baseCanvas:level())
             -- self.baseCanvas:bringToFront()
             -- self.baseCanvas:bringToFront(false)
-	        -- self.baseCanvas:clickActivating(false)
+            -- self.baseCanvas:clickActivating(false)
 
             -- invisibleWindows = hs.window.invisibleWindows()[1]
             -- hs.window.invisibleWindows()[1]:focus()
@@ -60,29 +60,40 @@ BaseCanvas.new = function(canvas, windows)
             -- utils.log(hs.timer.secondsSinceEpoch())
         end
 
-        self.baseCanvas:replaceElements(
-          {
+        self.baseCanvas:replaceElements({
             action = "fill",
-            fillColor = { alpha = canvasConstants.INLINE_RECTANGLE_ALPHA, blue = 0.5, green = 0.5, red = 0.5 },
-            frame = { x = "0", y = "0", h = "1", w = "1", },
+            fillColor = {
+                alpha = canvasConstants.INLINE_RECTANGLE_ALPHA,
+                blue = 0.5,
+                green = 0.5,
+                red = 0.5
+            },
+            frame = {
+                x = "0",
+                y = "0",
+                h = "1",
+                w = "1"
+            },
             type = "rectangle",
-            withShadow = true,
-          }
-        )
+            withShadow = true
+        })
 
-        self.baseCanvas:appendElements(
-          {
+        self.baseCanvas:appendElements({
             action = "fill",
-            fillColor = { alpha = canvasConstants.OUTLINE_RECTANGLE_ALPHA, blue = 0, green = 0, red = 0 },
+            fillColor = {
+                alpha = canvasConstants.OUTLINE_RECTANGLE_ALPHA,
+                blue = 0,
+                green = 0,
+                red = 0
+            },
             frame = {
                 x = canvasConstants.PADDING,
                 y = canvasConstants.PADDING,
                 h = #orderedWindows * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                w = canvasConstants.PANEL_W - canvasConstants.PADDING * 2,
+                w = canvasConstants.PANEL_W - canvasConstants.PADDING * 2
             },
-            type = "rectangle",
-          }
-        )
+            type = "rectangle"
+        })
     end
 
     obj.showText = function(self, orderedWindows)
@@ -103,7 +114,12 @@ BaseCanvas.new = function(canvas, windows)
                 local setting = settings[j]
                 if setting.app == appName then
                     if setting.keys[1] ~= nil then
-                        table.insert(self.keyStatuses, {app = appName, windowId = windowId, key = setting.keys[1], window = window})
+                        table.insert(self.keyStatuses, {
+                            app = appName,
+                            windowId = windowId,
+                            key = setting.keys[1],
+                            window = window
+                        })
                         table.remove(setting.keys, 1)
                     end
                     break
@@ -127,65 +143,87 @@ BaseCanvas.new = function(canvas, windows)
             end
 
             -- key
-            self.baseCanvas:appendElements(
-              {
+            self.baseCanvas:appendElements({
                 frame = {
                     x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING,
                     y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
                     h = canvasConstants.ROW_HEIGHT,
-                    w = canvasConstants.KEY_W,
+                    w = canvasConstants.KEY_W
                 },
                 text = hs.styledtext.new(keyText, {
-                    font = { name = ".AppleSystemUIFont", size = canvasConstants.FONT_SIZE },
-                    color = { alpha = canvasConstants.TEXT_ALPHA, blue = canvasConstants.TEXT_WHITE_VALUE, green = canvasConstants.TEXT_WHITE_VALUE, red = canvasConstants.TEXT_WHITE_VALUE },
+                    font = {
+                        name = ".AppleSystemUIFont",
+                        size = canvasConstants.FONT_SIZE
+                    },
+                    color = {
+                        alpha = canvasConstants.TEXT_ALPHA,
+                        blue = canvasConstants.TEXT_WHITE_VALUE,
+                        green = canvasConstants.TEXT_WHITE_VALUE,
+                        red = canvasConstants.TEXT_WHITE_VALUE
+                    }
                 }),
-                type = "text",
-              }
-            )
+                type = "text"
+            })
 
             -- app name
             local appName = window:application():name()
-            self.baseCanvas:appendElements(
-              {
+            self.baseCanvas:appendElements({
                 frame = {
                     x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING + canvasConstants.KEY_W,
                     y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
                     h = canvasConstants.ROW_HEIGHT,
-                    w = canvasConstants.APP_NAME_W,
+                    w = canvasConstants.APP_NAME_W
                 },
                 text = hs.styledtext.new(appName, {
-                    font = { name = ".AppleSystemUIFont", size = canvasConstants.FONT_SIZE },
-                    color = { alpha = canvasConstants.TEXT_ALPHA, blue = canvasConstants.TEXT_WHITE_VALUE, green = canvasConstants.TEXT_WHITE_VALUE, red = canvasConstants.TEXT_WHITE_VALUE },
+                    font = {
+                        name = ".AppleSystemUIFont",
+                        size = canvasConstants.FONT_SIZE
+                    },
+                    color = {
+                        alpha = canvasConstants.TEXT_ALPHA,
+                        blue = canvasConstants.TEXT_WHITE_VALUE,
+                        green = canvasConstants.TEXT_WHITE_VALUE,
+                        red = canvasConstants.TEXT_WHITE_VALUE
+                    }
                 }),
-                type = "text",
-              }
-            )
+                type = "text"
+            })
 
             -- window name
             local windowName = window:title()
-            self.baseCanvas:appendElements(
-              {
+            self.baseCanvas:appendElements({
                 frame = {
-                    x = canvasConstants.PADDING * 2 + canvasConstants.KEY_W + canvasConstants.KEY_LEFT_PADDING + canvasConstants.APP_NAME_W,
+                    x = canvasConstants.PADDING * 2 + canvasConstants.KEY_W + canvasConstants.KEY_LEFT_PADDING +
+                        canvasConstants.APP_NAME_W,
                     y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
                     h = canvasConstants.ROW_HEIGHT,
-                    w = canvasConstants.PANEL_W - canvasConstants.KEY_W - canvasConstants.APP_NAME_W - canvasConstants.PADDING * 5,
+                    w = canvasConstants.PANEL_W - canvasConstants.KEY_W - canvasConstants.APP_NAME_W -
+                        canvasConstants.PADDING * 5
                 },
                 text = hs.styledtext.new(windowName, {
-                    font = { name = ".AppleSystemUIFont", size = canvasConstants.FONT_SIZE },
-                    color = { alpha = canvasConstants.TEXT_ALPHA, blue = canvasConstants.TEXT_WHITE_VALUE, green = canvasConstants.TEXT_WHITE_VALUE, red = canvasConstants.TEXT_WHITE_VALUE },
+                    font = {
+                        name = ".AppleSystemUIFont",
+                        size = canvasConstants.FONT_SIZE
+                    },
+                    color = {
+                        alpha = canvasConstants.TEXT_ALPHA,
+                        blue = canvasConstants.TEXT_WHITE_VALUE,
+                        green = canvasConstants.TEXT_WHITE_VALUE,
+                        red = canvasConstants.TEXT_WHITE_VALUE
+                    }
                 }),
-                type = "text",
-              }
-            )
+                type = "text"
+            })
         end
 
         self.baseCanvas:show()
     end
 
     obj.hide = function(self)
-        self.baseCanvas:delete()
-        self.baseCanvas = nil
+        if self.baseCanvas ~= nil then
+            self.baseCanvas:delete()
+            self.baseCanvas = nil
+        end
     end
 
     return obj

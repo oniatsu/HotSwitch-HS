@@ -7,15 +7,16 @@ local SettingsProvider = require("hotswitch-hs/modules/settings_provider")
 local Panel = require("hotswitch-hs/modules/panel")
 
 -- some special keys don't work
-local ALL_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m",
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-    "-", "[", "]", ".", "/"}
+local ALL_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z",
+                  "x", "c", "v", "b", "n", "m", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "[", "]", ".",
+                  "/"}
 -- Sometimes, some signed key don't work such as ^ @ etc
 -- Hammerspoon Message:
 --   ** Warning:hs.keycode: key '@' not found in active keymap or ANSI-standard US keyboard layout
 --   ERROR:   LuaSkin: hs.hotkey callback: ...oon.app/Contents/Resources/extensions/hs/hotkey/init.lua:415: Invalid key: @ - this may mean that the key requested does not exist in your keymap (particularly if you switch keyboard layouts frequently)
 
-local SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m"}
+local SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l",
+                        "z", "x", "c", "v", "b", "n", "m"}
 
 local baseCanvas = nil
 local selectedRowCanvas = nil
@@ -55,15 +56,39 @@ Hotkeys.new = function()
     end
 
     obj.bindSpecialKeys = function(self)
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "down", function() self:next() end, nil, function() self:next() end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "up", function() self:previous() end, nil, function() self:previous() end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "tab", function() self:next() end, nil, function() self:next() end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({"shift"}, "tab", function() self:previous() end, nil, function() self:previous() end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "down", function()
+            self:next()
+        end, nil, function()
+            self:next()
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "up", function()
+            self:previous()
+        end, nil, function()
+            self:previous()
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "tab", function()
+            self:next()
+        end, nil, function()
+            self:next()
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({"shift"}, "tab", function()
+            self:previous()
+        end, nil, function()
+            self:previous()
+        end))
 
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "return", function() self:returnAction() end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "space", function() self:spaceAction() end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "delete", function() self:deleteAction() end))
-        table.insert(self.allHotkeys, hs.hotkey.bind({}, "escape", function() self:escapeAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "return", function()
+            self:returnAction()
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "space", function()
+            self:spaceAction()
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "delete", function()
+            self:deleteAction()
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.bind({}, "escape", function()
+            self:escapeAction()
+        end))
     end
 
     obj.next = function(self)
@@ -97,7 +122,7 @@ Hotkeys.new = function()
         end
         return position
     end
-    
+
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
@@ -227,7 +252,7 @@ Hotkeys.new = function()
                                 end
                                 setting.keys = newKeys
                             end
-                        else 
+                        else
                             local targetKey = key
                             for j = 1, #setting.keys do
                                 local settingKey = setting.keys[j]
@@ -249,9 +274,7 @@ Hotkeys.new = function()
                     if hasAppSetting == false then
                         table.insert(settings, {
                             app = appName,
-                            keys = {
-                                key
-                            }
+                            keys = {key}
                         })
                     end
 

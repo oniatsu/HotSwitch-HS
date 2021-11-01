@@ -55,7 +55,7 @@ Windows.new = function()
         for i = 0, #orderedWindows do
             local window = orderedWindows[i]
             if window ~= nil and window:subrole() ~= "AXUnknown" then
-               table.insert(cleanedOrderedWindows, window)
+                table.insert(cleanedOrderedWindows, window)
             end
         end
         return cleanedOrderedWindows

@@ -29,12 +29,12 @@ local function openOrClose()
 end
 
 local function clearSettings()
-  SettingsProvider.new().clear()
+    SettingsProvider.new().clear()
 end
 
 main()
 
 return {
     openOrClose = openOrClose,
-    clearSettings = clearSettings,
+    clearSettings = clearSettings
 }
