@@ -56,8 +56,8 @@ SelectedRowCanvas.new = function(canvas, windows, position)
             action = "fill",
             fillColor = {
                 alpha = 0.3,
-                blue = 0,
-                green = 0.9,
+                blue = 0.3,
+                green = 1,
                 red = 1
             },
             frame = {
