@@ -1,4 +1,4 @@
-local utils = require("hotswitch-hs/modules/utils")
+local util = require("hotswitch-hs/modules/util")
 local canvasConstants = require("hotswitch-hs/modules/canvas_constants")
 
 local SettingsProvider = require("hotswitch-hs/modules/settings_provider")

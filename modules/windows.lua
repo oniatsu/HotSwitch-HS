@@ -1,4 +1,4 @@
-local utils = require("hotswitch-hs/modules/utils")
+local util = require("hotswitch-hs/modules/util")
 
 local Windows = {}
 

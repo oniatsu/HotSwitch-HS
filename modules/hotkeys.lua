@@ -1,4 +1,4 @@
-local utils = require("hotswitch-hs/modules/utils")
+local util = require("hotswitch-hs/modules/util")
 
 local BaseCanvas = require("hotswitch-hs/modules/base_canvas")
 local SelectedRowCanvas = require("hotswitch-hs/modules/selected_row_canvas")
@@ -44,7 +44,7 @@ Hotkeys.new = function()
 
     obj.unbind = function(self)
         if self.allHotkeys == nil then
-            utils.log("hotkeys.lua (obj.unbind) : self.allHotkeys is null")
+            util.log("hotkeys.lua (obj.unbind) : self.allHotkeys is null")
         end
 
         for i = 1, #self.allHotkeys do

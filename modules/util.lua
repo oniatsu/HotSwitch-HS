@@ -7,6 +7,7 @@ local function log(value)
   --end
 
   local debugLog = hs.logger.new("=========", "debug")
+
   debugLog.i(message)
   print(message)
   hs.alert.show(message)
