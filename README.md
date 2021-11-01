@@ -8,6 +8,11 @@ It provides fastest window switching, no matter how many windows there are.
 
 HotSwitch-HS uses [Hammerspoon](https://www.hammerspoon.org/), and is rewritten for a substitution of [HotSwitch](https://github.com/oniatsu/HotSwitch).
 
+HotSwitch-HS's window switching steps is these.
+
+1. Register **a fixed key** to windows on list.
+2. Switch any windows by using the key you registered.
+
 # Installation
 
 ## 1. Install [Hammerspoon](https://www.hammerspoon.org/)
@@ -45,14 +50,19 @@ end)
 
 # Usage
 
-## The way of key registration
+HotSwitch-HS's window switching steps is these.
+
+1. Register **a fixed key** to windows on list.
+2. Switch any windows by using the key you registered.
+
+## Key registration 
 
 1. Open HotSwitch-HS panel. (Sample code: `command + .`. You can change any keybind.)
 2. Select any window on lists. (Press `Tab` or cursor keys.)
 3. Chanege the panel to registeration mode. (Press `Space`.)
 4. Register **a fixed key** to the window. (Press any character keys. `a`, `b`, `c`, etc.)
 
-## The way of switching windows
+## Switching windows
 
 1. Open HotSwitch-HS panel. (Sample code: `command + .`. You can change any keybind.)
 2. Switch the target window by using **a fixed key**. (Press a key you registered.)
@@ -62,7 +72,7 @@ The important thing is that **the 2 stroke key bind is fixed anytime**.
 
 That is why window switching by HotSwitch-HS is always fastest.
 
-## The way of key deletion
+## Key deletion
 
 If you want to delete a registered key combined with a window, select the window on lists and press `Delete`.
 
