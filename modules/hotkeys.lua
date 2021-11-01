@@ -108,8 +108,8 @@ Hotkeys.new = function()
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self:disable()
         self.panel:close()
+        self:disable()
 
         self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]:focus()
     end
@@ -129,8 +129,8 @@ Hotkeys.new = function()
             self.isRegistrationMode = false
             self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
         else
-            self:disable()
             self.panel:close()
+            self:disable()
         end
     end
 
@@ -275,8 +275,8 @@ Hotkeys.new = function()
                     end
 
                     if targetWindow ~= nil then
-                        self:disable()
                         self.panel:close()
+                        self:disable()
 
                         targetWindow:focus()
                     end
