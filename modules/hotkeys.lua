@@ -13,7 +13,6 @@ local SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "
                         "z", "x", "c", "v", "b", "n", "m"}
 
 local Hotkeys = {}
-
 Hotkeys.new = function()
     local obj = {}
 
@@ -110,7 +109,7 @@ Hotkeys.new = function()
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]:focus()
+        self.focusWindow(self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position])
 
         self:finish()
     end
@@ -279,7 +278,7 @@ Hotkeys.new = function()
                     if targetWindow ~= nil then
                         self:finish()
 
-                        targetWindow:focus()
+                        self.focusWindow(targetWindow)
                     end
                 end
             end))
@@ -294,9 +293,9 @@ Hotkeys.new = function()
 
     obj.focusWindowForCancel = function(self)
         if self.windows.previousWindow ~= nil then
-            self.windows.previousWindow:focus()
+            self.focusWindow(self.windows.previousWindow)
         else
-            self.windows:getCachedOrderedWindowsOrFetch()[1]:focus()
+            self.focusWindow(self.windows:getCachedOrderedWindowsOrFetch()[1])
         end
     end
 
@@ -315,6 +314,37 @@ Hotkeys.new = function()
         if self.applicationWatcher ~= nil then
             self.applicationWatcher:stop()
             self.applicationWatcher = nil
+        end
+    end
+
+    -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+    obj.focusWindow = function(targetWindow)
+        local targetAppliation = targetWindow:application()
+        local applicationVisibleWindows = targetAppliation:visibleWindows()
+
+        if #applicationVisibleWindows == 1 then
+            targetWindow:focus()
+        else
+            local applicationMainWindow = targetAppliation:mainWindow()
+            local applicationMainWindowScreen = applicationMainWindow:screen()
+            local applicationMainWindowScreenId = applicationMainWindowScreen:id()
+
+            local targetWindowScreen = targetWindow:screen()
+            local targetWindowScreenId = targetWindowScreen:id()
+
+            if targetWindowScreenId == applicationMainWindowScreenId then
+                targetWindow:focus()
+            else
+                -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+                -- This process is workaround way.
+
+                -- local originalSize = targetWindow:size()
+                -- targetWindow:setSize({h = 0, w = 0})
+                targetWindow:moveToScreen(applicationMainWindowScreen)
+                targetWindow:focus()
+                targetWindow:moveToScreen(targetWindowScreen)
+                -- targetWindow:setSize(originalSize)
+            end
         end
     end
 
