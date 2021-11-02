@@ -34,6 +34,7 @@ Windows.new = function()
         return windowIdBasedOrderedWindows
     end
 
+    -- Note: "hs.window.orderedWindows()" cannot get "Hammerspoon Console" window. I don't know why that.
     obj.refreshOrderedWindows = function(self)
         local checkTime = util.checkTime.new(false)
         local orderedWindows = hs.window.orderedWindows()

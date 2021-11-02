@@ -5,8 +5,9 @@
 HotSwitch-HS is a window switcher using **2 stroke hotkey** for macOS.
 
 It provides fastest window switching, no matter how many windows there are.
-
 HotSwitch-HS uses [Hammerspoon](https://www.hammerspoon.org/), and is rewritten for a substitution of [HotSwitch](https://github.com/oniatsu/HotSwitch).
+
+You can switch any windows by like `command + .` + `a (this key is fixed)`.
 
 HotSwitch-HS's window switching steps is these.
 
@@ -43,6 +44,8 @@ hs.hotkey.bind({"command"}, ".", function() -- Set any keybind you like
   hotswitchHs.openOrClose()
 end)
 ```
+
+Note: you cannot bind it to `command + tab` key, becuase Hammerspoon cannot override the key.
 
 [Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
 
