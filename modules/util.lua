@@ -1,44 +1,42 @@
--- local DEBUG = false
-local DEBUG = true
+local isEnabledDebug = false
 
-local previousTime
+local function enableDebug()
+    isEnabledDebug = true
+end
 
 local function log(value)
-    if DEBUG == false then return end
+    local message = hs.inspect.inspect(value)
 
-    local message = value
+    local status, err = pcall(function()
+        local debugLog = hs.logger.new("=========", "debug")
+        debugLog.i(message)
+    end)
+    if status == false then
+        print("ERROR: debugLog")
+    end
 
-    message = hs.inspect.inspect(message)
-    -- if type(value) == 'table' then
-    -- message = serializeTable(value)
-    -- end
-
-    local debugLog = hs.logger.new("=========", "debug")
-
-    debugLog.i(message)
     print(message)
-    hs.alert.show(message)
+
+    if isEnabledDebug then
+        hs.alert.show(message)
+    end
 end
 
 local checkTime = {}
-checkTime.new = function(debug)
+checkTime.new = function()
     local obj = {}
-
-    if debug ~= nil then
-        obj.debug = debug
-    else
-        obj.debug = true
-    end
 
     obj.previousTime = hs.timer.secondsSinceEpoch() * 1000
 
     obj.diff = function(self)
-        if DEBUG == false then return end
         if self.debug == false then return end
 
         local currentTime = hs.timer.secondsSinceEpoch() * 1000
         local timeDiff = currentTime - self.previousTime
-        log(math.floor(timeDiff + 0.5))
+
+        if isEnabledDebug then
+            log(math.floor(timeDiff + 0.5))
+        end
 
         self.previousTime = currentTime
         return timeDiff
@@ -50,4 +48,5 @@ end
 return {
     log = log,
     checkTime = checkTime,
+    enableDebug = enableDebug,
 }

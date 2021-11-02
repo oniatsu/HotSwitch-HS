@@ -29,9 +29,14 @@ local function clearSettings()
     SettingsProvider.new().clear()
 end
 
+local function enableDebug()
+    util.enableDebug()
+end
+
 main()
 
 return {
     openOrClose = openOrClose,
-    clearSettings = clearSettings
+    clearSettings = clearSettings,
+    enableDebug = enableDebug,
 }

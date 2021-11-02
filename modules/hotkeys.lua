@@ -43,12 +43,11 @@ Hotkeys.new = function()
                 self.allHotkeys[i]:enable()
             end)
             if status == false then
-                local logger = hs.logger.new("=========", "debug")
-                logger.i(self.allHotkeys[i])
-                logger.i("i: " .. i)
-                logger.i(self.allHotkeys[i])
-                logger.i(err)
                 util.log("ERROR: enabling hotkey")
+                util.log(self.allHotkeys[i])
+                util.log("i: " .. i)
+                util.log(self.allHotkeys[i])
+                util.log(err)
             end
         end
         -- checkTime:diff() -- 40ms - necessary
