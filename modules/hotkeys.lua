@@ -1,7 +1,5 @@
 local util = require("hotswitch-hs/modules/util")
 
-local BaseCanvas = require("hotswitch-hs/modules/base_canvas")
-local SelectedRowCanvas = require("hotswitch-hs/modules/selected_row_canvas")
 local Windows = require("hotswitch-hs/modules/windows")
 local SettingsProvider = require("hotswitch-hs/modules/settings_provider")
 local Panel = require("hotswitch-hs/modules/panel")
@@ -13,9 +11,6 @@ local ALL_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d
 
 local SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l",
                         "z", "x", "c", "v", "b", "n", "m"}
-
-local baseCanvas = nil
-local selectedRowCanvas = nil
 
 local Hotkeys = {}
 
