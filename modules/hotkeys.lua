@@ -39,7 +39,17 @@ Hotkeys.new = function()
     obj.enable = function(self)
         -- local checkTime = util.checkTime.new()
         for i = 1, #self.allHotkeys do
-            self.allHotkeys[i]:enable()
+            local status, err = pcall(function()
+                self.allHotkeys[i]:enable()
+            end)
+            if status == false then
+                local logger = hs.logger.new("=========", "debug")
+                logger.i(self.allHotkeys[i])
+                logger.i("i: " .. i)
+                logger.i(self.allHotkeys[i])
+                logger.i(err)
+                util.log("ERROR: enabling hotkey")
+            end
         end
         -- checkTime:diff() -- 40ms - necessary
     end
