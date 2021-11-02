@@ -293,8 +293,8 @@ Hotkeys.new = function()
     end
 
     obj.focusWindowForCancel = function(self)
-        if self.panel.baseCanvas.isPreviousFocusedWindowHammerspoonConsole then
-            -- none
+        if self.windows.previousWindow ~= nil then
+            self.windows.previousWindow:focus()
         else
             self.windows:getCachedOrderedWindowsOrFetch()[1]:focus()
         end

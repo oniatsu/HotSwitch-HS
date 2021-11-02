@@ -18,7 +18,9 @@ local function openOrClose()
         -- Enable hotkeys before refresh windows,
         -- because refreshing windows is slow and take time.
 
-        local checkTime = util.checkTime.new()
+        hotkeys.windows.previousWindow = hs.window.frontmostWindow()
+
+        -- local checkTime = util.checkTime.new()
         hotkeys:enable()
         -- checkTime:diff() -- 50ms
         hotkeys.windows:refreshOrderedWindows()

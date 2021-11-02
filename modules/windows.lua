@@ -6,6 +6,7 @@ Windows.new = function()
     local obj = {}
 
     obj.cachedOrderedWindows = nil
+    obj.previousWindow = nil
 
     obj.getCachedOrderedWindowsOrFetch = function(self)
         if self.cachedOrderedWindows == nil then
