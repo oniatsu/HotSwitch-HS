@@ -9,11 +9,8 @@ local Panel = require("hotswitch-hs/modules/panel")
 -- some special keys don't work
 local ALL_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m",
                   "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-                  "-", "^", "@", "[", "]", ",", ".", "/"}
--- Sometimes, some signed key don't work such as ^ @ etc
--- Hammerspoon Message:
---   ** Warning:hs.keycode: key '@' not found in active keymap or ANSI-standard US keyboard layout
---   ERROR:   LuaSkin: hs.hotkey callback: ...oon.app/Contents/Resources/extensions/hs/hotkey/init.lua:415: Invalid key: @ - this may mean that the key requested does not exist in your keymap (particularly if you switch keyboard layouts frequently)
+                  "-", "[", "]", ",", ".", "/"}
+-- Sometimes, some signed key don't work
 
 local SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l",
                         "z", "x", "c", "v", "b", "n", "m"}
