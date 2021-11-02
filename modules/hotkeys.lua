@@ -26,7 +26,7 @@ Hotkeys.new = function()
 
     obj.allHotkeys = {}
 
-    obj.watcherOfWindowChange = nil
+    obj.applicationWatcher = nil
 
     obj.create = function(self)
         if #self.allHotkeys == 0 then
@@ -290,7 +290,7 @@ Hotkeys.new = function()
     obj.finish = function(self)
         self.panel:close()
         self:disable()
-        -- self:unwatchWindowChange()
+        self:unwatchAppliationDeactivated()
     end
 
     obj.focusWindowForCancel = function(self)
@@ -301,21 +301,21 @@ Hotkeys.new = function()
         end
     end
 
-    -- too slow
-    obj.watchWindowChange = function(self)
-        if self.watcherOfWindowChange == nil then
-            self.watcherOfWindowChange = function(window, appName)
-                util.log('Focused: ' .. window:title() .. " : " .. appName)
-            end
-
-            hs.window.filter.default:subscribe(hs.window.filter.windowFocused, self.watcherOfWindowChange)
+    obj.watchAppliationDeactivated = function(self)
+        if self.applicationWatcher == nil then
+            self.applicationWatcher = hs.application.watcher.new(function(appName, eventType, app)
+                if appName == "Hammerspoon" and eventType == hs.application.watcher.deactivated then
+                    self:finish()
+                end
+            end)
+            self.applicationWatcher:start()
         end
     end
 
-    obj.unwatchWindowChange = function(self)
-        if self.watcherOfWindowChange ~= nil then
-            hs.window.filter.default:unsubscribe(hs.window.filter.windowFocused, self.watcherOfWindowChange)
-            self.watcherOfWindowChange = nil
+    obj.unwatchAppliationDeactivated = function(self)
+        if self.applicationWatcher ~= nil then
+            self.applicationWatcher:stop()
+            self.applicationWatcher = nil
         end
     end
 

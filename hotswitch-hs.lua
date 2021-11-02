@@ -12,23 +12,16 @@ end
 local function openOrClose()
     if hotkeys.panel.isOpen then
         hotkeys:focusWindowForCancel()
-
         hotkeys:finish()
     else
-        -- Enable hotkeys before refresh windows,
-        -- because refreshing windows is slow and take time.
-
         hotkeys.windows.previousWindow = hs.window.frontmostWindow()
 
-        -- local checkTime = util.checkTime.new()
+        -- Enable hotkeys before refresh windows,
+        -- because refreshing windows is slow and take time.
         hotkeys:enable()
-        -- checkTime:diff() -- 50ms
         hotkeys.windows:refreshOrderedWindows()
-        -- checkTime:diff() -- 50ms
         hotkeys.panel:open()
-        -- checkTime:diff() -- 120ms
-        -- hotkeys:watchWindowChange()
-        -- checkTime:diff() -- 200ms
+        hotkeys:watchAppliationDeactivated()
     end
 end
 
