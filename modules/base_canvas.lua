@@ -38,23 +38,28 @@ BaseCanvas.new = function(canvas, windows)
                 h = panelH,
                 w = canvasConstants.PANEL_W
             }
-
-            -- TODO: treat canvas as a standart window
-
-            -- self.baseCanvas:behavior("fullScreenPrimary")
-            -- self.baseCanvas:level()
-            -- utils.log(self.baseCanvas:behavior())
-            -- utils.log(self.baseCanvas:level())
-            -- self.baseCanvas:bringToFront()
-            -- self.baseCanvas:bringToFront(false)
-            -- self.baseCanvas:clickActivating(false)
-
-            -- invisibleWindows = hs.window.invisibleWindows()[1]
-            -- hs.window.invisibleWindows()[1]:focus()
-
-            -- util.log(hs.timer.secondsSinceEpoch())
         end
 
+        self:setElements(orderedWindows)
+
+        self:activateHammerspoonWindow()
+    end
+    
+    obj.activateHammerspoonWindow = function(self)
+        -- self.baseCanvas:level("normal") -- don't need
+
+        -- activate Hammerspoon windows
+        local app = hs.application.get("Hammerspoon")
+        -- app:activate()
+        app:setFrontmost()
+        self.baseCanvas:bringToFront()
+
+        -- disable mouse events
+        self.baseCanvas:canvasMouseEvents(true, true, false, false)
+        self.baseCanvas:mouseCallback(function() end)
+    end
+
+    obj.setElements = function(self, orderedWindows)
         self.baseCanvas:replaceElements({
             action = "fill",
             fillColor = {

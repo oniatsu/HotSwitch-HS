@@ -35,6 +35,8 @@ Hotkeys.new = function()
 
     obj.allHotkeys = {}
 
+    obj.watcherOfWindowChange = nil
+
     obj.create = function(self)
         if #self.allHotkeys == 0 then
             self:createSpecialKeys()
@@ -108,10 +110,9 @@ Hotkeys.new = function()
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self.panel:close()
-        self:disable()
-
         self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]:focus()
+
+        self:finish()
     end
 
     obj.spaceAction = function(self)
@@ -129,8 +130,9 @@ Hotkeys.new = function()
             self.isRegistrationMode = false
             self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
         else
-            self.panel:close()
-            self:disable()
+            self:focusWindowForCancel()
+
+            self:finish()
         end
     end
 
@@ -174,7 +176,7 @@ Hotkeys.new = function()
 
         self.settingsProvider.set(settings)
 
-        self.panel:open()
+        self:open()
         self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
     end
 
@@ -262,7 +264,7 @@ Hotkeys.new = function()
 
                     self.settingsProvider.set(settings)
 
-                    self.panel:open()
+                    self:open()
                     self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
                 else
                     local targetWindow
@@ -275,13 +277,44 @@ Hotkeys.new = function()
                     end
 
                     if targetWindow ~= nil then
-                        self.panel:close()
-                        self:disable()
+                        self:finish()
 
                         targetWindow:focus()
                     end
                 end
             end))
+        end
+    end
+
+    obj.finish = function(self)
+        self.panel:close()
+        self:disable()
+        -- self:unwatchWindowChange()
+    end
+
+    obj.focusWindowForCancel = function(self)
+        if self.panel.baseCanvas.isPreviousFocusedWindowHammerspoonConsole then
+            -- none
+        else
+            self.windows:getCachedOrderedWindowsOrFetch()[1]:focus()
+        end
+    end
+
+    -- too slow
+    obj.watchWindowChange = function(self)
+        if self.watcherOfWindowChange == nil then
+            self.watcherOfWindowChange = function(window, appName)
+                util.log('Focused: ' .. window:title() .. " : " .. appName)
+            end
+
+            hs.window.filter.default:subscribe(hs.window.filter.windowFocused, self.watcherOfWindowChange)
+        end
+    end
+
+    obj.unwatchWindowChange = function(self)
+        if self.watcherOfWindowChange ~= nil then
+            hs.window.filter.default:unsubscribe(hs.window.filter.windowFocused, self.watcherOfWindowChange)
+            self.watcherOfWindowChange = nil
         end
     end
 
