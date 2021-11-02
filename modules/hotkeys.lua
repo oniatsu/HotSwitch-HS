@@ -6,11 +6,10 @@ local Windows = require("hotswitch-hs/modules/windows")
 local SettingsProvider = require("hotswitch-hs/modules/settings_provider")
 local Panel = require("hotswitch-hs/modules/panel")
 
--- some special keys don't work
+-- Sometimes, some special keys don't work
 local ALL_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m",
                   "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
                   "-", "[", "]", ",", ".", "/"}
--- Sometimes, some signed key don't work
 
 local SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l",
                         "z", "x", "c", "v", "b", "n", "m"}
