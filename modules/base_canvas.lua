@@ -12,16 +12,31 @@ BaseCanvas.new = function(canvas, windows)
     obj.windows = windows
     obj.settingsProvider = SettingsProvider.new()
 
-    obj.keyStatuses = {} -- { {app: "foo", windowId = 123, key = a, window = window} }
+    --[[
+    data format:
+
+    keyStatuses = {
+        {
+            app: "Google Chrome",
+            windowId = 123,
+            key = a,
+            window = hs.window object
+        },
+        {
+            app: "Mail",
+            windowId = 456,
+            key = b,
+            window = hs.window object
+        }
+    }
+    ]]
+    obj.keyStatuses = {}
 
     obj.show = function(self)
         local orderedWindows = self.windows:getCachedOrderedWindowsOrFetch()
 
-        -- local checkTime = util.checkTime.new()
         self:showRectangle(orderedWindows)
-        -- checkTime:diff() -- 3ms - necessary
         self:showWindowInfo(orderedWindows)
-        -- checkTime:diff() -- 35ms - necessary
     end
 
     obj.showRectangle = function(self, orderedWindows)
@@ -205,18 +220,32 @@ BaseCanvas.new = function(canvas, windows)
     end
 
     obj.showEachAppIcon = function(self, i, window)
+        local frame = {
+            x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING + canvasConstants.KEY_W,
+            y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
+            h = canvasConstants.ROW_HEIGHT - 3,
+            w = canvasConstants.APP_ICON_W - 3
+        }
+
         local bundleID = window:application():bundleID()
-        self.baseCanvas:appendElements({
-            frame = {
-                x = canvasConstants.PADDING * 2 + canvasConstants.KEY_LEFT_PADDING + canvasConstants.KEY_W,
-                y = (i - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                h = canvasConstants.ROW_HEIGHT - 3,
-                w = canvasConstants.APP_ICON_W - 3
-            },
-            image = hs.image.imageFromAppBundle(bundleID),
-            imageScaling = "scaleToFit",
-            type = "image"
-        })
+        if bundleID then
+            self.baseCanvas:appendElements({
+                frame = frame,
+                image = hs.image.imageFromAppBundle(bundleID),
+                imageScaling = "scaleToFit",
+                type = "image",
+            })
+        else
+            local radius = frame.w / 2
+
+            self.baseCanvas:appendElements({
+                center = { x = frame.x + radius, y = frame.y + radius },
+                action = "fill",
+                fillColor = { alpha = 1, blue = 0.5, green = 0.5, red = 0.5 },
+                radius = radius - 1,
+                type = "circle",
+            })
+        end
     end
 
     obj.showEachWindowTitle = function(self, i, window)

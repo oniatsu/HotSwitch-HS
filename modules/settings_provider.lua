@@ -1,7 +1,6 @@
 local SETTING_KEY = "hotswitch-hs"
 
 --[[
-
 data format:
 
 settings = {
@@ -25,7 +24,6 @@ settings = {
         }
     }
 }
-
 ]]
 
 local SettingsProvider = {}
