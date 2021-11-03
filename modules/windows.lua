@@ -42,8 +42,11 @@ Windows.new = function()
         -- self.cachedOrderedWindows = wins
         -- return wins
 
+        -- local checkTime = util.checkTime.new()
         local orderedWindows = hs.window.orderedWindows()
+        -- checkTime:diff("get") --100ms
         local cleanedOrderedWindows = self.removeInvalidWindows(orderedWindows)
+        -- checkTime:diff("remove") -- 25ms
 
         self.cachedOrderedWindows = cleanedOrderedWindows
         return cleanedOrderedWindows

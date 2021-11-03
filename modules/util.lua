@@ -27,14 +27,17 @@ checkTime.new = function()
 
     obj.previousTime = hs.timer.secondsSinceEpoch() * 1000
 
-    obj.diff = function(self)
-        if self.debug == false then return end
+    obj.diff = function(self, key)
+        if isEnabledDebug == false then return end
 
         local currentTime = hs.timer.secondsSinceEpoch() * 1000
         local timeDiff = currentTime - self.previousTime
 
-        if isEnabledDebug then
-            log(math.floor(timeDiff + 0.5))
+        local roundedTimeDiff = math.floor(timeDiff + 0.5)
+        if key then
+            log(key .. ": " .. roundedTimeDiff)
+        else
+            log(roundedTimeDiff)
         end
 
         self.previousTime = currentTime
