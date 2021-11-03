@@ -175,7 +175,7 @@ Hotkeys.new = function()
 
         self.settingsProvider.set(settings)
 
-        self:open()
+        self.panel:open()
         self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
     end
 
@@ -263,7 +263,7 @@ Hotkeys.new = function()
 
                     self.settingsProvider.set(settings)
 
-                    self:open()
+                    self.panel:open()
                     self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
                 else
                     local targetWindow
