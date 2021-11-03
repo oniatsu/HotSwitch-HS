@@ -340,6 +340,8 @@ Hotkeys.new = function()
                     targetWindow:focus()
                 else
                     -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+                    -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
+
                     -- This process is workaround way.
 
                     -- util.log(targetWindow:title())
