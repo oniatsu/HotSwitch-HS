@@ -344,7 +344,7 @@ Hotkeys.new = function()
 
                     -- util.log(targetWindow:title())
                     targetWindow:focus()
-                    hs.timer.doAfter(0.2, function()
+                    hs.timer.doAfter(0.15, function()
                         targetWindow:focus()
                     end)
                 end
