@@ -37,11 +37,13 @@ Windows.new = function()
 
     -- Note: "hs.window.orderedWindows()" cannot get "Hammerspoon Console" window. I don't know why that.
     obj.refreshOrderedWindows = function(self)
-        local checkTime = util.checkTime.new(false)
+        -- This method is slow. hs.window.switcher uses this way.
+        -- local wins = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+        -- self.cachedOrderedWindows = wins
+        -- return wins
+
         local orderedWindows = hs.window.orderedWindows()
-        -- checkTime:diff() -- 45ms - necessary
         local cleanedOrderedWindows = self.removeInvalidWindows(orderedWindows)
-        -- checkTime:diff() -- 20ms - necessary
 
         self.cachedOrderedWindows = cleanedOrderedWindows
         return cleanedOrderedWindows

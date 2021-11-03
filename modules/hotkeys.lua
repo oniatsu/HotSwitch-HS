@@ -335,15 +335,19 @@ Hotkeys.new = function()
             if targetWindowScreenId == applicationMainWindowScreenId then
                 targetWindow:focus()
             else
-                -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
-                -- This process is workaround way.
+                local focusedWindow = hs.window.focusedWindow()
+                if focusedWindow and focusedWindow:application():pid() == targetAppliation:pid() then
+                    targetWindow:focus()
+                else
+                    -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+                    -- This process is workaround way.
 
-                -- local originalSize = targetWindow:size()
-                -- targetWindow:setSize({h = 0, w = 0})
-                targetWindow:moveToScreen(applicationMainWindowScreen)
-                targetWindow:focus()
-                targetWindow:moveToScreen(targetWindowScreen)
-                -- targetWindow:setSize(originalSize)
+                    -- util.log(targetWindow:title())
+                    targetWindow:focus()
+                    hs.timer.doAfter(0.2, function()
+                        targetWindow:focus()
+                    end)
+                end
             end
         end
     end

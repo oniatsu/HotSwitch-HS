@@ -42,7 +42,7 @@ BaseCanvas.new = function(canvas, windows)
 
         self:setElements(orderedWindows)
 
-        self:activateHammerspoonWindow()
+        -- self:activateHammerspoonWindow()
     end
     
     obj.activateHammerspoonWindow = function(self)
