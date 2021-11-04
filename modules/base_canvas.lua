@@ -250,6 +250,9 @@ BaseCanvas.new = function(canvas, windows)
 
     obj.showEachWindowTitle = function(self, i, window)
         local windowName = window:title()
+        if windowName == "" then
+            windowName = window:application():name()
+        end
         self.baseCanvas:appendElements({
             frame = {
                 x = canvasConstants.PADDING * 3 + canvasConstants.KEY_W + canvasConstants.KEY_LEFT_PADDING + canvasConstants.APP_ICON_W,
