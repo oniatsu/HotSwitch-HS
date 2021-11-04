@@ -16,7 +16,7 @@ local canvasConstants = {
     SELECTED_ROW_ALPHA = 0.2,
     TEXT_ALPHA = 1,
 
-    TEXT_WHITE_VALUE = 0.92
+    TEXT_WHITE_VALUE = 0.92,
 }
 
 -- for debug
