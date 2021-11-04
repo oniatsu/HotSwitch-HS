@@ -57,21 +57,18 @@ BaseCanvas.new = function(canvas, windows)
 
         self:setElements(orderedWindows)
 
-        self:activateHammerspoonWindow()
-    end
-    
-    obj.activateHammerspoonWindow = function(self)
+        -- self:activateHammerspoonWindow()
         -- self.baseCanvas:level("normal") -- don't need
-
-        -- activate Hammerspoon windows
-        local app = hs.application.get("Hammerspoon")
-        -- app:activate()
-        app:setFrontmost()
-        self.baseCanvas:bringToFront()
+        -- self.baseCanvas:bringToFront()
 
         -- disable mouse events
         self.baseCanvas:canvasMouseEvents(true, true, false, false)
         self.baseCanvas:mouseCallback(function() end)
+    end
+    
+    obj.activateHammerspoonWindow = function(self)
+        local app = hs.application.get("Hammerspoon")
+        app:setFrontmost()
     end
 
     obj.setElements = function(self, orderedWindows)

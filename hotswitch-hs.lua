@@ -18,9 +18,11 @@ local function openOrClose()
 
         -- Enable hotkeys before refresh windows,
         -- because refreshing windows is slow and take time.
-        -- local checkTime = util.checkTime.new()
+        local checkTime = util.checkTime.new()
         hotkeys:enable()
-        -- checkTime:diff("enable") -- 40ms
+        -- checkTime:diff("enable") -- 60ms
+        hotkeys.panel.baseCanvas:activateHammerspoonWindow()
+        -- checkTime:diff("activate") -- 25ms
         hotkeys.windows:refreshOrderedWindows()
         -- checkTime:diff("refresh") -- 170ms
         hotkeys.panel:open()
