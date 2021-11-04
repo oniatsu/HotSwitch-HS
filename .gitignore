@@ -39,3 +39,12 @@ luac.out
 *.x86_64
 *.hex
 
+### https://raw.github.com/github/gitignore/3af1c2901fe89a2a75b6669a73b0a13e3f036182/Global/VisualStudioCode.gitignore
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+
