@@ -7,9 +7,10 @@ local keyConstants = {
 
     SHIFTABLE_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m"},
 
-    DEFAULT_AUTO_GENERATED_KEYS = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+    DEFAULT_AUTO_GENERATED_KEYS = {"s", "a", "d", "f", "j", "k", "l", "e", "w", "c", "m", "p", "g", "h", "i", "o", "r", "t", "u", "n", "v", "b", "q", "x", "y", "z",
                                    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-                                   "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
+                                   "S", "A", "D", "F", "J", "K", "L", "E", "W", "C", "M", "P", "G", "H", "I", "O", "R", "T", "U", "N", "V", "B", "Q", "X", "Y", "Z"}
+
 }
 
 return keyConstants
