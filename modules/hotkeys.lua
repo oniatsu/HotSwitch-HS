@@ -174,6 +174,24 @@ Hotkeys.new = function()
         self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
     end
 
+    obj.checkTableHasTheValue = function(table, value)
+        for i, tableValue in ipairs(table) do
+            if tableValue == value then
+                return true
+            end
+        end
+        return false
+    end
+
+    obj.getIndexOfTableHavingTheValue = function(table, value)
+        for i, tableValue in ipairs(table) do
+            if tableValue == value then
+                return i
+            end
+        end
+        return 0
+    end
+
     obj.createCharacterKeys = function(self, keys, isShiftable)
         local keybindModifier
         if isShiftable then
@@ -194,6 +212,7 @@ Hotkeys.new = function()
                     self.isRegistrationMode = false
 
                     local window = self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]
+                    local windowId = window:id()
 
                     local appName = window:application():name()
 
@@ -205,8 +224,6 @@ Hotkeys.new = function()
                         if setting.app == appName then
                             hasAppSetting = true
 
-                            local windowId = window:id()
-
                             local targetKey
                             for j = 1, #self.panel.baseCanvas.registeredKeyStatuses do
                                 local keyStatus = self.panel.baseCanvas.registeredKeyStatuses[j]
@@ -217,15 +234,34 @@ Hotkeys.new = function()
                             end
 
                             if targetKey == nil then
-                                table.insert(setting.keys, key)
+                                if self.checkTableHasTheValue(setting.keys, key) then
+                                    -- It cannot find position to register the key.
+                                    self.panel.baseCanvas:toast("NOTICE: The key is already registered on the same app.")
+                                else
+                                    table.insert(setting.keys, key)
+                                end
                             else
                                 local newKeys = {}
-                                for j = 1, #setting.keys do
-                                    local settingKey = setting.keys[j]
-                                    if settingKey == targetKey then
-                                        newKeys[j] = key
-                                    else
-                                        newKeys[j] = settingKey
+                                if self.checkTableHasTheValue(setting.keys, key) then
+                                    local sameValueIndex = self.getIndexOfTableHavingTheValue(setting.keys, key)
+                                    for j = 1, #setting.keys do
+                                        local settingKey = setting.keys[j]
+                                        if settingKey == targetKey then
+                                            newKeys[j] = key
+                                        elseif j == sameValueIndex then
+                                            newKeys[j] = targetKey
+                                        else
+                                            newKeys[j] = settingKey
+                                        end
+                                    end
+                                else
+                                    for j = 1, #setting.keys do
+                                        local settingKey = setting.keys[j]
+                                        if settingKey == targetKey then
+                                            newKeys[j] = key
+                                        else
+                                            newKeys[j] = settingKey
+                                        end
                                     end
                                 end
                                 setting.keys = newKeys

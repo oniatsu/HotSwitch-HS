@@ -17,6 +17,11 @@ local canvasConstants = {
     TEXT_ALPHA = 1,
 
     TEXT_WHITE_VALUE = 0.92,
+
+    TOAST_W = 520,
+    TOAST_H = 46,
+    TOAST_ALPHA = 0.8,
+    TOAST_FONT_SIZE = 20,
 }
 
 -- for debug
