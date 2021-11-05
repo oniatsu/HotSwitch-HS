@@ -27,6 +27,11 @@ Hotkeys.new = function()
             self:createCharacterKeys(keyConstants.ALL_KEYS, false)
             self:createCharacterKeys(keyConstants.SHIFTABLE_KEYS, true)
         end
+
+        self.panel.baseCanvas:setClickCallback(function(position)
+            self.focusWindow(self.windows:getCachedOrderedWindowsOrFetch()[position])
+            self:finish()
+        end)
     end
 
     obj.enable = function(self)

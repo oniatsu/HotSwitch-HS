@@ -52,6 +52,8 @@ BaseCanvas.new = function(canvas, windows)
     obj.toastCanvas = nil
     obj.timer = nil
 
+    obj.clickCallback = nil
+
     obj.show = function(self)
         local orderedWindows = self.windows:getCachedOrderedWindowsOrFetch()
 
@@ -83,9 +85,32 @@ BaseCanvas.new = function(canvas, windows)
         -- self.baseCanvas:level("normal") -- don't need
         -- self.baseCanvas:bringToFront()
 
-        -- disable mouse events
-        self.baseCanvas:canvasMouseEvents(true, true, false, false)
-        self.baseCanvas:mouseCallback(function() end)
+        self:initializeMouseEvent(orderedWindows)
+    end
+
+    obj.initializeMouseEvent = function(self, orderedWindows)
+        self.baseCanvas:canvasMouseEvents(false, true, false, false)
+        self.baseCanvas:mouseCallback(function(canvas, type, elementId, x, y)
+            if self.clickCallback == nil then
+                return
+            end
+
+            if type == "mouseUp" then
+                local position = math.floor((y - canvasConstants.PADDING * 2) / canvasConstants.ROW_HEIGHT + 1)
+                if position < 1 then
+                    position = 1
+                elseif position > #orderedWindows then
+                    position = #orderedWindows
+                end
+
+                self.clickCallback(position)
+            end
+        end)
+    end
+
+    -- clickCallback = function(position) end
+    obj.setClickCallback = function(self, clickCallback)
+        self.clickCallback = clickCallback
     end
     
     obj.activateHammerspoonWindow = function(self)
