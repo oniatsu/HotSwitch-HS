@@ -1,4 +1,4 @@
-local canvasConstants = {
+local CanvasConstants = {
     FONT_SIZE = 17,
 
     PANEL_W = 520,
@@ -31,4 +31,4 @@ local canvasConstants = {
 -- canvasConstants.SELECTED_ROW_ALPHA = BASE_ALPHA
 -- canvasConstants.TEXT_ALPHA = BASE_ALPHA
 
-return canvasConstants
+return CanvasConstants

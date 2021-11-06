@@ -1,9 +1,9 @@
-local util = require("hotswitch-hs/modules/util")
+local util = require("hotswitch-hs/lib/common/util")
+local Model = require("hotswitch-hs/lib/model/Model")
 
-local Windows = {}
-
-Windows.new = function()
-    local obj = {}
+local WindowModel = {}
+WindowModel.new = function()
+    local obj = Model.new()
 
     obj.cachedOrderedWindows = nil
     obj.previousWindow = nil
@@ -67,5 +67,4 @@ Windows.new = function()
 
     return obj
 end
-
-return Windows
+return WindowModel

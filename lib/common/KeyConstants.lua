@@ -1,4 +1,4 @@
-local keyConstants = {
+local KeyConstants = {
 
     -- Sometimes, some special keys don't work
     ALL_KEYS = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m",
@@ -12,5 +12,4 @@ local keyConstants = {
                                    "S", "A", "D", "F", "J", "K", "L", "E", "W", "C", "M", "P", "G", "H", "I", "O", "R", "T", "U", "N", "V", "B", "Q", "X", "Y", "Z"}
 
 }
-
-return keyConstants
+return KeyConstants

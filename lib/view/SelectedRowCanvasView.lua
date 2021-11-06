@@ -1,23 +1,22 @@
-local util = require("hotswitch-hs/modules/util")
+local util = require("hotswitch-hs/lib/common/util")
+local View = require("hotswitch-hs/lib/view/View")
+local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
+local WindowModel = require("hotswitch-hs/lib/model/WindowModel")
 
-local canvasConstants = require("hotswitch-hs/modules/canvas_constants")
+local SelectedRowCanvasView = {}
+SelectedRowCanvasView.new = function(canvas, windows, position)
+    local obj = View.new()
 
-local Windows = require("hotswitch-hs/modules/windows")
-
-local SelectedRowCanvas = {}
-
-SelectedRowCanvas.new = function(canvas, windows, position)
-    local obj = {}
     obj.canvas = canvas
     obj.windows = windows
     obj.position = position
 
     obj.createSelectedRow = function(self)
         local orderedWindows = self.windows:getCachedOrderedWindowsOrFetch()
-        local panelH = #orderedWindows * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 4
+        local panelH = #orderedWindows * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 4
 
         local mainScreenFrame = hs.window.frontmostWindow():screen():frame()
-        local panelX = mainScreenFrame.x + mainScreenFrame.w / 2 - canvasConstants.PANEL_W / 2
+        local panelX = mainScreenFrame.x + mainScreenFrame.w / 2 - CanvasConstants.PANEL_W / 2
         local panelY = mainScreenFrame.y + mainScreenFrame.h / 2 - panelH / 2
 
         if self.selectedRowCanvas == nil then
@@ -25,7 +24,7 @@ SelectedRowCanvas.new = function(canvas, windows, position)
                 x = panelX,
                 y = panelY,
                 h = panelH,
-                w = canvasConstants.PANEL_W - canvasConstants.PADDING
+                w = CanvasConstants.PANEL_W - CanvasConstants.PADDING
             }
         end
     end
@@ -34,16 +33,16 @@ SelectedRowCanvas.new = function(canvas, windows, position)
         self.selectedRowCanvas:replaceElements({
             action = "fill",
             fillColor = {
-                alpha = canvasConstants.SELECTED_ROW_ALPHA,
+                alpha = CanvasConstants.SELECTED_ROW_ALPHA,
                 blue = 1,
                 green = 1,
                 red = 1
             },
             frame = {
-                x = canvasConstants.PADDING * 2,
-                y = (position - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                h = canvasConstants.ROW_HEIGHT,
-                w = canvasConstants.PANEL_W - canvasConstants.PADDING * 4
+                x = CanvasConstants.PADDING * 2,
+                y = (position - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                h = CanvasConstants.ROW_HEIGHT,
+                w = CanvasConstants.PANEL_W - CanvasConstants.PADDING * 4
             },
             type = "rectangle"
         })
@@ -61,10 +60,10 @@ SelectedRowCanvas.new = function(canvas, windows, position)
                 red = 1
             },
             frame = {
-                x = canvasConstants.PADDING * 2,
-                y = (position - 1) * canvasConstants.ROW_HEIGHT + canvasConstants.PADDING * 2,
-                h = canvasConstants.ROW_HEIGHT,
-                w = canvasConstants.PANEL_W - canvasConstants.PADDING * 4
+                x = CanvasConstants.PADDING * 2,
+                y = (position - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                h = CanvasConstants.ROW_HEIGHT,
+                w = CanvasConstants.PANEL_W - CanvasConstants.PADDING * 4
             },
             type = "rectangle"
         })
@@ -81,5 +80,4 @@ SelectedRowCanvas.new = function(canvas, windows, position)
 
     return obj
 end
-
-return SelectedRowCanvas
+return SelectedRowCanvasView
