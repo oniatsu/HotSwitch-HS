@@ -24,8 +24,7 @@ SelectedRowCanvasView.new = function(canvas, windowModel, position)
         local orderedWindows = self.windowModel:getCachedOrderedWindowsOrFetch()
         local panelH = #orderedWindows * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 4
 
-        local mainScreenFrame = hs.window.frontmostWindow():screen():frame()
-        local panelX = mainScreenFrame.x + mainScreenFrame.w / 2 - CanvasConstants.PANEL_W / 2
+        local mainScreenFrame = hs.window.frontmostWindow():screen():frame() local panelX = mainScreenFrame.x + mainScreenFrame.w / 2 - CanvasConstants.PANEL_W / 2
         local panelY = mainScreenFrame.y + mainScreenFrame.h / 2 - panelH / 2
 
         if self.selectedRowCanvas == nil then

@@ -10,10 +10,10 @@ MainController.new = function()
 
     obj.isRegistrationMode = false
 
+    obj.settingModel = SettingsModel.new()
     obj.windowModel = WindowModel.new()
 
-    obj.panelLayoutView = PanelLayoutView.new(obj.windowModel)
-    obj.settingModel = SettingsModel.new()
+    obj.panelLayoutView = PanelLayoutView.new(obj.windowModel, obj.settingModel)
 
     obj.allHotkeys = {}
 

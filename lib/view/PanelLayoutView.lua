@@ -4,18 +4,17 @@ local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local View = require("hotswitch-hs/lib/view/View")
 local BaseCanvasView = require("hotswitch-hs/lib/view/BaseCanvasView")
 local SelectedRowCanvasView = require("hotswitch-hs/lib/view/SelectedRowCanvasView")
-local SettingModel = require("hotswitch-hs/lib/model/SettingModel")
 
 local defaultRowPosition = 2
 
 local PanelLayoutView = {}
-PanelLayoutView.new = function(windowModel)
+PanelLayoutView.new = function(windowModel, settingModel)
     local obj = View.new()
 
     obj.isOpen = false
-    obj.baseCanvasView = BaseCanvasView.new(canvas, windowModel)
+    obj.baseCanvasView = BaseCanvasView.new(canvas, windowModel, settingModel)
     obj.selectedRowCanvasView = SelectedRowCanvasView.new(canvas, windowModel, defaultRowPosition)
-    obj.settingModel = SettingModel.new()
+    obj.settingModel = settingModel
 
     obj.show = function(self)
         if self.isOpen == false then

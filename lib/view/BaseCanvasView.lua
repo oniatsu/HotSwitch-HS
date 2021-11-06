@@ -2,15 +2,14 @@ local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local View = require("hotswitch-hs/lib/view/View")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
-local SettingModel = require("hotswitch-hs/lib/model/SettingModel")
 
 local BaseCanvasView = {}
-BaseCanvasView.new = function(canvas, windowModel)
+BaseCanvasView.new = function(canvas, windowModel, settingModel)
     local obj = View.new()
 
     obj.canvas = canvas
     obj.windowModel = windowModel
-    obj.settingModel = SettingModel.new()
+    obj.settingModel = settingModel
 
     --[[
     data format:
