@@ -35,20 +35,14 @@ Hotkeys.new = function()
     end
 
     obj.enable = function(self)
-        -- local checkTime = util.checkTime.new()
         for i = 1, #self.allHotkeys do
             local status, err = pcall(function()
                 self.allHotkeys[i]:enable()
             end)
             if status == false then
                 util.log("ERROR: enabling hotkey")
-                util.log(self.allHotkeys[i])
-                util.log("i: " .. i)
-                util.log(self.allHotkeys[i])
-                util.log(err)
             end
         end
-        -- checkTime:diff() -- 40ms - necessary
     end
 
     obj.disable = function(self)
@@ -57,7 +51,12 @@ Hotkeys.new = function()
         end
 
         for i = 1, #self.allHotkeys do
-            self.allHotkeys[i]:disable()
+            local status, err = pcall(function()
+                self.allHotkeys[i]:disable()
+            end)
+            if status == false then
+                util.log("ERROR: disabling hotkey")
+            end
         end
     end
 
