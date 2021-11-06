@@ -1,9 +1,11 @@
+local canvas = require("hs.canvas")
+
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local View = require("hotswitch-hs/lib/view/View")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
 
 local SelectedRowCanvasView = {}
-SelectedRowCanvasView.new = function(canvas, windowModel, position)
+SelectedRowCanvasView.new = function(windowModel, position)
     local obj = View.new()
 
     obj.canvas = canvas
@@ -11,6 +13,7 @@ SelectedRowCanvasView.new = function(canvas, windowModel, position)
     obj.position = position
 
     obj.show = function(self)
+        -- not be used
     end
 
     obj.hide = function(self)

@@ -8,12 +8,12 @@ local SelectedRowCanvasView = require("hotswitch-hs/lib/view/SelectedRowCanvasVi
 local defaultRowPosition = 2
 
 local PanelLayoutView = {}
-PanelLayoutView.new = function(windowModel, settingModel)
+PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
     local obj = View.new()
 
     obj.isOpen = false
-    obj.baseCanvasView = BaseCanvasView.new(canvas, windowModel, settingModel)
-    obj.selectedRowCanvasView = SelectedRowCanvasView.new(canvas, windowModel, defaultRowPosition)
+    obj.baseCanvasView = BaseCanvasView.new(windowModel, settingModel, keyStatusModel)
+    obj.selectedRowCanvasView = SelectedRowCanvasView.new(windowModel, defaultRowPosition)
     obj.settingModel = settingModel
 
     obj.show = function(self)
@@ -22,14 +22,10 @@ PanelLayoutView.new = function(windowModel, settingModel)
             self.selectedRowCanvasView.position = defaultRowPosition
         end
 
-        -- local checkTime = util.checkTime.new(false)
         self.baseCanvasView:show()
-        -- checkTime:diff() -- 20ms - necessary
         self.selectedRowCanvasView:createSelectedRow()
-        -- checkTime:diff() -- 20ms - necessary
 
         self.selectedRowCanvasView:replaceSelectedRow(self.selectedRowCanvasView.position)
-        -- checkTime:diff() -- 15ms - necessary
     end
 
     obj.hide = function(self)
@@ -37,6 +33,14 @@ PanelLayoutView.new = function(windowModel, settingModel)
 
         self.baseCanvasView:hide()
         self.selectedRowCanvasView:hide()
+    end
+
+    obj.setClickCallback = function(self, clickCallback)
+        self.baseCanvasView:setClickCallback(clickCallback)
+    end
+
+    obj.activateHammerspoonWindow = function(self)
+        self.baseCanvasView:activateHammerspoonWindow()
     end
 
     return obj
