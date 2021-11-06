@@ -9,35 +9,35 @@ local SettingModel = require("hotswitch-hs/lib/model/SettingModel")
 local defaultRowPosition = 2
 
 local PanelLayoutView = {}
-PanelLayoutView.new = function(windows)
+PanelLayoutView.new = function(windowModel)
     local obj = View.new()
 
     obj.isOpen = false
-    obj.baseCanvas = BaseCanvasView.new(canvas, windows)
-    obj.selectedRowCanvas = SelectedRowCanvasView.new(canvas, windows, defaultRowPosition)
-    obj.settingsProvider = SettingModel.new()
+    obj.baseCanvasView = BaseCanvasView.new(canvas, windowModel)
+    obj.selectedRowCanvasView = SelectedRowCanvasView.new(canvas, windowModel, defaultRowPosition)
+    obj.settingModel = SettingModel.new()
 
-    obj.open = function(self)
+    obj.show = function(self)
         if self.isOpen == false then
             self.isOpen = true
-            self.selectedRowCanvas.position = defaultRowPosition
+            self.selectedRowCanvasView.position = defaultRowPosition
         end
 
         -- local checkTime = util.checkTime.new(false)
-        self.baseCanvas:show()
+        self.baseCanvasView:show()
         -- checkTime:diff() -- 20ms - necessary
-        self.selectedRowCanvas:createSelectedRow()
+        self.selectedRowCanvasView:createSelectedRow()
         -- checkTime:diff() -- 20ms - necessary
 
-        self.selectedRowCanvas:replaceSelectedRow(self.selectedRowCanvas.position)
+        self.selectedRowCanvasView:replaceSelectedRow(self.selectedRowCanvasView.position)
         -- checkTime:diff() -- 15ms - necessary
     end
 
-    obj.close = function(self)
+    obj.hide = function(self)
         self.isOpen = false
 
-        self.baseCanvas:hide()
-        self.selectedRowCanvas:hide()
+        self.baseCanvasView:hide()
+        self.selectedRowCanvasView:hide()
     end
 
     return obj

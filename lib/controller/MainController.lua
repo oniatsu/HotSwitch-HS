@@ -10,29 +10,29 @@ MainController.new = function()
 
     obj.isRegistrationMode = false
 
-    obj.windows = WindowModel.new()
+    obj.windowModel = WindowModel.new()
 
-    obj.panel = PanelLayoutView.new(obj.windows)
-    obj.settingmodel = SettingsModel.new()
+    obj.panelLayoutView = PanelLayoutView.new(obj.windowModel)
+    obj.settingModel = SettingsModel.new()
 
     obj.allHotkeys = {}
 
     obj.applicationWatcher = nil
 
-    obj.create = function(self)
+    obj.createHotkeys = function(self)
         if #self.allHotkeys == 0 then
             self:createSpecialKeys()
             self:createCharacterKeys(KeyConstants.ALL_KEYS, false)
             self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true)
         end
 
-        self.panel.baseCanvas:setClickCallback(function(position)
-            self.focusWindow(self.windows:getCachedOrderedWindowsOrFetch()[position])
+        self.panelLayoutView.baseCanvasView:setClickCallback(function(position)
+            self.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[position])
             self:finish()
         end)
     end
 
-    obj.enable = function(self)
+    obj.enableHotkeys = function(self)
         for i = 1, #self.allHotkeys do
             local status, err = pcall(function()
                 self.allHotkeys[i]:enable()
@@ -43,7 +43,7 @@ MainController.new = function()
         end
     end
 
-    obj.disable = function(self)
+    obj.disableHotkeys = function(self)
         if self.allHotkeys == nil then
             Debugger.log("ERROR: hotkeys.lua (obj.disable) : self.allHotkeys is null")
         end
@@ -73,22 +73,22 @@ MainController.new = function()
     obj.next = function(self)
         self.isRegistrationMode = false
 
-        self.panel.selectedRowCanvas.position = self:calcNextRowPosition(self.panel.selectedRowCanvas.position)
+        self.panelLayoutView.selectedRowCanvasView.position = self:calcNextRowPosition(self.panelLayoutView.selectedRowCanvasView.position)
 
-        self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
+        self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
     end
 
     obj.previous = function(self)
         self.isRegistrationMode = false
 
-        self.panel.selectedRowCanvas.position = self:calcPreviousRowPosition(self.panel.selectedRowCanvas.position)
+        self.panelLayoutView.selectedRowCanvasView.position = self:calcPreviousRowPosition(self.panelLayoutView.selectedRowCanvasView.position)
 
-        self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
+        self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
     end
 
     obj.calcNextRowPosition = function(self, position)
         position = position + 1
-        if position > #self.windows:getCachedOrderedWindowsOrFetch() then
+        if position > #self.windowModel:getCachedOrderedWindowsOrFetch() then
             position = 1
         end
         return position
@@ -97,7 +97,7 @@ MainController.new = function()
     obj.calcPreviousRowPosition = function(self, position)
         position = position - 1
         if position <= 0 then
-            position = #self.windows:getCachedOrderedWindowsOrFetch()
+            position = #self.windowModel:getCachedOrderedWindowsOrFetch()
         end
         return position
     end
@@ -105,7 +105,7 @@ MainController.new = function()
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self.focusWindow(self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position])
+        self.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position])
 
         self:finish()
     end
@@ -113,17 +113,17 @@ MainController.new = function()
     obj.spaceAction = function(self)
         if self.isRegistrationMode then
             self.isRegistrationMode = false
-            self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
+            self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
         else
             self.isRegistrationMode = true
-            self.panel.selectedRowCanvas:replaceAndEmphasisSelectedRow(self.panel.selectedRowCanvas.position)
+            self.panelLayoutView.selectedRowCanvasView:replaceAndEmphasisSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
         end
     end
 
     obj.escapeAction = function(self)
         if self.isRegistrationMode then
             self.isRegistrationMode = false
-            self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
+            self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
         else
             self:focusWindowForCancel()
 
@@ -133,19 +133,19 @@ MainController.new = function()
 
     obj.deleteAction = function(self)
         self.isRegistrationMode = false
-        local window = self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]
+        local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position]
 
         local appName = window:application():name()
 
-        local settings = self.settingmodel.get()
+        local settings = self.settingModel.get()
         for i = 1, #settings do
             local setting = settings[i]
 
             if setting.app == appName then
                 local windowId = window:id()
 
-                for j = 1, #self.panel.baseCanvas.registeredKeyStatuses do
-                    local keyStatus = self.panel.baseCanvas.registeredKeyStatuses[j]
+                for j = 1, #self.panelLayoutView.baseCanvasView.registeredKeyStatuses do
+                    local keyStatus = self.panelLayoutView.baseCanvasView.registeredKeyStatuses[j]
                     if keyStatus.windowId == windowId then
                         local targetKey = keyStatus.key
 
@@ -169,11 +169,11 @@ MainController.new = function()
             end
         end
 
-        self.settingmodel.set(settings)
-        self.panel.baseCanvas:resetAutoGeneratedKeys()
+        self.settingModel.set(settings)
+        self.panelLayoutView.baseCanvasView:resetAutoGeneratedKeys()
 
-        self.panel:open()
-        self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
+        self.panelLayoutView:show()
+        self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
     end
 
     obj.checkTableHasTheValue = function(table, value)
@@ -213,13 +213,13 @@ MainController.new = function()
                 if self.isRegistrationMode then
                     self.isRegistrationMode = false
 
-                    local window = self.windows:getCachedOrderedWindowsOrFetch()[self.panel.selectedRowCanvas.position]
+                    local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position]
                     local windowId = window:id()
 
                     local appName = window:application():name()
 
                     local hasAppSetting = false
-                    local settings = self.settingmodel.get()
+                    local settings = self.settingModel.get()
                     for i = 1, #settings do
                         local setting = settings[i]
 
@@ -227,8 +227,8 @@ MainController.new = function()
                             hasAppSetting = true
 
                             local targetKey
-                            for j = 1, #self.panel.baseCanvas.registeredKeyStatuses do
-                                local keyStatus = self.panel.baseCanvas.registeredKeyStatuses[j]
+                            for j = 1, #self.panelLayoutView.baseCanvasView.registeredKeyStatuses do
+                                local keyStatus = self.panelLayoutView.baseCanvasView.registeredKeyStatuses[j]
                                 if keyStatus.windowId == windowId then
                                     targetKey = keyStatus.key
                                     break
@@ -238,7 +238,7 @@ MainController.new = function()
                             if targetKey == nil then
                                 if self.checkTableHasTheValue(setting.keys, key) then
                                     -- It cannot find position to register the key.
-                                    self.panel.baseCanvas:toast("NOTICE: The key is already registered on the same app.")
+                                    self.panelLayoutView.baseCanvasView:toast("NOTICE: The key is already registered on the same app.")
                                 else
                                     table.insert(setting.keys, key)
                                 end
@@ -294,15 +294,15 @@ MainController.new = function()
                         })
                     end
 
-                    self.settingmodel.set(settings)
-                    self.panel.baseCanvas:resetAutoGeneratedKeys()
+                    self.settingModel.set(settings)
+                    self.panelLayoutView.baseCanvasView:resetAutoGeneratedKeys()
 
-                    self.panel:open()
-                    self.panel.selectedRowCanvas:replaceSelectedRow(self.panel.selectedRowCanvas.position)
+                    self.panelLayoutView:show()
+                    self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
                 else
                     local targetWindow
-                    for j = 1, #self.panel.baseCanvas.registeredAndAutoGeneratedKeyStatuses do
-                        local keyStatus = self.panel.baseCanvas.registeredAndAutoGeneratedKeyStatuses[j]
+                    for j = 1, #self.panelLayoutView.baseCanvasView.registeredAndAutoGeneratedKeyStatuses do
+                        local keyStatus = self.panelLayoutView.baseCanvasView.registeredAndAutoGeneratedKeyStatuses[j]
                         if keyStatus.key == key then
                             targetWindow = keyStatus.window
                             break
@@ -320,16 +320,16 @@ MainController.new = function()
     end
 
     obj.finish = function(self)
-        self.panel:close()
-        self:disable()
+        self.panelLayoutView:hide()
+        self:disableHotkeys()
         self:unwatchAppliationDeactivated()
     end
 
     obj.focusWindowForCancel = function(self)
-        if self.windows.previousWindow ~= nil then
-            self.focusWindow(self.windows.previousWindow)
+        if self.windowModel.previousWindow ~= nil then
+            self.focusWindow(self.windowModel.previousWindow)
         else
-            self.focusWindow(self.windows:getCachedOrderedWindowsOrFetch()[1])
+            self.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[1])
         end
     end
 

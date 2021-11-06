@@ -1,18 +1,27 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local View = require("hotswitch-hs/lib/view/View")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
-local WindowModel = require("hotswitch-hs/lib/model/WindowModel")
 
 local SelectedRowCanvasView = {}
-SelectedRowCanvasView.new = function(canvas, windows, position)
+SelectedRowCanvasView.new = function(canvas, windowModel, position)
     local obj = View.new()
 
     obj.canvas = canvas
-    obj.windows = windows
+    obj.windowModel = windowModel
     obj.position = position
 
+    obj.show = function(self)
+    end
+
+    obj.hide = function(self)
+        if self.selectedRowCanvas ~= nil then
+            self.selectedRowCanvas:delete()
+            self.selectedRowCanvas = nil
+        end
+    end
+
     obj.createSelectedRow = function(self)
-        local orderedWindows = self.windows:getCachedOrderedWindowsOrFetch()
+        local orderedWindows = self.windowModel:getCachedOrderedWindowsOrFetch()
         local panelH = #orderedWindows * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 4
 
         local mainScreenFrame = hs.window.frontmostWindow():screen():frame()
@@ -69,13 +78,6 @@ SelectedRowCanvasView.new = function(canvas, windows, position)
         })
 
         self.selectedRowCanvas:show()
-    end
-
-    obj.hide = function(self)
-        if self.selectedRowCanvas ~= nil then
-            self.selectedRowCanvas:delete()
-            self.selectedRowCanvas = nil
-        end
     end
 
     return obj
