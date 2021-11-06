@@ -1,3 +1,4 @@
+local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local Model = require("hotswitch-hs/lib/model/Model")
 
 local SETTING_KEY = "hotswitch-hs"

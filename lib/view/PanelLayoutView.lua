@@ -1,6 +1,6 @@
 local canvas = require("hs.canvas")
 
-local util = require("hotswitch-hs/lib/common/util")
+local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local View = require("hotswitch-hs/lib/view/View")
 local BaseCanvasView = require("hotswitch-hs/lib/view/BaseCanvasView")
 local SelectedRowCanvasView = require("hotswitch-hs/lib/view/SelectedRowCanvasView")

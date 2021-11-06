@@ -1,4 +1,4 @@
-local util = require("hotswitch-hs/lib/common/util")
+local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local Model = require("hotswitch-hs/lib/model/Model")
 
 local WindowModel = {}

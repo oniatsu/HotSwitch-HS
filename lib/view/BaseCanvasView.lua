@@ -1,5 +1,4 @@
-local util = require("hotswitch-hs/lib/common/util")
-
+local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local View = require("hotswitch-hs/lib/view/View")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")

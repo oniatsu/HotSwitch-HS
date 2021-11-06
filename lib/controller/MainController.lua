@@ -1,4 +1,4 @@
-local util = require("hotswitch-hs/lib/common/util")
+local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
 local WindowModel = require("hotswitch-hs/lib/model/WindowModel")
 local SettingsModel = require("hotswitch-hs/lib/model/SettingModel")
@@ -38,14 +38,14 @@ MainController.new = function()
                 self.allHotkeys[i]:enable()
             end)
             if status == false then
-                util.log("ERROR: enabling hotkey")
+                Debugger.log("ERROR: enabling hotkey")
             end
         end
     end
 
     obj.disable = function(self)
         if self.allHotkeys == nil then
-            util.log("ERROR: hotkeys.lua (obj.disable) : self.allHotkeys is null")
+            Debugger.log("ERROR: hotkeys.lua (obj.disable) : self.allHotkeys is null")
         end
 
         for i = 1, #self.allHotkeys do
@@ -53,7 +53,7 @@ MainController.new = function()
                 self.allHotkeys[i]:disable()
             end)
             if status == false then
-                util.log("ERROR: disabling hotkey")
+                Debugger.log("ERROR: disabling hotkey")
             end
         end
     end
