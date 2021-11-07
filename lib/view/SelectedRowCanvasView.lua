@@ -40,7 +40,7 @@ SelectedRowCanvasView.new = function(windowModel, position)
         end
     end
 
-    obj.replaceSelectedRow = function(self, position)
+    obj.replaceSelectedRow = function(self)
         self.selectedRowCanvas:replaceElements({
             action = "fill",
             fillColor = {
@@ -51,7 +51,7 @@ SelectedRowCanvasView.new = function(windowModel, position)
             },
             frame = {
                 x = CanvasConstants.PADDING * 2,
-                y = (position - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                y = (self.position - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
                 h = CanvasConstants.ROW_HEIGHT,
                 w = CanvasConstants.PANEL_W - CanvasConstants.PADDING * 4
             },
@@ -61,7 +61,7 @@ SelectedRowCanvasView.new = function(windowModel, position)
         self.selectedRowCanvas:show()
     end
 
-    obj.replaceAndEmphasisSelectedRow = function(self, position)
+    obj.replaceAndEmphasisSelectedRow = function(self)
         self.selectedRowCanvas:replaceElements({
             action = "fill",
             fillColor = {
@@ -72,7 +72,7 @@ SelectedRowCanvasView.new = function(windowModel, position)
             },
             frame = {
                 x = CanvasConstants.PADDING * 2,
-                y = (position - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                y = (self.position - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
                 h = CanvasConstants.ROW_HEIGHT,
                 w = CanvasConstants.PANEL_W - CanvasConstants.PADDING * 4
             },
@@ -80,6 +80,38 @@ SelectedRowCanvasView.new = function(windowModel, position)
         })
 
         self.selectedRowCanvas:show()
+    end
+
+    obj.next = function(self, windowModel)
+        self.isRegistrationMode = false
+
+        self.position = self:calcNextRowPosition(self.position, windowModel)
+
+        self:replaceSelectedRow()
+    end
+
+    obj.previous = function(self, windowModel)
+        self.isRegistrationMode = false
+
+        self.position = self:calcPreviousRowPosition(self.position, windowModel)
+
+        self:replaceSelectedRow()
+    end
+
+    obj.calcNextRowPosition = function(self, position, windowModel)
+        local newPosition = position + 1
+        if newPosition > #windowModel:getCachedOrderedWindowsOrFetch() then
+            newPosition = 1
+        end
+        return newPosition
+    end
+
+    obj.calcPreviousRowPosition = function(self, position, windowModel)
+        local newPosition = position - 1
+        if newPosition <= 0 then
+            newPosition = #windowModel:getCachedOrderedWindowsOrFetch()
+        end
+        return newPosition
     end
 
     return obj

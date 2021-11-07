@@ -25,7 +25,7 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
         self.baseCanvasView:show()
         self.selectedRowCanvasView:createSelectedRow()
 
-        self.selectedRowCanvasView:replaceSelectedRow(self.selectedRowCanvasView.position)
+        self.selectedRowCanvasView:replaceSelectedRow()
     end
 
     obj.hide = function(self)
@@ -33,6 +33,26 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
 
         self.baseCanvasView:hide()
         self.selectedRowCanvasView:hide()
+    end
+
+    obj.getSelectedRowPosition = function(self)
+        return self.selectedRowCanvasView.position
+    end
+    
+    obj.selectNextRow = function(self, windowModel)
+        self.selectedRowCanvasView:next(windowModel)
+    end
+
+    obj.selectPreviousRow = function(self, windowModel)
+        self.selectedRowCanvasView:previous(windowModel)
+    end
+
+    obj.unemphasisRow = function(self)
+        self.selectedRowCanvasView:replaceSelectedRow()
+    end
+
+    obj.emphasisRow = function(self)
+        self.selectedRowCanvasView:replaceAndEmphasisSelectedRow()
     end
 
     obj.setClickCallback = function(self, clickCallback)

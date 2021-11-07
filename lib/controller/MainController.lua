@@ -86,47 +86,31 @@ MainController.new = function()
     end
 
     obj.createSpecialKeys = function(self)
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "down", function() self:next() end, nil, function() self:next() end))
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "up", function() self:previous() end, nil, function() self:previous() end))
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "tab", function() self:next() end, nil, function() self:next() end))
-        table.insert(self.allHotkeys, hs.hotkey.new({"shift"}, "tab", function() self:previous() end, nil, function() self:previous() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "down", function()
+            self.panelLayoutView:selectNextRow(self.windowModel)
+        end, nil, function()
+            self.panelLayoutView:selectNextRow(self.windowModel)
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "up", function()
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
+        end, nil, function()
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "tab", function()
+            self.panelLayoutView:selectNextRow(self.windowModel)
+        end, nil, function()
+            self.panelLayoutView:selectNextRow(self.windowModel)
+        end))
+        table.insert(self.allHotkeys, hs.hotkey.new({"shift"}, "tab", function()
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
+        end, nil, function()
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
+        end))
         
         table.insert(self.allHotkeys, hs.hotkey.new({}, "return", function() self:returnAction() end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "space", function() self:spaceAction() end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "delete", function() self:deleteAction() end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "escape", function() self:escapeAction() end))
-    end
-
-    obj.next = function(self)
-        self.isRegistrationMode = false
-
-        self.panelLayoutView.selectedRowCanvasView.position = self:calcNextRowPosition(self.panelLayoutView.selectedRowCanvasView.position)
-
-        self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
-    end
-
-    obj.previous = function(self)
-        self.isRegistrationMode = false
-
-        self.panelLayoutView.selectedRowCanvasView.position = self:calcPreviousRowPosition(self.panelLayoutView.selectedRowCanvasView.position)
-
-        self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
-    end
-
-    obj.calcNextRowPosition = function(self, position)
-        position = position + 1
-        if position > #self.windowModel:getCachedOrderedWindowsOrFetch() then
-            position = 1
-        end
-        return position
-    end
-
-    obj.calcPreviousRowPosition = function(self, position)
-        position = position - 1
-        if position <= 0 then
-            position = #self.windowModel:getCachedOrderedWindowsOrFetch()
-        end
-        return position
     end
 
     obj.returnAction = function(self)
@@ -140,17 +124,17 @@ MainController.new = function()
     obj.spaceAction = function(self)
         if self.isRegistrationMode then
             self.isRegistrationMode = false
-            self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
+            self.panelLayoutView:unemphasisRow()
         else
             self.isRegistrationMode = true
-            self.panelLayoutView.selectedRowCanvasView:replaceAndEmphasisSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
+            self.panelLayoutView:emphasisRow()
         end
     end
 
     obj.escapeAction = function(self)
         if self.isRegistrationMode then
             self.isRegistrationMode = false
-            self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
+            self.panelLayoutView:unemphasisRow()
         else
             self:focusWindowForCancel()
 
@@ -160,7 +144,7 @@ MainController.new = function()
 
     obj.deleteAction = function(self)
         self.isRegistrationMode = false
-        local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position]
+        local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView:getSelectedRowPosition()]
 
         local appName = window:application():name()
 
@@ -201,7 +185,7 @@ MainController.new = function()
 
         self.keyStatusModel:createKeyStatuses()
         self.panelLayoutView:show()
-        self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
+        self.panelLayoutView:unemphasisRow()
     end
 
     obj.clearSettings = function(self)
@@ -336,7 +320,7 @@ MainController.new = function()
 
                     self.keyStatusModel:createKeyStatuses()
                     self.panelLayoutView:show()
-                    self.panelLayoutView.selectedRowCanvasView:replaceSelectedRow(self.panelLayoutView.selectedRowCanvasView.position)
+                    self.panelLayoutView:unemphasisRow()
                 else
                     local targetWindow
                     for j = 1, #self.keyStatusModel.registeredAndAutoGeneratedKeyStatuses do

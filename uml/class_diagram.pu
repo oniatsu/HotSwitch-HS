@@ -15,26 +15,26 @@ abstract Model
 class PanelLayoutView {
     +show()
     +hide()
+    +getSelectedRowPosition()
+    +selectNextRow()
+    +selectPreviousRow()
+    +emphasisRow()
+    +unumphasisRow()
 }
 class BaseCanvasView {
     +show()
     +hide()
-    ..unimplemented..
-    +selectNextRow()
-    +selectPreviousRow()
-    +emphasisRow()
 }
 class SelectedRowCanvasView {
     +show()
     +hide()
-    ..unimplemented..
     +next()
     +previous()
-    +emphasis()
 }
 class ToastView {
     +show()
     +hide()
+    +toast()
 }
 abstract View {
     +show()
