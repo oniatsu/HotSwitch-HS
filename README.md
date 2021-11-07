@@ -39,7 +39,7 @@ Directory tree is like this:
 ```
 
 ## 3. Put a code at your Hammerspoon's `~/.hammerspoon/init.lua`
-If the file does not exist, create it.
+If the file does not exist, create it and add the codes.
 
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
@@ -105,7 +105,7 @@ Check these.
 - If you want to clear HotSwtich-HS's all settings, execute code `hotswitchHs.clearSettings()` at `~/.hammerspoon/init.lua`.
 - Update HotSwtich-HS. `cd ~/.hammerspoon/hotswitch-hs && git pull`
 
-# Updating
+# Update
 
 Execute these command at terminal.
 ```
@@ -113,6 +113,12 @@ cd ~/.hammerspoon/hotswitch-hs
 git pull
 ```
 
-# Development note
+# Development
+
+The class diagram is roughly like this.
+
+![class_diagram](https://github.com/oniatsu/HotSwitch-HS/blob/main/uml/class_diagram.png)
+
+## Note
 
 - Pay attention to lua's garvage collection.

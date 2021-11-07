@@ -1,4 +1,4 @@
-@startuml hotswitch-hs
+@startuml class_diagram
 
 class hotswitchHs {
     {static} +openOrClose()
