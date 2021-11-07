@@ -2,7 +2,7 @@ local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local MainController = require("hotswitch-hs/lib/controller/MainController")
 
 local mainController = MainController.new()
-mainController:main()
+mainController:init()
 
 return {
     openOrClose = function() mainController:openOrClose() end,
