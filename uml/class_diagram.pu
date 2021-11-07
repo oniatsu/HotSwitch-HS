@@ -82,6 +82,8 @@ MainController x-> AppWatchModel
 KeyStatusModel <|.. Model
 SettingModel <|.. Model
 WindowModel <|.. Model
+HotkeyModel <|.. Model
+AppWatchModel <|.. Model
 
 PanelLayoutView <|.. View
 BaseCanvasView <|.. View
