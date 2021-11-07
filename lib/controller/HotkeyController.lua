@@ -1,5 +1,5 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
-local Controller = require("hotswitch-hs/lib/model/Controller")
+local Controller = require("hotswitch-hs/lib/controller/Controller")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
 local ToastView = require("hotswitch-hs/lib/view/ToastView")
 
@@ -24,24 +24,36 @@ HotkeyController.new = function(mainController)
     end
 
     obj.enableHotkeys = function(self)
+        local hasError = false
+        local lastError
         for i = 1, #self.allHotkeys do
             local status, err = pcall(function()
                 self.allHotkeys[i]:enable()
             end)
             if status == false then
-                Debugger.log("ERROR: enabling hotkey")
+                hasError = true
+                lastError = err
             end
+        end
+        if hasError then
+            Debugger.log("ERROR (enable Hotkeys) : " .. lastError)
         end
     end
 
     obj.disableHotkeys = function(self)
+        local hasError = false
+        local lastError
         for i = 1, #self.allHotkeys do
             local status, err = pcall(function()
                 self.allHotkeys[i]:disable()
             end)
             if status == false then
-                Debugger.log("ERROR: disabling hotkey")
+                hasError = true
+                lastError = err
             end
+        end
+        if hasError then
+            Debugger.log("ERROR (disable Hotkeys) : " .. lastError)
         end
     end
 

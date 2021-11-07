@@ -1,6 +1,6 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
-local Controller = require("hotswitch-hs/lib/model/Controller")
+local Controller = require("hotswitch-hs/lib/controller/Controller")
 local WindowModel = require("hotswitch-hs/lib/model/WindowModel")
 local SettingsModel = require("hotswitch-hs/lib/model/SettingModel")
 local KeyStatusModel = require("hotswitch-hs/lib/model/KeyStatusModel")
