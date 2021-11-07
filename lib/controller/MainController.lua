@@ -46,7 +46,7 @@ MainController.new = function()
 
             self.keyStatusModel:createKeyStatuses()
             self.panelLayoutView:show()
-            self.appWatchModel:watchAppliationDeactivated()
+            self.appWatchModel:watchAppliationDeactivated(function() self:finish() end)
         end
     end
 

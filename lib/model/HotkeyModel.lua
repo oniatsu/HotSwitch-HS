@@ -281,8 +281,6 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
         self.appWatchModel:unwatchAppliationDeactivated()
     end
 
-
-
     obj.checkTableHasTheValue = function(table, value)
         for i, tableValue in ipairs(table) do
             if tableValue == value then

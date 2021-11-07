@@ -7,11 +7,11 @@ AppWatchModel.new = function(windowModel, settingModel, keyStatusModel)
 
     obj.applicationWatcher = nil
 
-    obj.watchAppliationDeactivated = function(self)
+    obj.watchAppliationDeactivated = function(self, callback)
         if self.applicationWatcher == nil then
             self.applicationWatcher = hs.application.watcher.new(function(appName, eventType, app)
                 if appName == "Hammerspoon" and eventType == hs.application.watcher.deactivated then
-                    self:finish()
+                    callback()
                 end
             end)
             self.applicationWatcher:start()
