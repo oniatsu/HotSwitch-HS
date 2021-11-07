@@ -65,6 +65,51 @@ WindowModel.new = function()
         return cleanedOrderedWindows
     end
 
+    obj.focusPreviousWindowForCancel = function(self)
+        if self.previousWindow ~= nil then
+            self.focusWindow(self.previousWindow)
+        else
+            self.focusWindow(self.getCachedOrderedWindowsOrFetch()[1])
+        end
+    end
+
+    -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+    obj.focusWindow = function(targetWindow)
+        local targetAppliation = targetWindow:application()
+        local applicationVisibleWindows = targetAppliation:visibleWindows()
+
+        if #applicationVisibleWindows == 1 then
+            targetWindow:focus()
+        else
+            local applicationMainWindow = targetAppliation:mainWindow()
+            local applicationMainWindowScreen = applicationMainWindow:screen()
+            local applicationMainWindowScreenId = applicationMainWindowScreen:id()
+
+            local targetWindowScreen = targetWindow:screen()
+            local targetWindowScreenId = targetWindowScreen:id()
+
+            if targetWindowScreenId == applicationMainWindowScreenId then
+                targetWindow:focus()
+            else
+                local focusedWindow = hs.window.focusedWindow()
+                if focusedWindow and focusedWindow:application():pid() == targetAppliation:pid() then
+                    targetWindow:focus()
+                else
+                    -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+                    -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
+
+                    -- This process is workaround way.
+
+                    -- util.log(targetWindow:title())
+                    targetWindow:focus()
+                    hs.timer.doAfter(0.15, function()
+                        targetWindow:focus()
+                    end)
+                end
+            end
+        end
+    end
+
     return obj
 end
 return WindowModel
