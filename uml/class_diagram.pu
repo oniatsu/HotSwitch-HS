@@ -72,7 +72,7 @@ abstract View {
 
 hotswitchHs --> MainController
 
-MainController --> HotkeyController
+MainController *-> HotkeyController
 
 MainController --> PanelLayoutView
 MainController --> KeyStatusModel
