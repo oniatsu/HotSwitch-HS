@@ -72,12 +72,14 @@ class MainController {
 hotswitchHs x-> MainController
 
 MainController x-> PanelLayoutView
-MainController x-> ToastView
 MainController x-> KeyStatusModel
 MainController x-> SettingModel
 MainController x-> WindowModel
 MainController x-> HotkeyModel
 MainController x-> AppWatchModel
+
+HotkeyModel ..> PanelLayoutView
+HotkeyModel ..> ToastView
 
 KeyStatusModel <|.. Model
 SettingModel <|.. Model

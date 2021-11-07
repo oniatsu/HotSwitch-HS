@@ -3,7 +3,7 @@ local Model = require("hotswitch-hs/lib/model/Model")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
 local ToastView = require("hotswitch-hs/lib/view/ToastView")
 
--- TODO: It's not good to use panelLayoutView in this model.
+-- TODO: It's not so good to use PanelLayoutView and ToastView in this model.
 
 local HotkeyModel = {}
 HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchModel)
