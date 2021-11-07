@@ -1,26 +1,25 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
-local Model = require("hotswitch-hs/lib/model/Model")
+local Controller = require("hotswitch-hs/lib/model/Controller")
 local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
 local ToastView = require("hotswitch-hs/lib/view/ToastView")
 
--- TODO: It's not so good to use PanelLayoutView and ToastView in this model.
+local HotkeyController = {}
+HotkeyController.new = function(mainController)
+    local obj = Controller.new()
 
-local HotkeyModel = {}
-HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchModel)
-    local obj = Model.new()
-
-    obj.windowModel = windowModel
-    obj.settingModel = settingModel
-    obj.keyStatusModel = keyStatusModel
-    obj.appWatchModel = appWatchModel
+    obj.windowModel = mainController.windowModel
+    obj.settingModel = mainController.settingModel
+    obj.keyStatusModel = mainController.keyStatusModel
+    obj.appWatchModel = mainController.appWatchModel
+    obj.panelLayoutView = mainController.panelLayoutView
 
     obj.allHotkeys = {}
 
-    obj.createHotkeys = function(self, panelLayoutView)
+    obj.createHotkeys = function(self)
         if #self.allHotkeys == 0 then
-            self:createSpecialKeys(panelLayoutView)
-            self:createCharacterKeys(KeyConstants.ALL_KEYS, false, panelLayoutView)
-            self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true, panelLayoutView)
+            self:createSpecialKeys()
+            self:createCharacterKeys(KeyConstants.ALL_KEYS, false)
+            self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true)
         end
     end
 
@@ -46,66 +45,66 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
         end
     end
 
-    obj.createSpecialKeys = function(self, panelLayoutView)
+    obj.createSpecialKeys = function(self)
         table.insert(self.allHotkeys, hs.hotkey.new({}, "down", function()
-            panelLayoutView:selectNextRow(self.windowModel)
+            self.panelLayoutView:selectNextRow(self.windowModel)
         end, nil, function()
-            panelLayoutView:selectNextRow(self.windowModel)
+            self.panelLayoutView:selectNextRow(self.windowModel)
         end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "up", function()
-            panelLayoutView:selectPreviousRow(self.windowModel)
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
         end, nil, function()
-            panelLayoutView:selectPreviousRow(self.windowModel)
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
         end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "tab", function()
-            panelLayoutView:selectNextRow(self.windowModel)
+            self.panelLayoutView:selectNextRow(self.windowModel)
         end, nil, function()
-            panelLayoutView:selectNextRow(self.windowModel)
+            self.panelLayoutView:selectNextRow(self.windowModel)
         end))
         table.insert(self.allHotkeys, hs.hotkey.new({"shift"}, "tab", function()
-            panelLayoutView:selectPreviousRow(self.windowModel)
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
         end, nil, function()
-            panelLayoutView:selectPreviousRow(self.windowModel)
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
         end))
         
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "return", function() self:returnAction(panelLayoutView) end))
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "space", function() self:spaceAction(panelLayoutView) end))
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "delete", function() self:deleteAction(panelLayoutView) end))
-        table.insert(self.allHotkeys, hs.hotkey.new({}, "escape", function() self:escapeAction(panelLayoutView) end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "return", function() self:returnAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "space", function() self:spaceAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "delete", function() self:deleteAction() end))
+        table.insert(self.allHotkeys, hs.hotkey.new({}, "escape", function() self:escapeAction() end))
     end
 
-    obj.returnAction = function(self, panelLayoutView)
+    obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self.windowModel.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[panelLayoutView.selectedRowCanvasView.position])
+        self.windowModel.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position])
 
-        self:finish(panelLayoutView)
+        self:finish()
     end
 
-    obj.spaceAction = function(self, panelLayoutView)
+    obj.spaceAction = function(self)
         if self.isRegistrationMode then
             self.isRegistrationMode = false
-            panelLayoutView:unemphasisRow()
+            self.panelLayoutView:unemphasisRow()
         else
             self.isRegistrationMode = true
-            panelLayoutView:emphasisRow()
+            self.panelLayoutView:emphasisRow()
         end
     end
 
-    obj.escapeAction = function(self, panelLayoutView)
+    obj.escapeAction = function(self)
         if self.isRegistrationMode then
             self.isRegistrationMode = false
-            panelLayoutView:unemphasisRow()
+            self.panelLayoutView:unemphasisRow()
         else
             self.windowModel:focusPreviousWindowForCancel()
 
-            self:finish(panelLayoutView)
+            self:finish()
         end
     end
 
-    obj.deleteAction = function(self, panelLayoutView)
+    obj.deleteAction = function(self)
         self.isRegistrationMode = false
-        local window = self.windowModel:getCachedOrderedWindowsOrFetch()[panelLayoutView:getSelectedRowPosition()]
+        local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView:getSelectedRowPosition()]
 
         local appName = window:application():name()
 
@@ -145,11 +144,11 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
         self.keyStatusModel:resetAutoGeneratedKeys()
 
         self.keyStatusModel:createKeyStatuses()
-        panelLayoutView:show()
-        panelLayoutView:unemphasisRow()
+        self.panelLayoutView:show()
+        self.panelLayoutView:unemphasisRow()
     end
 
-    obj.createCharacterKeys = function(self, keys, isShiftable, panelLayoutView)
+    obj.createCharacterKeys = function(self, keys, isShiftable)
         local keybindModifier
         if isShiftable then
             keybindModifier = {"shift"}
@@ -168,7 +167,7 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
                 if self.isRegistrationMode then
                     self.isRegistrationMode = false
 
-                    local window = self.windowModel:getCachedOrderedWindowsOrFetch()[panelLayoutView.selectedRowCanvasView.position]
+                    local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position]
                     local windowId = window:id()
 
                     local appName = window:application():name()
@@ -253,8 +252,8 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
                     self.keyStatusModel:resetAutoGeneratedKeys()
 
                     self.keyStatusModel:createKeyStatuses()
-                    panelLayoutView:show()
-                    panelLayoutView:unemphasisRow()
+                    self.panelLayoutView:show()
+                    self.panelLayoutView:unemphasisRow()
                 else
                     local targetWindow
                     for j = 1, #self.keyStatusModel.registeredAndAutoGeneratedKeyStatuses do
@@ -266,7 +265,7 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
                     end
 
                     if targetWindow ~= nil then
-                        self:finish(panelLayoutView)
+                        self:finish()
 
                         self.windowModel.focusWindow(targetWindow)
                     end
@@ -275,8 +274,8 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
         end
     end
 
-    obj.finish = function(self, panelLayoutView)
-        panelLayoutView:hide()
+    obj.finish = function(self)
+        self.panelLayoutView:hide()
         self:disableHotkeys()
         self.appWatchModel:unwatchAppliationDeactivated()
     end
@@ -301,4 +300,4 @@ HotkeyModel.new = function(windowModel, settingModel, keyStatusModel, appWatchMo
 
     return obj
 end
-return HotkeyModel
+return HotkeyController
