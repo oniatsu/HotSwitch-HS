@@ -117,7 +117,7 @@ git pull
 
 The class diagram is roughly like this.
 
-![class_diagram](https://github.com/oniatsu/HotSwitch-HS/blob/main/uml/class_diagram.png)
+![class_diagram](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/uml/class_diagram.png)
 
 ## Note
 
