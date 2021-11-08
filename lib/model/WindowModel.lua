@@ -98,13 +98,18 @@ WindowModel.new = function()
                     -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
                     -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
 
-                    -- This process is workaround way.
+                    -- This way is workaround.
 
-                    -- util.log(targetWindow:title())
                     targetWindow:focus()
-                    hs.timer.doAfter(0.15, function()
-                        targetWindow:focus()
+
+                    local status, err = pcall(function()
+                        hs.timer.doAfter(0.15, function()
+                            targetWindow:focus()
+                        end)
                     end)
+                    if status == false then
+                        Debugger.i(err)
+                    end
                 end
             end
         end

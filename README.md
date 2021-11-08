@@ -121,4 +121,4 @@ The class diagram is roughly like this.
 
 ## Note
 
-- Pay attention to lua's garvage collection.
+- Pay attention to Lua's garvage collection.
