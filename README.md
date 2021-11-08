@@ -54,11 +54,11 @@ For example, you can bind like these.
 -- These are valid.
 hs.hotkey.bind({"command"}, ".", function() hotswitchHs.openOrClose() end) -- command + .
 hs.hotkey.bind({"command"}, ";", function() hotswitchHs.openOrClose() end) -- command + ;
-hs.hotkey.bind({"option"}, "tab", function() hotswitchHs.openOrClose() end) -- option + [
+hs.hotkey.bind({"option"}, "tab", function() hotswitchHs.openOrClose() end) -- option + tab
 hs.hotkey.bind({"command", "shift"}, "a", function() hotswitchHs.openOrClose() end) -- command + shift + a
 
 -- These are NOT valid normally. Hammerspoon cannot override the keys, because the keys may be registered and used by macOS.
-hs.hotkey.bind({"command"}, "tab", function() hotswitchHs.openOrClose() end) -- command + space
+hs.hotkey.bind({"command"}, "tab", function() hotswitchHs.openOrClose() end) -- command + tab
 hs.hotkey.bind({"command"}, "space", function() hotswitchHs.openOrClose() end) -- command + space
 ```
 
