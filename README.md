@@ -98,7 +98,7 @@ If you want to delete a registered key combined with a window, select the window
 
 # Preferences
 
-If you want to set some preferences, add the code at `~/.hammerspoon/init.lua`.
+If you want to set some preferences, you can use some option by adding codes at `~/.hammerspoon/init.lua`.
 
 For example:
 
