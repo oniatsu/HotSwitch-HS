@@ -1,4 +1,5 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
+local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local Model = require("hotswitch-hs/lib/model/Model")
 
 local WindowModel = {}
@@ -7,6 +8,11 @@ WindowModel.new = function()
 
     obj.cachedOrderedWindows = nil
     obj.previousWindow = nil
+
+    -- Workaround:
+    -- This is necessaary to make it faster to get all windows.
+    -- If the `subscribe` is not set, the getting windows is slow.
+    hs.window.filter.default:subscribe(hs.window.filter.windowsChanged, function(window, appName, callingEvent) end)
 
     obj.getCachedOrderedWindowsOrFetch = function(self)
         if self.cachedOrderedWindows == nil then
@@ -37,21 +43,13 @@ WindowModel.new = function()
 
     -- Note: "hs.window.orderedWindows()" cannot get "Hammerspoon Console" window. I don't know why that.
     obj.refreshOrderedWindows = function(self)
-        -- This method is slow. hs.window.switcher uses this way.
-        -- local wins = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
-        -- self.cachedOrderedWindows = wins
-        -- return wins
-
-        -- local checkTime = util.checkTime.new()
-        local orderedWindows = hs.window.orderedWindows()
-        -- checkTime:diff("get") --100ms ~ 300ms
-        local cleanedOrderedWindows = self.removeInvalidWindows(orderedWindows)
-        -- checkTime:diff("remove") -- 25ms
-
-        self.cachedOrderedWindows = cleanedOrderedWindows
-        return cleanedOrderedWindows
+        local orderedWindows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+        -- local orderedWindows = hs.window.orderedWindows() -- too slow
+        self.cachedOrderedWindows = orderedWindows
+        return orderedWindows
     end
 
+    -- Deprecated
     obj.removeInvalidWindows = function(orderedWindows)
         -- Google Chrome's search box is treated as visible window.
         -- So you need remove such invalid windows.
@@ -76,12 +74,15 @@ WindowModel.new = function()
     -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
     obj.focusWindow = function(targetWindow)
         local targetAppliation = targetWindow:application()
-        local applicationVisibleWindows = targetAppliation:visibleWindows()
+        local applicationMainWindow = targetAppliation:mainWindow()
+        if applicationMainWindow == nil then
+            return
+        end
 
+        local applicationVisibleWindows = targetAppliation:visibleWindows()
         if #applicationVisibleWindows == 1 then
             targetWindow:focus()
         else
-            local applicationMainWindow = targetAppliation:mainWindow()
             local applicationMainWindowScreen = applicationMainWindow:screen()
             local applicationMainWindowScreenId = applicationMainWindowScreen:id()
 

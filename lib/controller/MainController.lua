@@ -1,5 +1,5 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
-local KeyConstants = require("hotswitch-hs/lib/common/KeyConstants")
+local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local Controller = require("hotswitch-hs/lib/controller/Controller")
 local WindowModel = require("hotswitch-hs/lib/model/WindowModel")
 local SettingsModel = require("hotswitch-hs/lib/model/SettingModel")
@@ -41,7 +41,7 @@ MainController.new = function()
             self.windowModel.previousWindow = hs.window.frontmostWindow()
 
             -- Enable hotkeys before refresh windows,
-            -- because refreshing windows is slow and take time.
+            -- because refreshing windows is sometimes slow and take time.
             self.hotkeyController:enableHotkeys()
             self.panelLayoutView:activateHammerspoonWindow()
             self.windowModel:refreshOrderedWindows()
