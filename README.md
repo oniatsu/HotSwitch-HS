@@ -132,6 +132,8 @@ If you want to see all space windows on the lists, add this.
 hotswitchHs.enableAllSpaceWindows()
 ```
 
+Default: the current space windows are only showen.
+
 # If you have some probrems,
 
 Check these.
