@@ -82,6 +82,7 @@ For example, you can bind like these.
 hs.hotkey.bind({"command"}, ".", function() hotswitchHs.openOrClose() end) -- command + .
 hs.hotkey.bind({"command"}, ";", function() hotswitchHs.openOrClose() end) -- command + ;
 hs.hotkey.bind({"option"}, "tab", function() hotswitchHs.openOrClose() end) -- option + tab
+hs.hotkey.bind({"control"}, 'space', function() hotswitchHs.openOrClose() end) -- control + space
 hs.hotkey.bind({"command", "shift"}, "a", function() hotswitchHs.openOrClose() end) -- command + shift + a
 
 -- These are NOT valid normally. Hammerspoon cannot override the keys, because the keys may be registered and used by macOS.
