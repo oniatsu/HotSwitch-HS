@@ -101,7 +101,7 @@ Default auto generated keys are [these](https://github.com/oniatsu/HotSwitch-HS/
 
 ## Showing all space windows
 
-If you want to enable to show all space windows, add this.
+If you want to see all space windows on the lists, add this.
 
 ```lua
 hotswitchHs.enableAllSpaceWindows()
