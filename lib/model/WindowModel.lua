@@ -9,10 +9,21 @@ WindowModel.new = function()
     obj.cachedOrderedWindows = nil
     obj.previousWindow = nil
 
-    -- Workaround:
-    -- This is necessaary to make it faster to get all windows.
-    -- If the `subscribe` is not set, the getting windows is slow.
-    hs.window.filter.default:subscribe(hs.window.filter.windowsChanged, function(window, appName, callingEvent) end)
+    obj.windowFilter = hs.window.filter.defaultCurrentSpace
+    obj.subscriptionCallback = function() end
+
+    obj.init = function(self)
+        -- Workaround:
+        -- This is necessaary to make it faster to get all windows.
+        -- If the `subscribe` is not set, the getting windows is slow.
+        obj.windowFilter:subscribe(hs.window.filter.windowsChanged, self.subscriptionCallback)
+    end
+
+    obj.enableAllSpaceWindows = function(self)
+        obj.windowFilter:unsubscribe(hs.window.filter.windowsChanged, self.subscriptionCallback)
+        obj.windowFilter = hs.window.filter.default
+        obj.windowFilter:subscribe(hs.window.filter.windowsChanged, self.subscriptionCallback)
+    end
 
     obj.getCachedOrderedWindowsOrFetch = function(self)
         if self.cachedOrderedWindows == nil then
@@ -43,7 +54,7 @@ WindowModel.new = function()
 
     -- Note: "hs.window.orderedWindows()" cannot get "Hammerspoon Console" window. I don't know why that.
     obj.refreshOrderedWindows = function(self)
-        local orderedWindows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+        local orderedWindows = self.windowFilter:getWindows(hs.window.filter.sortByFocusedLast)
         -- local orderedWindows = hs.window.orderedWindows() -- too slow
         self.cachedOrderedWindows = orderedWindows
         return orderedWindows
