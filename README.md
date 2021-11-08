@@ -45,8 +45,6 @@ The important thing is that **the 2 stroke key bind is fixed anytime**.
 
 That is why window switching by HotSwitch-HS is always fastest.
 
-## Key deletion
-
 # Installation
 
 ## 1. Install [Hammerspoon](https://www.hammerspoon.org/)
