@@ -27,10 +27,10 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
         self.baseCanvasView:show()
         -- t:diff("baseCanvasView:show")
         self.selectedRowCanvasView:createSelectedRow()
-        -- t:diff("createSelectedRow")
+        -- t:diff("selectedRowCanvasView:createSelectedRow")
 
         self.selectedRowCanvasView:replaceSelectedRow()
-        -- t:diff("replaceSelectedRow")
+        -- t:diff("selectedRowCanvasView:replaceSelectedRow")
     end
 
     obj.hide = function(self)

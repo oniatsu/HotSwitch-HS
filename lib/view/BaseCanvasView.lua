@@ -22,7 +22,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         -- t:diff("getCachedOrderedWindowsOrFetch")
 
         self:showRectangle(orderedWindows)
-        -- t:diff("showRectangle")
+        -- t:diff("showRectangle") -- sometimes, slow
         self:showWindowInfo(orderedWindows)
         -- t:diff("showWindowInfo")
     end
@@ -35,11 +35,15 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     end
 
     obj.showRectangle = function(self, orderedWindows)
+        local t = TimeChecker.new()
         if self.baseCanvas == nil then
+            Debugger.log("baseCanvas == nil")
             self.baseCanvas = canvas.new(FrameCulculator.calcBaseCanvasFrame(orderedWindows))
         end
+        t:diff("canvas new") -- sometimes, slow
 
         self:setElements(orderedWindows)
+        t:diff("setElements")
 
         -- self:activateHammerspoonWindow()
         -- self.baseCanvas:level("normal") -- don't need
