@@ -1,6 +1,7 @@
 local canvas = require("hs.canvas")
 
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
+local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local View = require("hotswitch-hs/lib/view/View")
 local BaseCanvasView = require("hotswitch-hs/lib/view/BaseCanvasView")
 local SelectedRowCanvasView = require("hotswitch-hs/lib/view/SelectedRowCanvasView")
@@ -22,10 +23,14 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
             self.selectedRowCanvasView.position = defaultRowPosition
         end
 
+        -- local t = TimeChecker.new()
         self.baseCanvasView:show()
+        -- t:diff("baseCanvasView:show")
         self.selectedRowCanvasView:createSelectedRow()
+        -- t:diff("createSelectedRow")
 
         self.selectedRowCanvasView:replaceSelectedRow()
+        -- t:diff("replaceSelectedRow")
     end
 
     obj.hide = function(self)

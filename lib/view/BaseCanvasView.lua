@@ -1,6 +1,7 @@
 local canvas = require("hs.canvas")
 
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
+local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local View = require("hotswitch-hs/lib/view/View")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
 local FrameCulculator = require("hotswitch-hs/lib/common/FrameCulculator")
@@ -16,10 +17,14 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     obj.clickCallback = nil
 
     obj.show = function(self)
+        -- local t = TimeChecker.new()
         local orderedWindows = self.windowModel:getCachedOrderedWindowsOrFetch()
+        -- t:diff("getCachedOrderedWindowsOrFetch")
 
         self:showRectangle(orderedWindows)
+        -- t:diff("showRectangle")
         self:showWindowInfo(orderedWindows)
+        -- t:diff("showWindowInfo")
     end
 
     obj.hide = function(self)
