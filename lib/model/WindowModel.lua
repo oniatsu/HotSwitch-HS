@@ -46,12 +46,15 @@ WindowModel.new = function()
         return copiedCachedOrderedWindows
     end
 
-    obj.getWindowIdBasedOrderedWindows = function(self)
-        local windowIdBasedOrderedWindows = self:copyCachedOrderedWindows()
-        table.sort(windowIdBasedOrderedWindows, function(a, b)
-            return (a:id() < b:id())
-        end)
-        return windowIdBasedOrderedWindows
+    obj.getCreatedOrderedWindows = function(self)
+        return self.windowFilter:getWindows(hs.window.filter.sortByCreated)
+
+        -- Another way: sorting by window id
+        -- local windowIdBasedOrderedWindows = self:copyCachedOrderedWindows()
+        -- table.sort(windowIdBasedOrderedWindows, function(a, b)
+        --     return (a:id() < b:id())
+        -- end)
+        -- return windowIdBasedOrderedWindows
     end
 
     -- Note: "hs.window.orderedWindows()" cannot get "Hammerspoon Console" window. I don't know why that.

@@ -167,6 +167,19 @@ git pull
 
 # Development
 
+## Steps
+
+1. Edit codes.
+2. Reload Hammerspoon config and check that it's working correctly.
+3. If you would update the class diagram, execute `plantuml uml` at your terminal.
+
+## Requirements
+
+- Hammerspoon
+- PlantUML (If you would update the class diagram, it's necessary. `brew install graphviz && brew install plantuml`)
+
+## Directory structure
+
 The class diagram is roughly like this.
 
 ![class_diagram](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/uml/class_diagram.png)
