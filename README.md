@@ -146,7 +146,7 @@ It would be fixed by reloading Hammerspoon. It's possibly Hammerspoon's bug.
 I recommend that you add a keybind to reload Hammerpoon quickly.
 
 ```lua
--- For example: you can reload by "command + option control + r".
+-- For example: you can reload by "command + option + control + r".
 hs.hotkey.bind({"command", "option", "control"}, "r", function() hs.reload() end)
 -- It's message showing the completion of reloading.
 hs.alert.show("Hammerspoon is reloaded")
