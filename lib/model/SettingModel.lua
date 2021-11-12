@@ -8,10 +8,10 @@ data format:
 
 settings = {
     {
-        app = "Google Chrome",
+        app = "Safari",
         keys = {
-            "d",
-            "r",
+            "s",
+            "f",
         }
     },
     {
