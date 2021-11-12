@@ -145,7 +145,7 @@ Check these.
 
 ## Known issues
 
-Sometimes, getting windows is failed after the macOS has waken up from sleep.
+Sometimes, getting windows is failed after the macOS has woken up from sleep.
 
 It would be fixed by reloading Hammerspoon. It's possibly Hammerspoon's bug.
 I recommend that you add a keybind to reload Hammerpoon quickly.
