@@ -59,23 +59,31 @@ HotkeyController.new = function(mainController)
 
     obj.createSpecialKeys = function(self)
         table.insert(self.allHotkeys, hs.hotkey.new({}, "down", function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectNextRow(self.windowModel)
         end, nil, function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectNextRow(self.windowModel)
         end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "up", function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end, nil, function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "tab", function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectNextRow(self.windowModel)
         end, nil, function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectNextRow(self.windowModel)
         end))
         table.insert(self.allHotkeys, hs.hotkey.new({"shift"}, "tab", function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end, nil, function()
+            self.isRegistrationMode = false
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end))
         
