@@ -2,6 +2,8 @@ local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local Model = require("hotswitch-hs/lib/model/Model")
 
+local SUBSCRIPTION_TARGET = {hs.window.filter.windowsChanged, hs.window.filter.windowTitleChanged}
+
 local WindowModel = {}
 WindowModel.new = function()
     local obj = Model.new()
@@ -16,13 +18,14 @@ WindowModel.new = function()
         -- Workaround:
         -- This is necessaary to make it faster to get all windows.
         -- If the `subscribe` is not set, the getting windows is slow.
-        obj.windowFilter:subscribe(hs.window.filter.windowsChanged, self.subscriptionCallback)
+        obj.windowFilter:subscribe(SUBSCRIPTION_TARGET, self.subscriptionCallback)
+
     end
 
     obj.enableAllSpaceWindows = function(self)
-        obj.windowFilter:unsubscribe(hs.window.filter.windowsChanged, self.subscriptionCallback)
+        obj.windowFilter:unsubscribe(SUBSCRIPTION_TARGET, self.subscriptionCallback)
         obj.windowFilter = hs.window.filter.default
-        obj.windowFilter:subscribe(hs.window.filter.windowsChanged, self.subscriptionCallback)
+        obj.windowFilter:subscribe(SUBSCRIPTION_TARGET, self.subscriptionCallback)
     end
 
     obj.getCachedOrderedWindowsOrFetch = function(self)
@@ -54,8 +57,13 @@ WindowModel.new = function()
 
     -- Note: "hs.window.orderedWindows()" cannot get "Hammerspoon Console" window. I don't know why that.
     obj.refreshOrderedWindows = function(self)
+        -- Sometimes, getting window is failed.
         local orderedWindows = self.windowFilter:getWindows(hs.window.filter.sortByFocusedLast)
-        -- local orderedWindows = hs.window.orderedWindows() -- too slow
+
+        -- Here is another way, but it's slow.
+        -- local orderedWindows = hs.window.orderedWindows()
+        -- orderedWindows = self.removeInvalidWindows(orderedWindows)
+
         self.cachedOrderedWindows = orderedWindows
         return orderedWindows
     end

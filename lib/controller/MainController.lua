@@ -43,20 +43,20 @@ MainController.new = function()
 
             -- Enable hotkeys before refresh windows,
             -- because refreshing windows is sometimes slow and take time.
-            -- local t = TimeChecker.new()
+            local t = TimeChecker.new()
             self.hotkeyController:enableHotkeys()
-            -- t:diff("enableHotkeys")
+            t:diff("MainController:enableHotkeys")
             self.panelLayoutView:activateHammerspoonWindow()
-            -- t:diff("activateHammerspoonWindow")
+            t:diff("MainController:activateHammerspoonWindow")
 
             self.windowModel:refreshOrderedWindows()
-            -- t:diff("refreshOrderedWindows")
+            t:diff("MainController:refreshOrderedWindows")
             self.keyStatusModel:createKeyStatuses()
-            -- t:diff("createKeyStatuses")
+            t:diff("MainController:createKeyStatuses")
             self.panelLayoutView:show()
-            -- t:diff("show")
+            t:diff("MainController:show")
             self.appWatchModel:watchAppliationDeactivated(function() self:finish() end)
-            -- t:diff("watchAppliationDeactivated")
+            t:diff("MainController:watchAppliationDeactivated")
         end
     end
 
