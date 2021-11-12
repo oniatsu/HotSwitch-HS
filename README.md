@@ -138,6 +138,19 @@ Check these.
 - If you want to clear HotSwtich-HS's all settings, execute code `hotswitchHs.clearSettings()` at `~/.hammerspoon/init.lua`.
 - Update HotSwtich-HS. `cd ~/.hammerspoon/hotswitch-hs && git pull`
 
+## Known issues
+
+Sometimes, getting windows is failed after the macOS has waken up from sleep.
+It would be fixed by reloading Hammerspoon. Probably it's Hammerspoon's bug.
+I recommend that you add a keybind to reload Hammerpoon to do quickly.
+
+```lua
+-- For example: you can reload by "command + option + r".
+hs.hotkey.bind({"command", "option", "control"}, "r", function() hs.reload() end)
+-- It's message showing the completion of reloading.
+hs.alert.show("Hammerspoon is reloaded")
+```
+
 # Update
 
 Execute these command at terminal.
