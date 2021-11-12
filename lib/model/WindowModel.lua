@@ -19,7 +19,6 @@ WindowModel.new = function()
         -- This is necessaary to make it faster to get all windows.
         -- If the `subscribe` is not set, the getting windows is slow.
         obj.windowFilter:subscribe(SUBSCRIPTION_TARGET, self.subscriptionCallback)
-
     end
 
     obj.enableAllSpaceWindows = function(self)
@@ -128,7 +127,7 @@ WindowModel.new = function()
                         end)
                     end)
                     if status == false then
-                        Debugger.i(err)
+                        Debugger.log("ERROR (doAfter timer) : " .. err)
                     end
                 end
             end

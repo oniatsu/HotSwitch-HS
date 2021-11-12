@@ -24,9 +24,9 @@ local function log(value)
         -- print("ERROR: debugLog") -- it has error that same as above.
     end
 
-    if debuggable then
+    -- if debuggable then
         -- hs.alert.show(message)
-    end
+    -- end
 end
 
 return {
