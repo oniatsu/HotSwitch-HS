@@ -173,6 +173,12 @@ git pull
 2. Reload Hammerspoon config and check that it's working correctly.
 3. If you would update the class diagram, execute `plantuml uml` at your terminal.
 
+### Administrator steps
+
+4. Check current git tag. (`git describe --tags --abbrev=0`)
+5. Add a new git tag.
+6. Push the tags. Then, the release on GitHub is automatically created.
+
 ## Requirements
 
 - Hammerspoon
