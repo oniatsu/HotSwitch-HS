@@ -74,7 +74,7 @@ If the file does not exist, create it and add the codes.
 
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
--- Set any keybinds you like
+-- Set a keybind you like to open HotSwitch-HS panel.
 hs.hotkey.bind({"command"}, ".", function() hotswitchHs.openOrClose() end)
 ```
 
@@ -96,6 +96,9 @@ hs.hotkey.bind({"command"}, "space", function() hotswitchHs.openOrClose() end) -
 [Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
 
 ## 4. Run Hammerspoon
+
+And open HotSwitch-HS panel by using the keybind you set.
+If you have some probrems, [check these](https://github.com/oniatsu/HotSwitch-HS#if-you-have-some-probrems).
 
 # Preferences
 
@@ -137,8 +140,7 @@ Default: the current space windows are only shown.
 
 Check these.
 
-- If a keybind you set is not enabled, open Hammerspoon console and check some error messages. First, click Hammerspoon's menubar icon. Second, click `Console...`.
-- If you want to clear HotSwtich-HS's all settings, execute code `hotswitchHs.clearSettings()` at `~/.hammerspoon/init.lua`.
+- If the keybind you set is not enabled, open Hammerspoon console and check some error messages. First, click Hammerspoon's menubar icon. Second, click `Console...`.
 - Update HotSwtich-HS. `cd ~/.hammerspoon/hotswitch-hs && git pull`
 
 ## Known issues
