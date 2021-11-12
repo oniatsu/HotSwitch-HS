@@ -59,12 +59,15 @@ git clone https://github.com/oniatsu/HotSwitch-HS.git ~/.hammerspoon/hotswitch-h
 Directory tree is like this:
 ```
 ~/.hammerspoon/
-▾ hotswitch-hs/
-  ▸ modules/
-    hotswitch-hs.lua
-    README.md
-  init.lua
+├── init.lua
+└── hotswitch-hs/
+  ├── lib/
+  ├── LICENSE
+  ├── README.md
+  └── hotswitch-hs.lua
 ```
+
+If you have installed Hammerspoon just right now, `~/.hammerspoon/init.lua` doesn't exist yet.
 
 ## 3. Put a code at your Hammerspoon's `~/.hammerspoon/init.lua`
 If the file does not exist, create it and add the codes.
