@@ -1,5 +1,6 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
+local Updater = require("hotswitch-hs/lib/common/Updater")
 local Controller = require("hotswitch-hs/lib/controller/Controller")
 local WindowModel = require("hotswitch-hs/lib/model/WindowModel")
 local SettingsModel = require("hotswitch-hs/lib/model/SettingModel")
@@ -79,6 +80,10 @@ MainController.new = function()
         self.panelLayoutView:hide()
         self.hotkeyController:disableHotkeys()
         self.appWatchModel:unwatchAppliationDeactivated()
+    end
+
+    obj.checkUpdate = function()
+        Updater.check();
     end
 
     return obj
