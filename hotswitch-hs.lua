@@ -1,5 +1,6 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local MainController = require("hotswitch-hs/lib/controller/MainController")
+local PreferenceModel = require("hotswitch-hs/lib/model/PreferenceModel")
 
 local mainController = MainController.new()
 
@@ -9,5 +10,6 @@ return {
     enableAllSpaceWindows = function() mainController:enableAllSpaceWindows() end,
     enableAutoUpdate = function() mainController.checkUpdate() end,
     clearSettings = function() mainController:clearSettings() end,
+    clearPreferences = function() PreferenceModel.clearPreferences() end,
     enableDebug = function() Debugger.setDebuggable(true) end,
 }

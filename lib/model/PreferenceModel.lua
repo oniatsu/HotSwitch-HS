@@ -28,7 +28,6 @@ end
 local clearPreferences = function()
     hs.settings.clear(PREFERENCE_KEY)
 end
--- clearPreferences() -- debug
 
 local getAutoUpdate = function()
     local preferences = getPreferences()
@@ -48,6 +47,8 @@ local setAutoUpdate = function(autoUpdate)
 end
 
 local obj = {}
+
+obj.clearPreferences = clearPreferences
 
 obj.autoUpdate = {}
 

@@ -52,13 +52,11 @@ obj.check = function()
     local currentDate = os.date("%Y-%m-%d")
     local lastCheckedDate = PreferenceModel.autoUpdate.getLastCheckedDate()
     -- lastCheckedDate = "2021-10-10" -- debug
-    Debugger.log(lastCheckedDate)
     if lastCheckedDate == currentDate then
         Debugger.log("Today is same as last checked date.")
         return
     end
     PreferenceModel.autoUpdate.setLastCheckedDate(currentDate)
-    Debugger.log(PreferenceModel.autoUpdate.getLastCheckedDate())
 
     Debugger.log("HTTP request")
     hs.http.asyncGet(URL, nil, function(status, body, header)
@@ -74,7 +72,6 @@ obj.check = function()
                 else
                     local lastCheckedVersion = PreferenceModel.autoUpdate.getLastCheckedVersion()
                     -- lastCheckedVersion = "v1.9.9" -- debug
-                    Debugger.log(lastCheckedVersion)
                     if lastCheckedVersion == remoteVersion then
                         Debugger.log("The version update was already checked.")
                     else
