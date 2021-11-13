@@ -118,6 +118,8 @@ See below to know what these means.
 
 ## Auto update
 
+Add this. It will update HotSwitch-HS by `git pull` automatically.
+
 ```lua
 hotswitchHs.enableAutoUpdate()
 ```
@@ -164,7 +166,7 @@ hs.hotkey.bind({"command", "option", "control"}, "r", function() hs.reload() end
 hs.alert.show("Hammerspoon is reloaded")
 ```
 
-# Update
+# Update manually
 
 ```
 cd ~/.hammerspoon/hotswitch-hs
