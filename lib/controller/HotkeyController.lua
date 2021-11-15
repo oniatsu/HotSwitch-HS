@@ -126,13 +126,13 @@ HotkeyController.new = function(mainController)
         self.isRegistrationMode = false
         local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView:getSelectedRowPosition()]
 
-        local appName = window:application():name()
+        local bundleId = window:application():bundleID()
 
         local settings = self.settingModel.get()
         for i = 1, #settings do
             local setting = settings[i]
 
-            if setting.app == appName then
+            if setting.app == bundleId then
                 local windowId = window:id()
 
                 for j = 1, #self.keyStatusModel.registeredKeyStatuses do
@@ -190,14 +190,14 @@ HotkeyController.new = function(mainController)
                     local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position]
                     local windowId = window:id()
 
-                    local appName = window:application():name()
+                    local bundleId = window:application():bundleID()
 
                     local hasAppSetting = false
                     local settings = self.settingModel.get()
                     for i = 1, #settings do
                         local setting = settings[i]
 
-                        if setting.app == appName then
+                        if setting.app == bundleId then
                             hasAppSetting = true
 
                             local targetKey
@@ -263,7 +263,7 @@ HotkeyController.new = function(mainController)
 
                     if hasAppSetting == false then
                         table.insert(settings, {
-                            app = appName,
+                            app = bundleId,
                             keys = {key}
                         })
                     end

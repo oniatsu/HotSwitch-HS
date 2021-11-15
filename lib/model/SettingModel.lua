@@ -8,20 +8,20 @@ data format:
 
 settings = {
     {
-        app = "Safari",
+        app = "com.apple.Safari",
         keys = {
             "s",
             "f",
         }
     },
     {
-        app = "Mail",
+        app = "com.apple.mail",
         keys = {
             "m",
         }
     },
     {
-        app = "Calendar",
+        app = "com.apple.iCal",
         keys = {
             "c",
         }
