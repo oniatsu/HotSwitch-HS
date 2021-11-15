@@ -11,8 +11,8 @@ You can switch any windows by like `command + .` + `x` (this key is always fixed
 
 HotSwitch-HS's window switching steps is these.
 
-1. Register **a fixed key** to windows on list. (Press `Space`)
-2. Switch any windows by using the key you registered.
+1. Register **a fixed key** to windows on list. (Press `Space`. It's easy and fast.)
+2. Switch any windows by using the key you registered. (You can switch in a flash without thinking time.)
 
 In addition, HotSwitch-HS provides auto generated keys before your key registration.
 However, I highly recommend that you register keys, because it enable you to switch windows faster than ever.
@@ -156,8 +156,8 @@ Check these.
 
 Sometimes, getting windows is failed after the macOS has woken up from sleep.
 
-It would be fixed by reloading Hammerspoon. It's possibly Hammerspoon's bug.
-I recommend that you add a keybind to reload Hammerpoon quickly.
+It would be fixed by reloading Hammerspoon config. It's possibly Hammerspoon's bug.
+I recommend that you add a keybind to reload Hammerpoon config quickly.
 
 ```lua
 -- For example: you can reload by "command + option + control + r".
@@ -181,22 +181,22 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # Development
 
+## Requirements
+
+- Hammerspoon
+- PlantUML (Option: If you would update the class diagram on documents, it's necessary. `brew install graphviz && brew install plantuml`)
+
 ## Steps
 
 1. Edit codes.
 2. Reload Hammerspoon config and check that it's working correctly.
-3. If you would update the class diagram, execute `plantuml doc/uml --o ../img` at your terminal.
 
 ### Administrator steps
 
+3. If you would update the class diagram, execute `plantuml doc/uml --o ../img` at your terminal.
 4. Check current git tag. (`git describe --tags --abbrev=0`)
 5. Add a new git tag.
-6. Push the tags. Then, the release on GitHub is automatically created.
-
-## Requirements
-
-- Hammerspoon
-- PlantUML (If you would update the class diagram, it's necessary. `brew install graphviz && brew install plantuml`)
+6. Push the tag. Then, the release on GitHub is automatically created.
 
 ## Directory structure
 
