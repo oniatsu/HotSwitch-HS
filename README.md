@@ -216,6 +216,6 @@ The class diagram is roughly like this.
 # Important ChangeLog
 
 - v2.1.5: Change saving keys to use bundleID instead of app name
-  - If you used before this version, you need register keys again.
+  - If you used this app before this version, you need register keys again.
 - v2.1.0: Add auto updater
 - v1.0.0: First released
