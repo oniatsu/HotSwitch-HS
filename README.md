@@ -1,6 +1,6 @@
 # What is HotSwitch-HS
 
-![preview](https://user-images.githubusercontent.com/5919569/139619210-b4215c01-a1f8-41db-ad41-34a1882f13bc.png)
+![top](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/doc/img/top.png)
 
 HotSwitch-HS is a window switcher using **2 stroke hotkey** for macOS.
 
@@ -185,7 +185,7 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 1. Edit codes.
 2. Reload Hammerspoon config and check that it's working correctly.
-3. If you would update the class diagram, execute `plantuml uml` at your terminal.
+3. If you would update the class diagram, execute `plantuml doc/uml --o ../img` at your terminal.
 
 ### Administrator steps
 
@@ -202,7 +202,7 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 The class diagram is roughly like this.
 
-![class_diagram](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/uml/class_diagram.png)
+![class_diagram](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/doc/img/class_diagram.png)
 
 ## Note
 
