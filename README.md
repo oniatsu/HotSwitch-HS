@@ -212,3 +212,10 @@ The class diagram is roughly like this.
 ## Note
 
 - Pay attention to Lua's garvage collection.
+
+# Important ChangeLog
+
+- v2.1.5: Change saving keys to use bundleID instead of app name
+  - If you used before this version, you need register keys again.
+- v2.1.0: Add auto updater
+- v1.0.0: First released
