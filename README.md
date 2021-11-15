@@ -201,7 +201,7 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 If you would update the class diagram,
 1. Install PlantUML. (`brew install graphviz && brew install plantuml`)
 2. Edit `doc/uml/class_diagram.pu`.
-3. Execute `plantuml doc/uml --o ../img` at your terminal.
+3. Execute `plantuml doc/uml -o ../img` at your terminal.
 
 ## Directory structure
 
