@@ -192,7 +192,7 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 ### Owner's steps
 
-3. Check current git tag. (`git describe --tags --abbrev=0`)
+3. Check latest git tag. (`git describe --tags --abbrev=0`)
 4. Add a new git tag.
 5. Push the tag. Then, the release on GitHub is automatically created.
 
