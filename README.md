@@ -184,19 +184,24 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 ## Requirements
 
 - Hammerspoon
-- PlantUML (Option: If you would update the class diagram on documents, it's necessary. `brew install graphviz && brew install plantuml`)
 
 ## Steps
 
 1. Edit codes.
 2. Reload Hammerspoon config and check that it's working correctly.
 
-### Administrator steps
+### Owner's steps
 
-3. If you would update the class diagram, execute `plantuml doc/uml --o ../img` at your terminal.
-4. Check current git tag. (`git describe --tags --abbrev=0`)
-5. Add a new git tag.
-6. Push the tag. Then, the release on GitHub is automatically created.
+3. Check current git tag. (`git describe --tags --abbrev=0`)
+4. Add a new git tag.
+5. Push the tag. Then, the release on GitHub is automatically created.
+
+### Option
+
+If you would update the class diagram,
+1. Install PlantUML. (`brew install graphviz && brew install plantuml`)
+2. Edit `doc/uml/class_diagram.pu`.
+3. Execute `plantuml doc/uml --o ../img` at your terminal.
 
 ## Directory structure
 
