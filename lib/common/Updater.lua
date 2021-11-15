@@ -38,8 +38,8 @@ local showDialog = function(remoteVersion)
             end
         end
     end, {
-        title = "New HotSwitch-HS: " .. remoteVersion,
-        informativeText = "Click 'Update' button.\nIt will execute 'git pull'.",
+        title = "New HotSwitch-HS is available!",
+        informativeText = "Click 'Update' button.\nIt will update to " .. remoteVersion,
         hasActionButton = true,
         actionButtonTitle = "Update",
         autoWithdraw = false,
@@ -49,9 +49,11 @@ end
 
 obj.check = function()
     Debugger.log("start checking")
+    -- if 1 == 1 then showDialog("v3.0.0") return end -- for debug
+
     local currentDate = os.date("%Y-%m-%d")
     local lastCheckedDate = PreferenceModel.autoUpdate.getLastCheckedDate()
-    -- lastCheckedDate = "2021-10-10" -- debug
+    -- lastCheckedDate = "2021-10-10" -- for debug
     if lastCheckedDate == currentDate then
         Debugger.log("Today is same as last checked date.")
         return
@@ -66,12 +68,12 @@ obj.check = function()
 
             local isSuccess, localVersion, rawOutput = hs.osascript.applescript(APPLE_SCRIPT_FOR_GIT_TAG)
             if isSuccess then
-                -- localVersion = "v1.9.9" -- debug
+                -- localVersion = "v1.9.9" -- for debug
                 if localVersion == remoteVersion then
                     Debugger.log("This HotSwitch-HS " .. localVersion .. " is latest.")
                 else
                     local lastCheckedVersion = PreferenceModel.autoUpdate.getLastCheckedVersion()
-                    -- lastCheckedVersion = "v1.9.9" -- debug
+                    -- lastCheckedVersion = "v1.9.9" -- for debug
                     if lastCheckedVersion == remoteVersion then
                         Debugger.log("The version update was already checked.")
                     else
