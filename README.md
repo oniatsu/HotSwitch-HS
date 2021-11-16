@@ -24,7 +24,25 @@ HotSwitch-HS's window switching steps is these.
 1. Register **a fixed key** to windows on list.
 2. Switch any windows by using the key you registered.
 
-## 1. Register **a fixed key** to windows on list.
+## Simple way
+
+Try it. It's easy.
+
+| key | action |
+| --- | ------ |
+| The key you set | Open or close HotSwitch-HS panel |
+| `Space` | Toggle registration mode |
+| `Tab` or `Down` | Select next window |
+| `Shift+Tab` or `Up` | Select previous window |
+| `Delete` | Delete the registered key |
+| `Return` | Focus selected window |
+| `Escape` | Hide panal |
+| `[a-zA-Z0-9]` | Focus the window or register the key |
+| `-` or `[` or `]` or `.` or `/` | Focus the window or register the key |
+
+## Details
+
+### 1. Register **a fixed key** to windows on list.
 
 1. Open HotSwitch-HS panel. (Press `command + .` that you registered)
 2. Select a window on lists. (Press `Tab` or cursor keys.)
@@ -35,7 +53,7 @@ The registered key become a reserversion key, so the key doesn't appear as auto 
 
 If you want to delete a registered key combined with the window, select the window on lists and press `Delete`.
 
-## 2. Switch any windows by using the key you registered.
+### 2. Switch any windows by using the key you registered.
 
 1. Open HotSwitch-HS panel. (Press `command + .` that you registered)
 2. Switch the target window by using **a fixed key**. (Press the key you registered.)
