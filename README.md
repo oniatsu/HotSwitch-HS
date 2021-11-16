@@ -36,11 +36,13 @@ Try it. It's easy.
 | `Shift+Tab` or `Up` | Select previous window |
 | `Delete` | Delete the registered key |
 | `Return` | Focus selected window |
-| `Escape` | Hide panal |
+| `Escape` | Close panal |
 | `[a-zA-Z0-9]` | Focus the window or register the key |
 | `-` or `[` or `]` or `.` or `/` | Focus the window or register the key |
 
 ## Details
+
+Concretely, the steps are like these.
 
 ### 1. Register **a fixed key** to windows on list.
 
