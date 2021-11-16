@@ -218,4 +218,8 @@ The class diagram is roughly like this.
 - v2.1.5: Change saving keys to use bundleID instead of app name
   - If you used this app before this version, you need register keys again.
 - v2.1.0: Add auto updater
-- v1.0.0: First released
+  - `hotswitchHs.enableAutoUpdate()`
+- v2.0.0: Connect Git tag with GitHub Release
+- v1.17: Add auto generated keys
+- v1.4: Chnage app info text to app icon
+- v1.0: First release
