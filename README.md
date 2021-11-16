@@ -221,5 +221,5 @@ The class diagram is roughly like this.
   - `hotswitchHs.enableAutoUpdate()`
 - v2.0.0: Connect Git tag with GitHub Release
 - v1.17: Add auto generated keys
-- v1.4: Chnage app info text to app icon
+- v1.4: Change app info text to app icon on panel
 - v1.0: First release
