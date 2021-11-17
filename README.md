@@ -28,15 +28,15 @@ HotSwitch-HS's window switching steps is these.
 
 Try it. It's easy.
 
-| key | action |
+| Key | Action |
 | --- | ------ |
-| The key you set | Open or close HotSwitch-HS panel |
+| The key you set | Open or close the HotSwitch-HS panel |
 | `Space` | Toggle registration mode |
-| `Tab` or `Down` | Select next window |
-| `Shift+Tab` or `Up` | Select previous window |
-| `Delete` | Delete the registered key |
-| `Return` | Focus selected window |
-| `Escape` | Close panal |
+| `Tab` or `Down` | Select a next window |
+| `Shift+Tab` or `Up` | Select a previous window |
+| `Delete` | Delete the key with the selected window |
+| `Return` | Focus the selected window |
+| `Escape` | Close the panal |
 | `[a-zA-Z0-9]` | Focus the window or register the key |
 | `-` or `[` or `]` or `.` or `/` | Focus the window or register the key |
 
