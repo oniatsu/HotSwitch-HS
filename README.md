@@ -19,14 +19,9 @@ However, I highly recommend that you register keys, because it enable you to swi
 
 # Usage
 
-HotSwitch-HS's window switching steps is these.
-
-1. Register **a fixed key** to windows on list.
-2. Switch any windows by using the key you registered.
-
 ## Simple way
 
-Try it. It's easy.
+Try it. It's easy and fast to understand.
 
 | Key | Action |
 | --- | ------ |
@@ -42,7 +37,10 @@ Try it. It's easy.
 
 ## Details
 
-Concretely, the steps are like these.
+Concretely, HotSwitch-HS's window switching steps is these.
+
+1. Register **a fixed key** to windows on list.
+2. Switch any windows by using the key you registered.
 
 ### 1. Register **a fixed key** to windows on list.
 
