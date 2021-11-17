@@ -34,7 +34,7 @@ Try it. It's easy.
 | `Space` | Toggle registration mode |
 | `Tab` or `Down` | Select a next window |
 | `Shift+Tab` or `Up` | Select a previous window |
-| `Delete` | Delete the key with the selected window |
+| `Delete` | Delete the key on the selected window |
 | `Return` | Focus the selected window |
 | `Escape` | Close the panal |
 | `[a-zA-Z0-9]` | Focus the window or register the key |
