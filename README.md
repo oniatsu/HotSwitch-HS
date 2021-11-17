@@ -96,7 +96,7 @@ hotswitchHs.enableAutoUpdate() -- If you don't want to update automatically, rem
 hs.hotkey.bind({"command"}, ".", hotswitchHs.openOrClose) -- Set a keybind you like to open HotSwitch-HS panel.
 ```
 
-For example, you can set keybind to open HotSwitch-HS like these.
+For example, you can set the keybind to open HotSwitch-HS like these.
 
 ```lua
 -- These are valid.
@@ -112,6 +112,31 @@ hs.hotkey.bind({"command"}, "space", hotswitchHs.openOrClose) -- command + space
 ```
 
 [Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
+
+### Advanced option
+
+If you want to set the keybind as `command + tab`, you can do forcibly by using [Karabiner-Elements](https://karabiner-elements.pqrs.org/).
+
+#### `~/.config/karabiner/karabiner.json`
+
+```json
+{
+    "from": {
+        "key_code": "tab",
+        "modifiers": { "mandatory": [ "command" ] }
+    },
+    "to": [ {
+        "key_code": "f13"
+    } ],
+    "type": "basic"
+}
+```
+
+#### `~/.hammerspoon/init.lua`
+
+```lua
+hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
+```
 
 ## 4. Run Hammerspoon
 
