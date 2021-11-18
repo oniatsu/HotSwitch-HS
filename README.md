@@ -115,7 +115,7 @@ hs.hotkey.bind({"command"}, "space", hotswitchHs.openOrClose) -- command + space
 
 ### Advanced option
 
-If you want to replace the keybind `command + tab` to use HotSwitch-HS, you can do forcibly by using [Karabiner-Elements](https://karabiner-elements.pqrs.org/).
+If you want to replace the macOS's app switcher `command + tab` with HotSwitch-HS, you can do forcibly by using [Karabiner-Elements](https://karabiner-elements.pqrs.org/).
 
 #### `~/.config/karabiner/karabiner.json`
 
