@@ -161,7 +161,7 @@ See below to know what these means.
 
 ## Auto update
 
-Add this. It will update HotSwitch-HS by `git pull` automatically.
+Add this. It will update HotSwitch-HS by `git pull` automatically when needed.
 
 ```lua
 hotswitchHs.enableAutoUpdate()
