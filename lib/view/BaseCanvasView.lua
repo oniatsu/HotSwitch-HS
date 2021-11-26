@@ -17,14 +17,14 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     obj.clickCallback = nil
 
     obj.show = function(self)
-        local t = TimeChecker.new()
+        -- local t = TimeChecker.new()
         local orderedWindows = self.windowModel:getCachedOrderedWindowsOrFetch()
-        t:diff("getCachedOrderedWindowsOrFetch")
+        -- t:diff("getCachedOrderedWindowsOrFetch")
 
         self:showRectangle(orderedWindows)
-        t:diff("showRectangle") -- sometimes, slow
+        -- t:diff("showRectangle") -- sometimes, slow
         self:showWindowInfo(orderedWindows)
-        t:diff("showWindowInfo")
+        -- t:diff("showWindowInfo")
     end
 
     obj.hide = function(self)
@@ -122,21 +122,21 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     end
 
     obj.showWindowInfo = function(self, orderedWindows)
-        local t = TimeChecker.new()
+        -- local t = TimeChecker.new()
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
 
-            t:diff(i)
+            -- t:diff(i)
             self:showEachKeyText(i, window)
-            t:diff("showEachKeyText")
+            -- t:diff("showEachKeyText")
             self:showEachAppIcon(i, window)
-            t:diff("showEachAppIcon")
+            -- t:diff("showEachAppIcon")
             self:showEachWindowTitle(i, window)
-            t:diff("showEachWindowTitle")
+            -- t:diff("showEachWindowTitle")
         end
 
         self.baseCanvas:show()
-        t:diff("show")
+        -- t:diff("show")
     end
 
     obj.showEachKeyText = function(self, i, window)
@@ -187,6 +187,9 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
             }),
             type = "text"
         })
+
+        local appName = window:application():name()
+        Debugger.log(keyText .. " : " .. appName)
     end
 
     obj.showEachAppName = function(self, i, window)
@@ -244,15 +247,15 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     end
 
     obj.showEachWindowTitle = function(self, i, window)
-        local t = TimeChecker.new()
+        -- local t = TimeChecker.new()
         local windowName = window:title() -- sometimes slow
         if windowName == "" then
             windowName = window:application():name()
-            t:diff("get application name")
+            -- t:diff("get application name")
         end
         -- alternative way
         -- local windowName = window:application():name() -- more faster
-        t:diff("get window title")
+        -- t:diff("get window title")
 
         self.baseCanvas:appendElements({
             frame = {
