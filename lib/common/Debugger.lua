@@ -29,8 +29,15 @@ local function log(value)
     -- end
 end
 
+local function alert(value)
+    if debuggable then
+        hs.alert.show(value)
+    end
+end
+
 return {
     log = log,
+    alert = alert,
     setDebuggable = setDebuggable,
     getDebuggable = getDebuggable,
 }

@@ -11,5 +11,4 @@ return {
     enableAutoUpdate = function() mainController.checkUpdate() end,
     clearSettings = function() mainController:clearSettings() end,
     clearPreferences = function() PreferenceModel.clearPreferences() end,
-    enableDebug = function() Debugger.setDebuggable(true) end,
 }
