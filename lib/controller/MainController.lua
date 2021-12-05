@@ -86,6 +86,10 @@ MainController.new = function()
         Updater.check();
     end
 
+    obj.addJapaneseSymbolKeys = function(self)
+        self.hotkeyController:addJapaneseSymbolKeys()
+    end
+
     return obj
 end
 return MainController
