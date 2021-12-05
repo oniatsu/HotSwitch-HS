@@ -24,7 +24,7 @@ HotkeyController.new = function(mainController)
         end
     end
 
-    obj.addJapaneseSymbolKeys = function(self)
+    obj.addJapaneseKeyboardLayoutSymbolKeys = function(self)
         self:createAdditionalSymbolKeys(KeyConstants.ADDITIONAL_LAYOUT.JAPANESE)
     end
 

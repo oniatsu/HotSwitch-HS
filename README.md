@@ -190,10 +190,10 @@ Default: the current space windows are only shown.
 
 ## Additonal symbol keys
 
-You can add symbol keys to register windows. (Only the [Japanese keyboard symbols](https://github.com/oniatsu/HotSwitch-HS/blob/main/lib/common/KeyConstants.lua#L30) are available now.)
+You can add symbol keys to register windows. (Only the [Japanese keyboard layout symbols](https://github.com/oniatsu/HotSwitch-HS/blob/main/lib/common/KeyConstants.lua#L30) are available now.)
 
 ```lua
-hotswitchHs.addJapaneseSymbolKeys()
+hotswitchHs.addJapaneseKeyboardLayoutSymbolKeys()
 ```
 
 # If you have some probrems,
