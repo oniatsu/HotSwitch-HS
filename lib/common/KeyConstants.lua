@@ -10,6 +10,7 @@ local key = {
     comma = 93,
     dot = 47,
     slash = 44,
+    underscore = 94,
 }
 
 local KeyConstants = {
@@ -66,8 +67,8 @@ local KeyConstants = {
             { {"shift"}, key.dot, ">" },
             { {"shift"}, key.slash, "?" },
 
-            { {}, "_", "_" },
-            -- { {"shift"}, "_", "" }, -- not exist
+            { {}, key.underscore, "_" },
+            -- { {"shift"}, key.underscore, "" }, -- not exist
         },
 
     },
