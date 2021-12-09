@@ -64,20 +64,19 @@ WindowModel.new = function()
 
         -- Here is another way, but it's slow.
         -- local orderedWindows = hs.window.orderedWindows()
-        -- orderedWindows = self.removeInvalidWindows(orderedWindows)
+
+        orderedWindows = self.removeInvalidWindows(orderedWindows)
 
         self.cachedOrderedWindows = orderedWindows
         return orderedWindows
     end
 
-    -- Deprecated
     obj.removeInvalidWindows = function(orderedWindows)
-        -- Google Chrome's search box is treated as visible window.
-        -- So you need remove such invalid windows.
         local cleanedOrderedWindows = {}
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
-            if window:subrole() ~= "AXUnknown" then
+            local subrole = window:subrole()
+            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" then
                 table.insert(cleanedOrderedWindows, window)
             end
         end

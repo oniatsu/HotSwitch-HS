@@ -23,14 +23,14 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
             self.selectedRowCanvasView.position = defaultRowPosition
         end
 
-        local t = TimeChecker.new()
+        -- local t = TimeChecker.new()
         self.baseCanvasView:show()
-        t:diff("PanelLayoutView:baseCanvasView:show")
+        -- t:diff("PanelLayoutView:baseCanvasView:show")
         self.selectedRowCanvasView:createSelectedRow()
-        t:diff("PanelLayoutView:selectedRowCanvasView:createSelectedRow")
+        -- t:diff("PanelLayoutView:selectedRowCanvasView:createSelectedRow")
 
         self.selectedRowCanvasView:replaceSelectedRow()
-        t:diff("PanelLayoutView:selectedRowCanvasView:replaceSelectedRow")
+        -- t:diff("PanelLayoutView:selectedRowCanvasView:replaceSelectedRow")
     end
 
     obj.hide = function(self)
