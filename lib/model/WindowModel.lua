@@ -76,7 +76,8 @@ WindowModel.new = function()
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
             local subrole = window:subrole()
-            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" then
+            Debugger.log(window:application():name() .. " : " .. subrole)
+            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" then
                 table.insert(cleanedOrderedWindows, window)
             end
         end
