@@ -8,6 +8,7 @@ local KeyStatusModel = require("hotswitch-hs/lib/model/KeyStatusModel")
 local AppWatchModel = require("hotswitch-hs/lib/model/AppWatchModel")
 local PanelLayoutView = require("hotswitch-hs/lib/view/PanelLayoutView")
 local HotkeyController = require("hotswitch-hs/lib/controller/HotkeyController")
+local FrameCulculator = require("hotswitch-hs/lib/common/FrameCulculator")
 
 local MainController = {}
 MainController.new = function()
@@ -88,6 +89,10 @@ MainController.new = function()
 
     obj.addJapaneseKeyboardLayoutSymbolKeys = function(self)
         self.hotkeyController:addJapaneseKeyboardLayoutSymbolKeys()
+    end
+
+    obj.setPanelToAlwaysShowOnPrimaryScreen = function(self)
+        FrameCulculator.setShowingOnMainScreen(false)
     end
 
     return obj

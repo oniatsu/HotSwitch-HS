@@ -10,6 +10,7 @@ return {
     enableAllSpaceWindows = function() mainController:enableAllSpaceWindows() end,
     enableAutoUpdate = function() mainController.checkUpdate() end,
     addJapaneseKeyboardLayoutSymbolKeys = function() mainController:addJapaneseKeyboardLayoutSymbolKeys() end,
+    setPanelToAlwaysShowOnPrimaryScreen = function() mainController:setPanelToAlwaysShowOnPrimaryScreen() end,
     clearSettings = function() mainController:clearSettings() end,
     clearPreferences = function() PreferenceModel.clearPreferences() end,
 }

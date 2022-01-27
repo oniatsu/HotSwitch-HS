@@ -196,6 +196,14 @@ You can add symbol keys to register windows. (Only the [Japanese keyboard layout
 hotswitchHs.addJapaneseKeyboardLayoutSymbolKeys()
 ```
 
+## Always showing the panel on primary screen
+
+To show the panel not on main screen but on primary screen.
+
+```lua
+hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()
+```
+
 # If you have some probrems,
 
 Check these.
@@ -265,8 +273,10 @@ The class diagram is roughly like this.
 
 - Pay attention to Lua's garvage collection.
 
-# Important ChangeLog
+# Some ChangeLogs
 
+- v2.2.5: Add option to always show the panel on primary screen
+  - `hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()`
 - v2.1.5: Change saving keys to use bundleID instead of app name
   - If you used this app before this version, you need register keys again.
 - v2.1.0: Add auto updater

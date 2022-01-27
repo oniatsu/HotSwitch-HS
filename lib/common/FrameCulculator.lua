@@ -2,17 +2,19 @@ local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
 
-local function calcBaseCanvasFrame(orderedWindows)
-    -- local t = TimeChecker.new()
-    local panelH = #orderedWindows * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 4
-    -- t:diff("panelH")
+local doesShowOnMainScreen = true
 
-    local mainScreenFrame = hs.screen.mainScreen():frame()
-    -- t:diff("mainScreenFrame")
-    local panelX = mainScreenFrame.x + mainScreenFrame.w / 2 - CanvasConstants.PANEL_W / 2
-    -- t:diff("panelX")
-    local panelY = mainScreenFrame.y + mainScreenFrame.h / 2 - panelH / 2
-    -- t:diff("panelY")
+local function calcBaseCanvasFrame(orderedWindows)
+    local panelH = #orderedWindows * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 4
+
+    local targetScreenFrame
+    if doesShowOnMainScreen then
+        targetScreenFrame = hs.screen.mainScreen():frame()
+    else
+        targetScreenFrame = hs.screen.primaryScreen():frame()
+    end
+    local panelX = targetScreenFrame.x + targetScreenFrame.w / 2 - CanvasConstants.PANEL_W / 2
+    local panelY = targetScreenFrame.y + targetScreenFrame.h / 2 - panelH / 2
 
     local baseCanvasFrame = {
         x = panelX,
@@ -23,6 +25,11 @@ local function calcBaseCanvasFrame(orderedWindows)
     return baseCanvasFrame
 end
 
+local function setShowingOnMainScreen(flag)
+    doesShowOnMainScreen = flag
+end
+
 return {
     calcBaseCanvasFrame = calcBaseCanvasFrame,
+    setShowingOnMainScreen = setShowingOnMainScreen,
 }
