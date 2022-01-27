@@ -199,6 +199,7 @@ hotswitchHs.addJapaneseKeyboardLayoutSymbolKeys()
 ## Always showing the panel on primary screen
 
 To show the panel not on main screen but on primary screen.
+Main screen means the one containing the currently focused window.
 
 ```lua
 hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()
