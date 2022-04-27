@@ -91,8 +91,12 @@ WindowModel.new = function()
         if self.previousWindow ~= nil then
             self.focusWindow(self.previousWindow)
         else
-            self.focusWindow(self.getCachedOrderedWindowsOrFetch()[1])
+            self.focusWindow(self.getCachedOrderedWindowsOrFetch(self)[1])
         end
+    end
+
+    obj.focusNextWindow = function(self)
+        self.focusWindow(self:refreshOrderedWindows()[2])
     end
 
     -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
