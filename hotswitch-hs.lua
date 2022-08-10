@@ -14,4 +14,5 @@ return {
     setPanelToAlwaysShowOnPrimaryScreen = function() mainController:setPanelToAlwaysShowOnPrimaryScreen() end,
     clearSettings = function() mainController:clearSettings() end,
     clearPreferences = function() PreferenceModel.clearPreferences() end,
+    addKeyModifier = function() mainController:addKeyModifier() end,
 }

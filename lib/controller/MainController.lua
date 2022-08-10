@@ -99,6 +99,10 @@ MainController.new = function()
         FrameCulculator.setShowingOnMainScreen(false)
     end
 
+    obj.addKeyModifier = function(self)
+        self.hotkeyController:addKeyModifier()
+    end
+
     return obj
 end
 return MainController

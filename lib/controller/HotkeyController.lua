@@ -21,9 +21,6 @@ HotkeyController.new = function(mainController)
             self:createSpecialKeys()
             self:createCharacterKeys(KeyConstants.BASIC_KEYS, false, false)
             self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true, false)
-
-            self:createCharacterKeys(KeyConstants.BASIC_KEYS, false, true)
-            self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true, true)
         end
     end
 
@@ -364,6 +361,11 @@ HotkeyController.new = function(mainController)
             end
         end
         return 0
+    end
+
+    obj.addKeyModifier = function(self)
+        self:createCharacterKeys(KeyConstants.BASIC_KEYS, false, true)
+        self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true, true)
     end
 
     return obj
