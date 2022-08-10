@@ -85,14 +85,14 @@ HotkeyController.new = function(mainController)
             self.isRegistrationMode = false
             self.panelLayoutView:selectNextRow(self.windowModel)
         end))
-        table.insert(self.allHotkeys, hs.hotkey.new({"shift"}, "tab", function()
+        table.insert(self.allHotkeys, hs.hotkey.new({ "shift" }, "tab", function()
             self.isRegistrationMode = false
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end, nil, function()
             self.isRegistrationMode = false
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end))
-        
+
         table.insert(self.allHotkeys, hs.hotkey.new({}, "return", function() self:returnAction() end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "space", function() self:spaceAction() end))
         table.insert(self.allHotkeys, hs.hotkey.new({}, "delete", function() self:deleteAction() end))
@@ -102,7 +102,8 @@ HotkeyController.new = function(mainController)
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self.windowModel.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position])
+        self.windowModel.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[
+            self.panelLayoutView.selectedRowCanvasView.position])
 
         self:finish()
     end
@@ -192,7 +193,8 @@ HotkeyController.new = function(mainController)
             Debugger.log("DEBUG: registration mode")
             self.isRegistrationMode = false
 
-            local window = self.windowModel:getCachedOrderedWindowsOrFetch()[self.panelLayoutView.selectedRowCanvasView.position]
+            local window = self.windowModel:getCachedOrderedWindowsOrFetch()[
+                self.panelLayoutView.selectedRowCanvasView.position]
             local windowId = window:id()
 
             local bundleId = window:application():bundleID()
@@ -269,7 +271,7 @@ HotkeyController.new = function(mainController)
             if hasAppSetting == false then
                 table.insert(settings, {
                     app = bundleId,
-                    keys = {key}
+                    keys = { key }
                 })
             end
 
@@ -306,7 +308,7 @@ HotkeyController.new = function(mainController)
         end
         local keybindModifier
         if isShiftable then
-            keybindModifier = {"shift"}
+            keybindModifier = { "shift" }
         else
             keybindModifier = {}
         end
