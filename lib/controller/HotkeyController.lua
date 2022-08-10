@@ -310,13 +310,13 @@ HotkeyController.new = function(mainController)
         local keybindModifier
         if isShiftable then
             if hasModifier then
-                keybindModifier = { "option", "shift" }
+                keybindModifier = { "option", "command", "control", "shift" }
             else
                 keybindModifier = { "shift" }
             end
         else
             if hasModifier then
-                keybindModifier = { "option" }
+                keybindModifier = { "option", "command", "control" }
             else
                 keybindModifier = {}
             end
