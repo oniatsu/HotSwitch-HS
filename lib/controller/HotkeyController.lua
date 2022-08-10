@@ -19,8 +19,11 @@ HotkeyController.new = function(mainController)
         Debugger.log("DEBUG: createHotkeys")
         if #self.allHotkeys == 0 then
             self:createSpecialKeys()
-            self:createCharacterKeys(KeyConstants.BASIC_KEYS, false)
-            self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true)
+            self:createCharacterKeys(KeyConstants.BASIC_KEYS, false, false)
+            self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true, false)
+
+            self:createCharacterKeys(KeyConstants.BASIC_KEYS, false, true)
+            self:createCharacterKeys(KeyConstants.SHIFTABLE_KEYS, true, true)
         end
     end
 
@@ -300,17 +303,26 @@ HotkeyController.new = function(mainController)
         end
     end
 
-    obj.createCharacterKeys = function(self, keys, isShiftable)
+    obj.createCharacterKeys = function(self, keys, isShiftable, hasModifier)
         if isShiftable then
             Debugger.log("DEBUG: createCharacterKeys" .. " (shift)")
         else
             Debugger.log("DEBUG: createCharacterKeys")
         end
+
         local keybindModifier
         if isShiftable then
-            keybindModifier = { "shift" }
+            if hasModifier then
+                keybindModifier = { "option", "shift" }
+            else
+                keybindModifier = { "shift" }
+            end
         else
-            keybindModifier = {}
+            if hasModifier then
+                keybindModifier = { "option" }
+            else
+                keybindModifier = {}
+            end
         end
 
         for i = 1, #keys do
