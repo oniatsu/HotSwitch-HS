@@ -2,9 +2,9 @@ local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local TimeChecker = require("hotswitch-hs/lib/common/TimeChecker")
 local Model = require("hotswitch-hs/lib/model/Model")
 
--- local SUBSCRIPTION_TARGET = {hs.window.filter.windowAllowed, hs.window.filter.windowCreated, hs.window.filter.windowsChanged, hs.window.filter.windowTitleChanged}
--- local SUBSCRIPTION_TARGET = {hs.window.filter.hasWindow}
-local SUBSCRIPTION_TARGET = {hs.window.filter.windowVisible}
+-- local SUBSCRIPTION_TARGET = { hs.window.filter.windowAllowed, hs.window.filter.windowCreated, hs.window.filter.windowsChanged, hs.window.filter.windowTitleChanged }
+-- local SUBSCRIPTION_TARGET = { hs.window.filter.hasWindow }
+local SUBSCRIPTION_TARGET = { hs.window.filter.windowVisible }
 
 local WindowModel = {}
 WindowModel.new = function()
@@ -15,7 +15,8 @@ WindowModel.new = function()
 
     obj.windowFilter = hs.window.filter.defaultCurrentSpace
     -- obj.windowFilter = hs.window.filter.default
-    obj.subscriptionCallback = function() end
+    obj.subscriptionCallback = function()
+    end
 
     obj.init = function(self)
         -- Workaround:
