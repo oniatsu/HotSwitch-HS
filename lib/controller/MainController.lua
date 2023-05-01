@@ -107,9 +107,6 @@ MainController.new = function()
     ---    between 0 and 5
     obj.setLogLevel = function(self, logLevel)
         hs.logger.setModulesLogLevel(logLevel)
-
-        -- clear manually
-        -- hs.console.clearConsole()
     end
 
     return obj
