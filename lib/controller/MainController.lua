@@ -103,6 +103,15 @@ MainController.new = function()
         self.hotkeyController:addKeyModifier()
     end
 
+    ---  * loglevel - can be 'nothing', 'error', 'warning', 'info', 'debug', or 'verbose', or a corresponding number
+    ---    between 0 and 5
+    obj.setLogLevel = function(self, logLevel)
+        hs.logger.setModulesLogLevel(logLevel)
+
+        -- clear manually
+        -- hs.console.clearConsole()
+    end
+
     return obj
 end
 return MainController

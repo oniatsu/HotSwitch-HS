@@ -16,8 +16,10 @@ local function log(value)
     local message
     local status, err = pcall(function()
         message = hs.inspect.inspect(value)
-        local debugLog = hs.logger.new("=========", "debug")
-        debugLog.i(message)
+
+        hs.logger.d(message)
+        -- local debugLog = hs.logger.new("=========", "debug")
+        -- debugLog.i(message)
     end)
     if status == false then
         message = value
@@ -25,7 +27,7 @@ local function log(value)
     end
 
     -- if debuggable then
-        -- hs.alert.show(message)
+    -- hs.alert.show(message)
     -- end
 end
 
