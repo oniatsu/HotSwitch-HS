@@ -17,9 +17,8 @@ local function log(value)
     local status, err = pcall(function()
         message = hs.inspect.inspect(value)
 
-        hs.logger.d(message)
-        -- local debugLog = hs.logger.new("=========", "debug")
-        -- debugLog.i(message)
+        local debugLog = hs.logger.new("hotswitch", "info")
+        debugLog.w(message)
     end)
     if status == false then
         message = value

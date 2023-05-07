@@ -33,7 +33,7 @@ WindowModel.new = function()
 
     obj.getCachedOrderedWindowsOrFetch = function(self)
         if self.cachedOrderedWindows == nil then
-            self:refreshOrderedWindows()
+            return self:refreshOrderedWindows()
         end
         return self.cachedOrderedWindows
     end
@@ -79,10 +79,30 @@ WindowModel.new = function()
         local cleanedOrderedWindows = {}
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
+            -- local role = window:role()
             local subrole = window:subrole()
-            Debugger.log(window:application():name() .. " : " .. subrole)
+            -- local id = window:id()
+            -- local isVisible = window:isVisible()
+            -- local isStandard = window:isStandard()
+            -- Debugger.log(window:application():name() .. " | " .. role ..
+            --     " : " ..
+            --     subrole ..
+            --     " | " .. id .. " | " .. tostring(isVisible) .. " | " .. tostring(isStandard) .. " | " .. tabCount)
             if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" then
                 table.insert(cleanedOrderedWindows, window)
+
+                -- not work
+                -- local applicationName = window:application():name()
+                -- if applicationName == "Finder" then
+                --     local tabCount = window:tabCount()
+                --     Debugger.log(applicationName .. " | " .. tabCount)
+                --     table.insert(cleanedOrderedWindows, window)
+                --     if tabCount > 0 then
+                --         table.insert(cleanedOrderedWindows, window)
+                --     end
+                -- else
+                --     table.insert(cleanedOrderedWindows, window)
+                -- end
             end
         end
         return cleanedOrderedWindows

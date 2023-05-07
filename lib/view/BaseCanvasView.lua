@@ -78,7 +78,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     obj.setClickCallback = function(self, clickCallback)
         self.clickCallback = clickCallback
     end
-    
+
     obj.activateHammerspoonWindow = function(self)
         local app = hs.application.get("Hammerspoon")
         app:setFrontmost()
@@ -259,10 +259,12 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
 
         self.baseCanvas:appendElements({
             frame = {
-                x = CanvasConstants.PADDING * 3 + CanvasConstants.KEY_W + CanvasConstants.KEY_LEFT_PADDING + CanvasConstants.APP_ICON_W,
+                x = CanvasConstants.PADDING * 3 + CanvasConstants.KEY_W + CanvasConstants.KEY_LEFT_PADDING +
+                    CanvasConstants.APP_ICON_W,
                 y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
                 h = CanvasConstants.ROW_HEIGHT,
-                w = CanvasConstants.PANEL_W - CanvasConstants.KEY_W - CanvasConstants.APP_ICON_W - CanvasConstants.PADDING * 6
+                w = CanvasConstants.PANEL_W - CanvasConstants.KEY_W - CanvasConstants.APP_ICON_W -
+                    CanvasConstants.PADDING * 6
             },
             text = hs.styledtext.new(windowName, {
                 font = {
