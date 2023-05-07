@@ -1,4 +1,5 @@
 local debuggable = false
+local debugLog = hs.logger.new("hotswitch", "info")
 
 local function setDebuggable(flag)
     debuggable = flag
@@ -17,7 +18,6 @@ local function log(value)
     local status, err = pcall(function()
         message = hs.inspect.inspect(value)
 
-        local debugLog = hs.logger.new("hotswitch", "info")
         debugLog.w(message)
     end)
     if status == false then
@@ -30,6 +30,10 @@ local function log(value)
     -- end
 end
 
+local function setLogLevel(level)
+    debugLog.setLogLevel(level)
+end
+
 local function alert(value)
     if debuggable then
         hs.alert.show(value)
@@ -38,6 +42,7 @@ end
 
 return {
     log = log,
+    setLogLevel = setLogLevel,
     alert = alert,
     setDebuggable = setDebuggable,
     getDebuggable = getDebuggable,
