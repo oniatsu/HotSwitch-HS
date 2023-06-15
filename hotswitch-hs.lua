@@ -3,7 +3,6 @@ local MainController = require("hotswitch-hs/lib/controller/MainController")
 local PreferenceModel = require("hotswitch-hs/lib/model/PreferenceModel")
 
 local mainController = MainController.new()
-mainController:setLogLevel("nothing")
 
 return {
     openOrClose = function() mainController:openOrClose() end,
