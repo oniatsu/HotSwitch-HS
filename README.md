@@ -286,6 +286,7 @@ The class diagram is roughly like this.
 
 # Some ChangeLogs
 
+- v2.3.4: Modify focusing a Finder window
 - v2.2.6: Add a utility method
   - `hotswitchHs:switchToNextWindow()`
 - v2.2.5: Add option to always show the panel on primary screen
