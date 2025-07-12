@@ -26,7 +26,7 @@ MainController.new = function()
     obj.hotkeyController = HotkeyController.new(obj)
 
     obj.panelLayoutView:setClickCallback(function(position)
-        obj.windowModel.focusWindow(obj.windowModel:getCachedOrderedWindowsOrFetch()[position])
+        obj.windowModel:focusWindow(obj.windowModel:getCachedOrderedWindowsOrFetch()[position])
         obj:finish()
     end)
 

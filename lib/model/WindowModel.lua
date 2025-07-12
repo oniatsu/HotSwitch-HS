@@ -155,18 +155,18 @@ WindowModel.new = function()
 
     obj.focusPreviousWindowForCancel = function(self)
         if self.previousWindow ~= nil then
-            self.focusWindow(self.previousWindow)
+            self:focusWindow(self.previousWindow)
         else
-            self.focusWindow(self.getCachedOrderedWindowsOrFetch(self)[1])
+            self:focusWindow(self.getCachedOrderedWindowsOrFetch(self)[1])
         end
     end
 
     obj.focusNextWindow = function(self)
-        self.focusWindow(self:refreshOrderedWindows()[2])
+        self:focusWindow(self:refreshOrderedWindows()[2])
     end
 
     -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
-    obj.focusWindow = function(targetWindow)
+    obj.focusWindow = function(self, targetWindow)
         -- if Finder window should be focused, then focus Finder application not but the specific window.
         -- that is because Finder window is not created collectively by HammerSpoon.
         if targetWindow:application():bundleID() == FINDER_BUNDLE_ID then
@@ -184,55 +184,55 @@ WindowModel.new = function()
         if #applicationVisibleWindows == 1 then
             targetWindow:focus()
         else
-            local applicationMainWindowScreen = applicationMainWindow:screen()
-            local applicationMainWindowScreenId = applicationMainWindowScreen:id()
+            -- Do not need to check the screen
+            -- local applicationMainWindowScreen = applicationMainWindow:screen()
+            -- local applicationMainWindowScreenId = applicationMainWindowScreen:id()
+            -- local targetWindowScreen = targetWindow:screen()
+            -- local targetWindowScreenId = targetWindowScreen:id()
+            -- if targetWindowScreenId == applicationMainWindowScreenId then
 
-            local targetWindowScreen = targetWindow:screen()
-            local targetWindowScreenId = targetWindowScreen:id()
+            local previousWindow = self.getCachedOrderedWindowsOrFetch(self)[1]
 
-            -- If you need main screen, you can use:
-            -- mainScreen = hs.screen.mainScreen()
-            -- primaryScreen = hs.screen.primaryScreen()
+            -- local previousWindowScreen = previousWindow:screen()
+            -- local previousWindowScreenId = previousWindowScreen:id()
+            -- local targetWindowScreen = targetWindow:screen()
+            -- local targetWindowScreenId = targetWindowScreen:id()
 
-            if targetWindowScreenId == applicationMainWindowScreenId then
-                -- hs.alert.show("targetWindowScreenId == applicationMainWindowScreenId")
+            local focusedWindow = hs.window.focusedWindow()
+
+            -- Do not need to check the screen
+            -- if targetWindowScreenId == previousWindowScreenId then
+            --     -- If the target window is on the same screen as the previous window, focus it directly.
+            --     targetWindow:focus()
+
+            if focusedWindow and focusedWindow:application():pid() == targetAppliation:pid() then
+                targetWindow:focus()
+            else
+                -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+                -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
+
+                -- This way is workaround.
+
+                -- First focus another window of the same application, then focus the target window
+                -- targetAppliation:activate(false)
+                -- applicationMainWindow:focus()
 
                 targetWindow:focus()
                 targetWindow:focus()
+                previousWindow:raise()
                 hs.timer.doAfter(0.15, function()
                     targetWindow:focus()
+                    previousWindow:raise()
                 end)
-            else
-                local focusedWindow = hs.window.focusedWindow()
-                if focusedWindow and focusedWindow:application():pid() == targetAppliation:pid() then
-                    targetWindow:focus()
-                else
-                    -- hs.alert.show("focusing another window of the same application")
 
-                    -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
-                    -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
+                -- Another way is to move the target window to the main screen, then focus it.
+                -- targetWindow:moveToScreen(applicationMainWindowScreen)
+                -- targetWindow:focus()
+                -- targetWindow:moveToScreen(targetWindowScreen)
 
-                    -- This way is workaround.
-
-                    -- First focus another window of the same application, then focus the target window
-                    -- targetAppliation:activate(false)
-                    -- applicationMainWindow:focus()
-
-                    targetWindow:focus()
-                    targetWindow:focus()
-                    hs.timer.doAfter(0.15, function()
-                        targetWindow:focus()
-                    end)
-
-                    -- Another way is to move the target window to the main screen, then focus it.
-                    -- targetWindow:moveToScreen(applicationMainWindowScreen)
-                    -- targetWindow:focus()
-                    -- targetWindow:moveToScreen(targetWindowScreen)
-
-                    -- If you need time delay, you can use `hs.timer.doAfter`.
-                    -- hs.timer.doAfter(0.15, function()
-                    -- end)
-                end
+                -- If you need time delay, you can use `hs.timer.doAfter`.
+                -- hs.timer.doAfter(0.15, function()
+                -- end)
             end
         end
     end

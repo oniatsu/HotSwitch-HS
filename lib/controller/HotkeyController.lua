@@ -102,7 +102,7 @@ HotkeyController.new = function(mainController)
     obj.returnAction = function(self)
         self.isRegistrationMode = false
 
-        self.windowModel.focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[
+        self.windowModel:focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[
             self.panelLayoutView.selectedRowCanvasView.position])
 
         self:finish()
@@ -295,7 +295,7 @@ HotkeyController.new = function(mainController)
             if targetWindow ~= nil then
                 self:finish()
 
-                self.windowModel.focusWindow(targetWindow)
+                self.windowModel:focusWindow(targetWindow)
             end
         end
     end
