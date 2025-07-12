@@ -198,15 +198,17 @@ WindowModel.new = function()
             -- local targetWindowScreen = targetWindow:screen()
             -- local targetWindowScreenId = targetWindowScreen:id()
 
-            local focusedWindow = hs.window.focusedWindow()
-
             -- Do not need to check the screen
             -- if targetWindowScreenId == previousWindowScreenId then
             --     -- If the target window is on the same screen as the previous window, focus it directly.
             --     targetWindow:focus()
 
-            if focusedWindow and focusedWindow:application():pid() == targetAppliation:pid() then
+            if previousWindow:application():pid() == targetAppliation:pid() then
                 targetWindow:focus()
+                targetWindow:focus()
+                hs.timer.doAfter(0.15, function()
+                    targetWindow:focus()
+                end)
             else
                 -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
                 -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
