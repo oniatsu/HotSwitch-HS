@@ -284,7 +284,7 @@ The class diagram is roughly like this.
 
 - Pay attention to Lua's garvage collection.
 
-# Some ChangeLogs
+# ChangeLogs
 
 - v2.3.4: Modify focusing a Finder window
 - v2.2.6: Add a utility method

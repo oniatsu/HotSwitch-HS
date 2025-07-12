@@ -190,28 +190,48 @@ WindowModel.new = function()
             local targetWindowScreen = targetWindow:screen()
             local targetWindowScreenId = targetWindowScreen:id()
 
+            -- If you need main screen, you can use:
+            -- mainScreen = hs.screen.mainScreen()
+            -- primaryScreen = hs.screen.primaryScreen()
+
             if targetWindowScreenId == applicationMainWindowScreenId then
+                -- hs.alert.show("targetWindowScreenId == applicationMainWindowScreenId")
+
                 targetWindow:focus()
+                targetWindow:focus()
+                hs.timer.doAfter(0.15, function()
+                    targetWindow:focus()
+                end)
             else
                 local focusedWindow = hs.window.focusedWindow()
                 if focusedWindow and focusedWindow:application():pid() == targetAppliation:pid() then
                     targetWindow:focus()
                 else
+                    -- hs.alert.show("focusing another window of the same application")
+
                     -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
                     -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
 
                     -- This way is workaround.
 
-                    targetWindow:focus()
+                    -- First focus another window of the same application, then focus the target window
+                    -- targetAppliation:activate(false)
+                    -- applicationMainWindow:focus()
 
-                    local status, err = pcall(function()
-                        hs.timer.doAfter(0.15, function()
-                            targetWindow:focus()
-                        end)
+                    targetWindow:focus()
+                    targetWindow:focus()
+                    hs.timer.doAfter(0.15, function()
+                        targetWindow:focus()
                     end)
-                    if status == false then
-                        Debugger.log("ERROR (doAfter timer) : " .. err)
-                    end
+
+                    -- Another way is to move the target window to the main screen, then focus it.
+                    -- targetWindow:moveToScreen(applicationMainWindowScreen)
+                    -- targetWindow:focus()
+                    -- targetWindow:moveToScreen(targetWindowScreen)
+
+                    -- If you need time delay, you can use `hs.timer.doAfter`.
+                    -- hs.timer.doAfter(0.15, function()
+                    -- end)
                 end
             end
         end
