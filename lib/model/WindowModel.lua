@@ -224,16 +224,42 @@ WindowModel.new = function()
                     end)
                 end
             else
-                -- First focus another window of the same application, then focus the target window
-                targetWindow:focus()
-                hs.timer.doAfter(0.1, function()
+                if previousWindow:screen():id() == targetWindow:screen():id() then
+                    -- Find the first window on a different screen to raise
+                    local targetWindowScreenId = targetWindow:screen():id()
+                    local windowToRaise = nil
+                    for i = 1, #cachedWindows do
+                        local window = cachedWindows[i]
+                        if targetAppliation:pid() ~= window:application():pid() and window:screen():id() ~= targetWindowScreenId then
+                            windowToRaise = window
+                            break
+                        end
+                    end
+                
+                    -- First focus another window of the same application, then focus the target window
                     targetWindow:focus()
-
-                    -- Raise the previous window
                     hs.timer.doAfter(0.1, function()
-                        previousWindow:raise()
+                        targetWindow:focus()
+
+                        -- Raise the first window on a different screen
+                        if windowToRaise then
+                            hs.timer.doAfter(0.1, function()
+                                windowToRaise:raise()
+                            end)
+                        end
                     end)
-                end)
+                else
+                    -- First focus another window of the same application, then focus the target window
+                    targetWindow:focus()
+                    hs.timer.doAfter(0.1, function()
+                        targetWindow:focus()
+
+                        -- Raise the previous window
+                        hs.timer.doAfter(0.1, function()
+                            previousWindow:raise()
+                        end)
+                    end)
+                end
             end
         end
     end
