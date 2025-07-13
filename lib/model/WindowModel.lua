@@ -184,57 +184,46 @@ WindowModel.new = function()
         if #applicationVisibleWindows == 1 then
             targetWindow:focus()
         else
-            -- Do not need to check the screen
-            -- local applicationMainWindowScreen = applicationMainWindow:screen()
-            -- local applicationMainWindowScreenId = applicationMainWindowScreen:id()
-            -- local targetWindowScreen = targetWindow:screen()
-            -- local targetWindowScreenId = targetWindowScreen:id()
-            -- if targetWindowScreenId == applicationMainWindowScreenId then
+            -- Workaround for Hammerspoon bug:
+            -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
+            -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
 
-            local previousWindow = self.getCachedOrderedWindowsOrFetch(self)[1]
-
-            -- local previousWindowScreen = previousWindow:screen()
-            -- local previousWindowScreenId = previousWindowScreen:id()
-            -- local targetWindowScreen = targetWindow:screen()
-            -- local targetWindowScreenId = targetWindowScreen:id()
-
-            -- Do not need to check the screen
-            -- if targetWindowScreenId == previousWindowScreenId then
-            --     -- If the target window is on the same screen as the previous window, focus it directly.
-            --     targetWindow:focus()
+            local cachedWindows = self:getCachedOrderedWindowsOrFetch()
+            local previousWindow = cachedWindows[1]
 
             if previousWindow:application():pid() == targetAppliation:pid() then
-                targetWindow:focus()
+                -- Find the first window on a different screen to raise
+                local targetWindowScreenId = targetWindow:screen():id()
+                local windowToRaise = nil
+                for i = 1, #cachedWindows do
+                    local window = cachedWindows[i]
+                    if targetAppliation:pid() ~= window:application():pid() and window:screen():id() ~= targetWindowScreenId then
+                        windowToRaise = window
+                        break
+                    end
+                end
+                
+                -- First focus another window of the same application, then focus the target window
                 targetWindow:focus()
                 hs.timer.doAfter(0.1, function()
                     targetWindow:focus()
+
+                    hs.timer.doAfter(0.1, function()
+                        if windowToRaise then
+                            windowToRaise:raise()
+                        end
+                    end)
                 end)
             else
-                -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
-                -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
-
-                -- This way is workaround.
-
                 -- First focus another window of the same application, then focus the target window
-                -- targetAppliation:activate(false)
-                -- applicationMainWindow:focus()
-
                 targetWindow:focus()
-                targetWindow:focus()
-                previousWindow:raise()
-                hs.timer.doAfter(0.2, function()
+                hs.timer.doAfter(0.1, function()
                     targetWindow:focus()
-                    previousWindow:raise()
+
+                    hs.timer.doAfter(0.1, function()
+                        previousWindow:raise()
+                    end)
                 end)
-
-                -- Another way is to move the target window to the main screen, then focus it.
-                -- targetWindow:moveToScreen(applicationMainWindowScreen)
-                -- targetWindow:focus()
-                -- targetWindow:moveToScreen(targetWindowScreen)
-
-                -- If you need time delay, you can use `hs.timer.doAfter`.
-                -- hs.timer.doAfter(0.15, function()
-                -- end)
             end
         end
     end
