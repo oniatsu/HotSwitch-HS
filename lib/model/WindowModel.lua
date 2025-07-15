@@ -186,7 +186,9 @@ WindowModel.new = function()
         else
             -- Workaround for Hammerspoon bug:
             -- Hammerspoon bug: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
-            -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/2978
+            -- Issue: https://github.com/Hammerspoon/hammerspoon/issues/370
+            -- Other similar window switch apps solve this problem by using a private API.
+            -- Hammerspoon does not use the private API and therefore cannot solve this problem.
 
             local cachedWindows = self:getCachedOrderedWindowsOrFetch()
             local previousWindow = cachedWindows[1]
@@ -195,7 +197,7 @@ WindowModel.new = function()
                 if previousWindow:id() ~= targetWindow:id() then
                     -- First focus another window of the same application, then focus the target window
                     targetWindow:focus()
-                    hs.timer.doAfter(0.1, function()
+                    hs.timer.doAfter(0.01, function()
                         targetWindow:focus()
                     end)
                 else
@@ -212,12 +214,12 @@ WindowModel.new = function()
                 
                     -- First focus another window of the same application, then focus the target window
                     targetWindow:focus()
-                    hs.timer.doAfter(0.1, function()
+                    hs.timer.doAfter(0.01, function()
                         targetWindow:focus()
 
                         -- Raise the first window on a different screen
                         if windowToRaise then
-                            hs.timer.doAfter(0.1, function()
+                            hs.timer.doAfter(0.01, function()
                                 windowToRaise:raise()
                             end)
                         end
@@ -238,12 +240,12 @@ WindowModel.new = function()
                 
                     -- First focus another window of the same application, then focus the target window
                     targetWindow:focus()
-                    hs.timer.doAfter(0.1, function()
+                    hs.timer.doAfter(0.01, function()
                         targetWindow:focus()
 
                         -- Raise the first window on a different screen
                         if windowToRaise then
-                            hs.timer.doAfter(0.1, function()
+                            hs.timer.doAfter(0.01, function()
                                 windowToRaise:raise()
                             end)
                         end
@@ -251,11 +253,11 @@ WindowModel.new = function()
                 else
                     -- First focus another window of the same application, then focus the target window
                     targetWindow:focus()
-                    hs.timer.doAfter(0.1, function()
+                    hs.timer.doAfter(0.01, function()
                         targetWindow:focus()
 
                         -- Raise the previous window
-                        hs.timer.doAfter(0.1, function()
+                        hs.timer.doAfter(0.01, function()
                             previousWindow:raise()
                         end)
                     end)
