@@ -190,6 +190,12 @@ WindowModel.new = function()
             -- Other similar window switch apps solve this problem by using a private API.
             -- Hammerspoon does not use the private API and therefore cannot solve this problem.
 
+            -- At the point when raising a window is necessary,
+            -- there can be a cachedWindows-like difference from the actual window alignment,
+            -- which can lead to unnecessary raising a window when refocusing a window in multi-window applications on multi-screens.
+            -- This cannot be prevented as long as it raised a window.
+            -- However, this situation is very limited, so it is acceptable.
+
             local cachedWindows = self:getCachedOrderedWindowsOrFetch()
             local previousWindow = cachedWindows[1]
 
