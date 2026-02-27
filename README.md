@@ -113,13 +113,34 @@ hs.hotkey.bind({"command"}, "space", hotswitchHs.openOrClose) -- command + space
 
 [Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
 
-### Advanced option
+### Advanced option — AltTab-like cycling
 
-If you want to replace the macOS's app switcher `command + tab` with HotSwitch-HS, you can do forcibly by using [Karabiner-Elements](https://karabiner-elements.pqrs.org/).
+Hold a modifier key and press a key repeatedly to cycle through windows. Release the modifier to focus the selected window.
 
-#### `openOrClose` — replace `command + tab`
+#### option + tab (recommended, no Karabiner needed)
 
-#### `~/.config/karabiner/karabiner.json`
+Use `openWithModifier`. It handles key repeat and modifier release detection entirely within Hammerspoon via `hs.eventtap`.
+
+##### `~/.hammerspoon/init.lua`
+
+```lua
+hs.hotkey.bind({"option"}, "tab",
+    function() hotswitchHs.openWithModifier({"option"}, "tab") end)
+hs.hotkey.bind({"option", "shift"}, "tab",
+    function() hotswitchHs.openWithModifier({"option", "shift"}, "tab") end)
+```
+
+- `option + tab` — cycle forward (next)
+- `option + shift + tab` — cycle backward (previous)
+- Release `option` — focus the selected window
+
+#### command + tab replacement (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
+
+macOS reserves `command + tab` at the system level, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it to a free key, then bind that key in Hammerspoon.
+
+**Simple version** — open/close toggle only, using `openOrClose`:
+
+##### `~/.config/karabiner/karabiner.json`
 
 ```json
 {
@@ -127,28 +148,20 @@ If you want to replace the macOS's app switcher `command + tab` with HotSwitch-H
         "key_code": "tab",
         "modifiers": { "mandatory": [ "command" ] }
     },
-    "to": [ {
-        "key_code": "f13"
-    } ],
+    "to": [ { "key_code": "f13" } ],
     "type": "basic"
 }
 ```
 
-#### `~/.hammerspoon/init.lua`
+##### `~/.hammerspoon/init.lua`
 
 ```lua
 hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
 ```
 
-#### `openOrSelectNext` + `focusOpenOrSelectNextWindow` — cmd+tab style cycling
+**Cycling version** — hold command, press tab to cycle, release command to focus, using `openOrSelectNext` + `focusOpenOrSelectNextWindow`:
 
-`openOrSelectNext` cycles through windows each time it is called. `focusOpenOrSelectNextWindow` focuses the currently selected window and only takes effect when called after `openOrSelectNext`.
-
-The intended usage is cmd+tab-style: hold `command`, press `tab` repeatedly to cycle, then release `command` to focus.
-
-The key point is to call `focusOpenOrSelectNextWindow` in `to_after_key_up` of the command key — it fires when `command` is released.
-
-#### `~/.config/karabiner/karabiner.json`
+##### `~/.config/karabiner/karabiner.json`
 
 ```json
 [
@@ -171,7 +184,7 @@ The key point is to call `focusOpenOrSelectNextWindow` in `to_after_key_up` of t
 ]
 ```
 
-#### `~/.hammerspoon/init.lua`
+##### `~/.hammerspoon/init.lua`
 
 ```lua
 hs.hotkey.bind({}, "f14", hotswitchHs.openOrSelectNext)
