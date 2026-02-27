@@ -67,9 +67,9 @@ MainController.new = function()
         end
     end
 
-    obj.openOrSelectNext = function(self)
+    local function openOrSelectRowHelper(self, selectFn)
         if self.panelLayoutView.isOpen then
-            self.panelLayoutView:selectNextRow(self.windowModel)
+            selectFn()
         else
             self.openedByOpenOrSelectNext = true
 
@@ -89,6 +89,18 @@ MainController.new = function()
                 self.panelLayoutView:show()
             end)
         end
+    end
+
+    obj.openOrSelectNext = function(self)
+        openOrSelectRowHelper(self, function()
+            self.panelLayoutView:selectNextRow(self.windowModel)
+        end)
+    end
+
+    obj.openOrSelectPrevious = function(self)
+        openOrSelectRowHelper(self, function()
+            self.panelLayoutView:selectPreviousRow(self.windowModel)
+        end)
     end
 
     obj.focusOpenOrSelectNextWindow = function(self)

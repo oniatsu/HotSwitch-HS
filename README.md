@@ -159,7 +159,7 @@ macOS reserves `command + tab` at the system level, so Hammerspoon cannot interc
 hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
 ```
 
-**Cycling version** — hold command, press tab to cycle, release command to focus, using `openOrSelectNext` + `focusOpenOrSelectNextWindow`:
+**Cycling version** — hold command, press tab to cycle forward / shift+tab to cycle backward, release command to focus, using `openOrSelectNext` + `openOrSelectPrevious` + `focusOpenOrSelectNextWindow`:
 
 ##### `~/.config/karabiner/karabiner.json`
 
@@ -175,10 +175,19 @@ hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
         "type": "basic"
     },
     {
-        "description": "command key release → focusOpenOrSelectNextWindow (f15)",
+        "description": "cmd+shift+tab → openOrSelectPrevious (f15)",
+        "from": {
+            "key_code": "tab",
+            "modifiers": { "mandatory": [ "command", "shift" ] }
+        },
+        "to": [ { "key_code": "f15" } ],
+        "type": "basic"
+    },
+    {
+        "description": "command key release → focusOpenOrSelectNextWindow (f16)",
         "from": { "key_code": "left_command" },
         "to": [ { "key_code": "left_command" } ],
-        "to_after_key_up": [ { "key_code": "f15" } ],
+        "to_after_key_up": [ { "key_code": "f16" } ],
         "type": "basic"
     }
 ]
@@ -188,10 +197,15 @@ hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
 
 ```lua
 hs.hotkey.bind({}, "f14", hotswitchHs.openOrSelectNext)
-hs.hotkey.bind({}, "f15", hotswitchHs.focusOpenOrSelectNextWindow)
+hs.hotkey.bind({}, "f15", hotswitchHs.openOrSelectPrevious)
+hs.hotkey.bind({}, "f16", hotswitchHs.focusOpenOrSelectNextWindow)
 ```
 
-> **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `focusOpenOrSelectNextWindow` is a no-op unless `openOrSelectNext` was called first, so spurious firings (e.g. after cmd+c) are harmless.
+- `command + tab` — cycle forward (next)
+- `command + shift + tab` — cycle backward (previous)
+- Release `command` — focus the selected window
+
+> **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `focusOpenOrSelectNextWindow` is a no-op unless `openOrSelectNext` or `openOrSelectPrevious` was called first, so spurious firings (e.g. after cmd+c) are harmless.
 
 ## 4. Run Hammerspoon
 

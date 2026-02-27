@@ -7,6 +7,7 @@ local mainController = MainController.new()
 return {
     openOrClose = function() mainController:openOrClose() end,
     openOrSelectNext = function() mainController:openOrSelectNext() end,
+    openOrSelectPrevious = function() mainController:openOrSelectPrevious() end,
     focusOpenOrSelectNextWindow = function() mainController:focusOpenOrSelectNextWindow() end,
     openWithModifier = function(modifiers, key) mainController:openWithModifier(modifiers, key) end,
     switchToNextWindow = function() mainController:switchToNextWindow() end,
