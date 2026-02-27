@@ -117,6 +117,8 @@ hs.hotkey.bind({"command"}, "space", hotswitchHs.openOrClose) -- command + space
 
 If you want to replace the macOS's app switcher `command + tab` with HotSwitch-HS, you can do forcibly by using [Karabiner-Elements](https://karabiner-elements.pqrs.org/).
 
+#### `openOrClose` — replace `command + tab`
+
 #### `~/.config/karabiner/karabiner.json`
 
 ```json
@@ -137,6 +139,46 @@ If you want to replace the macOS's app switcher `command + tab` with HotSwitch-H
 ```lua
 hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
 ```
+
+#### `openOrSelectNext` + `focusOpenOrSelectNextWindow` — cmd+tab style cycling
+
+`openOrSelectNext` cycles through windows each time it is called. `focusOpenOrSelectNextWindow` focuses the currently selected window and only takes effect when called after `openOrSelectNext`.
+
+The intended usage is cmd+tab-style: hold `command`, press `tab` repeatedly to cycle, then release `command` to focus.
+
+The key point is to call `focusOpenOrSelectNextWindow` in `to_after_key_up` of the command key — it fires when `command` is released.
+
+#### `~/.config/karabiner/karabiner.json`
+
+```json
+[
+    {
+        "description": "cmd+tab → openOrSelectNext (f14)",
+        "from": {
+            "key_code": "tab",
+            "modifiers": { "mandatory": [ "command" ] }
+        },
+        "to": [ { "key_code": "f14" } ],
+        "type": "basic"
+    },
+    {
+        "description": "command key release → focusOpenOrSelectNextWindow (f15)",
+        "from": { "key_code": "left_command" },
+        "to": [ { "key_code": "left_command" } ],
+        "to_after_key_up": [ { "key_code": "f15" } ],
+        "type": "basic"
+    }
+]
+```
+
+#### `~/.hammerspoon/init.lua`
+
+```lua
+hs.hotkey.bind({}, "f14", hotswitchHs.openOrSelectNext)
+hs.hotkey.bind({}, "f15", hotswitchHs.focusOpenOrSelectNextWindow)
+```
+
+> **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `focusOpenOrSelectNextWindow` is a no-op unless `openOrSelectNext` was called first, so spurious firings (e.g. after cmd+c) are harmless.
 
 ## 4. Run Hammerspoon
 

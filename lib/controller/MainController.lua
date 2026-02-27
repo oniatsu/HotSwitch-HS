@@ -15,6 +15,8 @@ MainController.new = function()
     local obj = Controller.new()
 
     obj.isRegistrationMode = false
+    obj.openedByOpenOrSelectNext = false
+    obj.showPanelTimer = nil
 
     obj.windowModel = WindowModel.new()
     obj.settingModel = SettingsModel.new()
@@ -30,34 +32,76 @@ MainController.new = function()
         obj:finish()
     end)
 
+    obj.open = function(self)
+        -- local t1 = TimeChecker.new()
+
+        self.windowModel.previousWindow = hs.window.frontmostWindow()
+
+        -- Enable hotkeys before refresh windows,
+        -- because refreshing windows is sometimes slow and take time.
+        -- local t2 = TimeChecker.new()
+        self.hotkeyController:enableHotkeys()
+        -- t2:diff("MainController:enableHotkeys")
+        self.panelLayoutView:activateHammerspoonWindow()
+        -- t2:diff("MainController:activateHammerspoonWindow")
+
+        self.windowModel:refreshOrderedWindows()
+        -- t2:diff("MainController:refreshOrderedWindows")
+        self.keyStatusModel:createKeyStatuses()
+        -- t2:diff("MainController:createKeyStatuses")
+        self.panelLayoutView:show()
+        -- t2:diff("MainController:show")
+        self.appWatchModel:watchAppliationDeactivated(function() self:finish() end)
+        -- t2:diff("MainController:watchAppliationDeactivated")
+
+        -- t1:diff("All")
+    end
+
     obj.openOrClose = function(self)
         if self.panelLayoutView.isOpen then
             self.windowModel:focusPreviousWindowForCancel()
             self:finish()
         else
-            -- local t1 = TimeChecker.new()
-
-            self.windowModel.previousWindow = hs.window.frontmostWindow()
-
-            -- Enable hotkeys before refresh windows,
-            -- because refreshing windows is sometimes slow and take time.
-            -- local t2 = TimeChecker.new()
-            self.hotkeyController:enableHotkeys()
-            -- t2:diff("MainController:enableHotkeys")
-            self.panelLayoutView:activateHammerspoonWindow()
-            -- t2:diff("MainController:activateHammerspoonWindow")
-
-            self.windowModel:refreshOrderedWindows()
-            -- t2:diff("MainController:refreshOrderedWindows")
-            self.keyStatusModel:createKeyStatuses()
-            -- t2:diff("MainController:createKeyStatuses")
-            self.panelLayoutView:show()
-            -- t2:diff("MainController:show")
-            self.appWatchModel:watchAppliationDeactivated(function() self:finish() end)
-            -- t2:diff("MainController:watchAppliationDeactivated")
-
-            -- t1:diff("All")
+            self:open()
         end
+    end
+
+    obj.openOrSelectNext = function(self)
+        if self.panelLayoutView.isOpen then
+            self.panelLayoutView:selectNextRow(self.windowModel)
+        else
+            self.openedByOpenOrSelectNext = true
+
+            -- Prepare data immediately (needed by focusOpenOrSelectNextWindow)
+            self.windowModel.previousWindow = hs.window.frontmostWindow()
+            self.windowModel:refreshOrderedWindows()
+            self.keyStatusModel:createKeyStatuses()
+
+            -- Watch for app deactivation immediately, even during the timer delay
+            self.appWatchModel:watchAppliationDeactivated(function() self:finish() end)
+
+            -- Defer panel rendering; if focusOpenOrSelectNextWindow is called first, skip it
+            self.showPanelTimer = hs.timer.doAfter(0.1, function()
+                self.showPanelTimer = nil
+                self.hotkeyController:enableHotkeys()
+                self.panelLayoutView:activateHammerspoonWindow()
+                self.panelLayoutView:show()
+            end)
+        end
+    end
+
+    obj.focusOpenOrSelectNextWindow = function(self)
+        if not self.openedByOpenOrSelectNext then return end
+
+        -- Cancel deferred panel rendering if still pending
+        if self.showPanelTimer then
+            self.showPanelTimer:stop()
+            self.showPanelTimer = nil
+        end
+
+        self.windowModel:focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[
+            self.panelLayoutView:getSelectedRowPosition()])
+        self:finish()
     end
 
     obj.switchToNextWindow = function(self)
@@ -78,6 +122,11 @@ MainController.new = function()
     end
 
     obj.finish = function(self)
+        if self.showPanelTimer then
+            self.showPanelTimer:stop()
+            self.showPanelTimer = nil
+        end
+        self.openedByOpenOrSelectNext = false
         self.panelLayoutView:hide()
         self.hotkeyController:disableHotkeys()
         self.appWatchModel:unwatchAppliationDeactivated()
