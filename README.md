@@ -355,6 +355,10 @@ The class diagram is roughly like this.
 
 # ChangeLogs
 
+- v2.4.0: Add AltTab-style cycling API
+  - `openOrSelectNext()` / `openOrSelectPrevious()` — cycle forward/backward through windows
+  - `focusOpenOrSelectNextWindow()` — focus selected window on modifier release
+  - `openWithModifier(modifiers, key)` — all-in-one cycling with automatic modifier release detection
 - v2.3.4: Modify focusing a Finder window
 - v2.2.6: Add a utility method
   - `hotswitchHs:switchToNextWindow()`
