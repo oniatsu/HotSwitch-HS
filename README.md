@@ -207,6 +207,19 @@ hs.hotkey.bind({}, "f16", hotswitchHs.focusOpenOrSelectNextWindow)
 
 > **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `focusOpenOrSelectNextWindow` is a no-op unless `openOrSelectNext` or `openOrSelectPrevious` was called first, so spurious firings (e.g. after cmd+c) are harmless.
 
+### Advanced option — Direct window cycling (no panel)
+
+Switch to the next or previous window immediately, without opening the HotSwitch-HS panel.
+Windows are ordered by most-recently-focused. "Next" moves toward older windows; "previous" wraps around to the oldest.
+
+```lua
+hs.hotkey.bind({"option"}, "n", hotswitchHs.switchToNextWindow)
+hs.hotkey.bind({"option"}, "p", hotswitchHs.switchToPreviousWindow)
+```
+
+- `switchToNextWindow()` — focus the second most-recently-used window (equivalent to a simple next-window switch)
+- `switchToPreviousWindow()` — focus the least-recently-used window (cycles in reverse)
+
 ## 4. Run Hammerspoon
 
 And open HotSwitch-HS panel by using the keybind you set.
@@ -355,6 +368,8 @@ The class diagram is roughly like this.
 
 # ChangeLogs
 
+- v2.4.2: Add `switchToPreviousWindow()`
+  - `hotswitchHs.switchToPreviousWindow()` — focus the least-recently-used window (reverse of `switchToNextWindow`)
 - v2.4.1: Bug fixes
   - Show all Finder windows in the switcher panel (previously only one was shown)
   - Fix AltTab-style cycling: handle key input during deferred panel open, reset selection position on new cycle, prevent timer leaks, guard canvas before panel is shown
@@ -364,7 +379,7 @@ The class diagram is roughly like this.
   - `openWithModifier(modifiers, key)` — all-in-one cycling with automatic modifier release detection
 - v2.3.4: Modify focusing a Finder window
 - v2.2.6: Add a utility method
-  - `hotswitchHs:switchToNextWindow()`
+  - `hotswitchHs.switchToNextWindow()` — focus the next most-recently-used window without opening the panel
 - v2.2.5: Add option to always show the panel on primary screen
   - `hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()`
 - v2.1.5: Change saving keys to use bundleID instead of app name

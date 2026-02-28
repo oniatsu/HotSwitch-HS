@@ -134,6 +134,11 @@ WindowModel.new = function()
         self:focusWindow(self:refreshOrderedWindows()[2])
     end
 
+    obj.focusPreviousWindow = function(self)
+        local orderedWindows = self:refreshOrderedWindows()
+        self:focusWindow(orderedWindows[#orderedWindows])
+    end
+
     -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
     obj.focusWindow = function(self, targetWindow)
         local targetAppliation = targetWindow:application()

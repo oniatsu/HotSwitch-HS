@@ -131,6 +131,10 @@ MainController.new = function()
         self.windowModel:focusNextWindow()
     end
 
+    obj.switchToPreviousWindow = function(self)
+        self.windowModel:focusPreviousWindow()
+    end
+
     obj.clearSettings = function(self)
         self.settingModel.clear()
     end
