@@ -15,7 +15,7 @@ MainController.new = function()
     local obj = Controller.new()
 
     obj.isRegistrationMode = false
-    obj.openedByOpenOrSelectNext = false
+    obj.openedByCycle = false
     obj.showPanelTimer = nil
     obj.modifierEventTap = nil
 
@@ -58,7 +58,7 @@ MainController.new = function()
         -- t1:diff("All")
     end
 
-    obj.openOrClose = function(self)
+    obj.togglePanel = function(self)
         if self.panelLayoutView.isOpen then
             self.windowModel:focusPreviousWindowForCancel()
             self:finish()
@@ -67,7 +67,7 @@ MainController.new = function()
         end
     end
 
-    local function openOrSelectRowHelper(self, selectFn)
+    local function cycleRowHelper(self, selectFn)
         if self.panelLayoutView.isOpen then
             selectFn()
         elseif self.showPanelTimer then
@@ -75,7 +75,7 @@ MainController.new = function()
             -- still move selection.
             selectFn()
         else
-            self.openedByOpenOrSelectNext = true
+            self.openedByCycle = true
 
             -- Prepare data immediately (needed by focusOpenOrSelectNextWindow)
             self.windowModel.previousWindow = hs.window.frontmostWindow()
@@ -101,20 +101,20 @@ MainController.new = function()
         end
     end
 
-    obj.openOrSelectNext = function(self)
-        openOrSelectRowHelper(self, function()
+    obj.cycleNext = function(self)
+        cycleRowHelper(self, function()
             self.panelLayoutView:selectNextRow(self.windowModel)
         end)
     end
 
-    obj.openOrSelectPrevious = function(self)
-        openOrSelectRowHelper(self, function()
+    obj.cyclePrevious = function(self)
+        cycleRowHelper(self, function()
             self.panelLayoutView:selectPreviousRow(self.windowModel)
         end)
     end
 
-    obj.focusOpenOrSelectNextWindow = function(self)
-        if not self.openedByOpenOrSelectNext then return end
+    obj.commitCycle = function(self)
+        if not self.openedByCycle then return end
 
         -- Cancel deferred panel rendering if still pending
         if self.showPanelTimer then
@@ -157,7 +157,7 @@ MainController.new = function()
             self.modifierEventTap:stop()
             self.modifierEventTap = nil
         end
-        self.openedByOpenOrSelectNext = false
+        self.openedByCycle = false
         self.panelLayoutView:hide()
         self.hotkeyController:disableHotkeys()
         self.appWatchModel:unwatchAppliationDeactivated()
@@ -180,11 +180,11 @@ MainController.new = function()
     -- Pass {"option", "shift"} to go in reverse (previous); {"option"} to go forward (next).
     -- Usage in init.lua:
     --   hs.hotkey.bind({"option"}, "tab",
-    --       function() hotswitchHs.openWithModifier({"option"}, "tab") end)
+    --       function() hotswitchHs.cycleWithModifier({"option"}, "tab") end)
     --   hs.hotkey.bind({"option", "shift"}, "tab",
-    --       function() hotswitchHs.openWithModifier({"option", "shift"}, "tab") end)
-    obj.openWithModifier = function(self, modifiers, key)
-        self:openOrSelectNext()
+    --       function() hotswitchHs.cycleWithModifier({"option", "shift"}, "tab") end)
+    obj.cycleWithModifier = function(self, modifiers, key)
+        self:cycleNext()
 
         if self.modifierEventTap == nil then
             self.modifierEventTap = hs.eventtap.new(
@@ -213,7 +213,7 @@ MainController.new = function()
                         if not anyHeld then
                             self.modifierEventTap:stop()
                             self.modifierEventTap = nil
-                            self:focusOpenOrSelectNextWindow()
+                            self:commitCycle()
                         end
                     end
                 end

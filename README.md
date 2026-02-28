@@ -93,22 +93,22 @@ If the file does not exist, create it and add the codes.
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
 hotswitchHs.enableAutoUpdate() -- If you don't want to update automatically, remove this line.
-hs.hotkey.bind({"command"}, ".", hotswitchHs.openOrClose) -- Set a keybind you like to open HotSwitch-HS panel.
+hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel) -- Set a keybind you like to open HotSwitch-HS panel.
 ```
 
 For example, you can set the keybind to open HotSwitch-HS like these.
 
 ```lua
 -- These are valid.
-hs.hotkey.bind({"command"}, ".", hotswitchHs.openOrClose) -- command + .
-hs.hotkey.bind({"command"}, ";", hotswitchHs.openOrClose) -- command + ;
-hs.hotkey.bind({"option"}, "tab", hotswitchHs.openOrClose) -- option + tab
-hs.hotkey.bind({"control"}, 'space', hotswitchHs.openOrClose) -- control + space
-hs.hotkey.bind({"command", "shift"}, "a", hotswitchHs.openOrClose) -- command + shift + a
+hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel) -- command + .
+hs.hotkey.bind({"command"}, ";", hotswitchHs.togglePanel) -- command + ;
+hs.hotkey.bind({"option"}, "tab", hotswitchHs.togglePanel) -- option + tab
+hs.hotkey.bind({"control"}, 'space', hotswitchHs.togglePanel) -- control + space
+hs.hotkey.bind({"command", "shift"}, "a", hotswitchHs.togglePanel) -- command + shift + a
 
 -- These are NOT valid normally. Hammerspoon cannot override the keys, because the keys may be registered and used by macOS.
-hs.hotkey.bind({"command"}, "tab", hotswitchHs.openOrClose) -- command + tab
-hs.hotkey.bind({"command"}, "space", hotswitchHs.openOrClose) -- command + space
+hs.hotkey.bind({"command"}, "tab", hotswitchHs.togglePanel) -- command + tab
+hs.hotkey.bind({"command"}, "space", hotswitchHs.togglePanel) -- command + space
 ```
 
 [Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
@@ -119,15 +119,15 @@ Hold a modifier key and press a key repeatedly to cycle through windows. Release
 
 #### option + tab (recommended, no Karabiner needed)
 
-Use `openWithModifier`. It handles key repeat and modifier release detection entirely within Hammerspoon via `hs.eventtap`.
+Use `cycleWithModifier`. It handles key repeat and modifier release detection entirely within Hammerspoon via `hs.eventtap`.
 
 ##### `~/.hammerspoon/init.lua`
 
 ```lua
 hs.hotkey.bind({"option"}, "tab",
-    function() hotswitchHs.openWithModifier({"option"}, "tab") end)
+    function() hotswitchHs.cycleWithModifier({"option"}, "tab") end)
 hs.hotkey.bind({"option", "shift"}, "tab",
-    function() hotswitchHs.openWithModifier({"option", "shift"}, "tab") end)
+    function() hotswitchHs.cycleWithModifier({"option", "shift"}, "tab") end)
 ```
 
 - `option + tab` — cycle forward (next)
@@ -138,7 +138,7 @@ hs.hotkey.bind({"option", "shift"}, "tab",
 
 macOS reserves `command + tab` at the system level, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it to a free key, then bind that key in Hammerspoon.
 
-**Simple version** — open/close toggle only, using `openOrClose`:
+**Simple version** — open/close toggle only, using `togglePanel`:
 
 ##### `~/.config/karabiner/karabiner.json`
 
@@ -156,17 +156,17 @@ macOS reserves `command + tab` at the system level, so Hammerspoon cannot interc
 ##### `~/.hammerspoon/init.lua`
 
 ```lua
-hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
+hs.hotkey.bind({}, "f13", hotswitchHs.togglePanel)
 ```
 
-**Cycling version** — hold command, press tab to cycle forward / shift+tab to cycle backward, release command to focus, using `openOrSelectNext` + `openOrSelectPrevious` + `focusOpenOrSelectNextWindow`:
+**Cycling version** — hold command, press tab to cycle forward / shift+tab to cycle backward, release command to focus, using `cycleNext` + `cyclePrevious` + `commitCycle`:
 
 ##### `~/.config/karabiner/karabiner.json`
 
 ```json
 [
     {
-        "description": "cmd+tab → openOrSelectNext (f14)",
+        "description": "cmd+tab → cycleNext (f14)",
         "from": {
             "key_code": "tab",
             "modifiers": { "mandatory": [ "command" ] }
@@ -175,7 +175,7 @@ hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
         "type": "basic"
     },
     {
-        "description": "cmd+shift+tab → openOrSelectPrevious (f15)",
+        "description": "cmd+shift+tab → cyclePrevious (f15)",
         "from": {
             "key_code": "tab",
             "modifiers": { "mandatory": [ "command", "shift" ] }
@@ -184,7 +184,7 @@ hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
         "type": "basic"
     },
     {
-        "description": "command key release → focusOpenOrSelectNextWindow (f16)",
+        "description": "command key release → commitCycle (f16)",
         "from": { "key_code": "left_command" },
         "to": [ { "key_code": "left_command" } ],
         "to_after_key_up": [ { "key_code": "f16" } ],
@@ -196,16 +196,16 @@ hs.hotkey.bind({}, "f13", hotswitchHs.openOrClose)
 ##### `~/.hammerspoon/init.lua`
 
 ```lua
-hs.hotkey.bind({}, "f14", hotswitchHs.openOrSelectNext)
-hs.hotkey.bind({}, "f15", hotswitchHs.openOrSelectPrevious)
-hs.hotkey.bind({}, "f16", hotswitchHs.focusOpenOrSelectNextWindow)
+hs.hotkey.bind({}, "f14", hotswitchHs.cycleNext)
+hs.hotkey.bind({}, "f15", hotswitchHs.cyclePrevious)
+hs.hotkey.bind({}, "f16", hotswitchHs.commitCycle)
 ```
 
 - `command + tab` — cycle forward (next)
 - `command + shift + tab` — cycle backward (previous)
 - Release `command` — focus the selected window
 
-> **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `focusOpenOrSelectNextWindow` is a no-op unless `openOrSelectNext` or `openOrSelectPrevious` was called first, so spurious firings (e.g. after cmd+c) are harmless.
+> **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `commitCycle` is a no-op unless `cycleNext` or `cyclePrevious` was called first, so spurious firings (e.g. after cmd+c) are harmless.
 
 ### Advanced option — Direct window cycling (no panel)
 
@@ -236,7 +236,7 @@ local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
 hotswitchHs.enableAutoUpdate()
 hotswitchHs.setAutoGeneratedKeys({"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"})
 hotswitchHs.enableAllSpaceWindows()
-hs.hotkey.bind({"command"}, ".", hotswitchHs.openOrClose)
+hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel)
 ```
 
 See below to know what these means.
@@ -314,7 +314,7 @@ I recommend that you add a keybind to reload Hammerpoon config quickly.
 ```lua
 -- For example: you can reload by "command + option + control + r".
 hs.hotkey.bind({"command", "option", "control"}, "r", hs.reload)
-hs.hotkey.bind({"command"}, ".", hotswitchHs.openOrClose)
+hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel)
 -- It's message showing the completion of reloading.
 hs.alert.show("Hammerspoon is reloaded")
 ```
@@ -374,9 +374,9 @@ The class diagram is roughly like this.
   - Show all Finder windows in the switcher panel (previously only one was shown)
   - Fix AltTab-style cycling: handle key input during deferred panel open, reset selection position on new cycle, prevent timer leaks, guard canvas before panel is shown
 - v2.4.0: Add AltTab-style cycling API
-  - `openOrSelectNext()` / `openOrSelectPrevious()` — cycle forward/backward through windows
-  - `focusOpenOrSelectNextWindow()` — focus selected window on modifier release
-  - `openWithModifier(modifiers, key)` — all-in-one cycling with automatic modifier release detection
+  - `cycleNext()` / `cyclePrevious()` — cycle forward/backward through windows
+  - `commitCycle()` — focus selected window on modifier release
+  - `cycleWithModifier(modifiers, key)` — all-in-one cycling with automatic modifier release detection
 - v2.3.4: Modify focusing a Finder window
 - v2.2.6: Add a utility method
   - `hotswitchHs.switchToNextWindow()` — focus the next most-recently-used window without opening the panel
