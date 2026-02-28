@@ -355,6 +355,9 @@ The class diagram is roughly like this.
 
 # ChangeLogs
 
+- v2.4.1: Bug fixes
+  - Show all Finder windows in the switcher panel (previously only one was shown)
+  - Fix AltTab-style cycling: handle key input during deferred panel open, reset selection position on new cycle, prevent timer leaks, guard canvas before panel is shown
 - v2.4.0: Add AltTab-style cycling API
   - `openOrSelectNext()` / `openOrSelectPrevious()` — cycle forward/backward through windows
   - `focusOpenOrSelectNextWindow()` — focus selected window on modifier release
