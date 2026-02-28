@@ -85,7 +85,9 @@ SelectedRowCanvasView.new = function(windowModel, position)
 
         self.position = self:calcNextRowPosition(self.position, windowModel)
 
-        self:replaceSelectedRow()
+        if self.selectedRowCanvas ~= nil then
+            self:replaceSelectedRow()
+        end
     end
 
     obj.previous = function(self, windowModel)
@@ -93,7 +95,9 @@ SelectedRowCanvasView.new = function(windowModel, position)
 
         self.position = self:calcPreviousRowPosition(self.position, windowModel)
 
-        self:replaceSelectedRow()
+        if self.selectedRowCanvas ~= nil then
+            self:replaceSelectedRow()
+        end
     end
 
     obj.calcNextRowPosition = function(self, position, windowModel)

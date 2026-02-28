@@ -70,6 +70,10 @@ MainController.new = function()
     local function openOrSelectRowHelper(self, selectFn)
         if self.panelLayoutView.isOpen then
             selectFn()
+        elseif self.showPanelTimer then
+            -- While deferred-open is pending, additional cycle keys should
+            -- still move selection.
+            selectFn()
         else
             self.openedByOpenOrSelectNext = true
 
@@ -77,11 +81,17 @@ MainController.new = function()
             self.windowModel.previousWindow = hs.window.frontmostWindow()
             self.windowModel:refreshOrderedWindows()
             self.keyStatusModel:createKeyStatuses()
+            self.panelLayoutView:resetSelectedRowPosition()
 
             -- Watch for app deactivation immediately, even during the timer delay
             self.appWatchModel:watchAppliationDeactivated(function() self:finish() end)
 
             -- Defer panel rendering; if focusOpenOrSelectNextWindow is called first, skip it
+            -- Stop any previously scheduled timer to avoid leaked timers opening the panel late.
+            if self.showPanelTimer then
+                self.showPanelTimer:stop()
+                self.showPanelTimer = nil
+            end
             self.showPanelTimer = hs.timer.doAfter(0.1, function()
                 self.showPanelTimer = nil
                 self.hotkeyController:enableHotkeys()

@@ -43,6 +43,10 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
     obj.getSelectedRowPosition = function(self)
         return self.selectedRowCanvasView.position
     end
+
+    obj.resetSelectedRowPosition = function(self)
+        self.selectedRowCanvasView.position = defaultRowPosition
+    end
     
     obj.selectNextRow = function(self, windowModel)
         self.selectedRowCanvasView:next(windowModel)
