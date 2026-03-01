@@ -40,7 +40,19 @@ MVC pattern. Entry point `hotswitch-hs.lua` exposes the public API and wires up 
 
 ## Key Behaviors to Be Aware Of
 
-- **Finder windows** get special handling: only the most recently focused Finder window is shown, and focusing Finder uses `hs.application.launchOrFocusByBundleID` instead of `window:focus()`.
+- **Finder windows** get special handling: only the most recently focused Finder window is shown, and focusing Finder uses `hs.application.launchOrFocusByBundleID` instead of `window:focus()`. **Do not attempt to show all Finder windows** — see the Finder limitations section below for why this is not solvable with the current approach.
 - **Lua garbage collection**: the README warns to pay attention to this. Hammerspoon objects (hotkeys, watchers, canvas) must be kept alive by storing them in variables with sufficient scope.
 - **Log level defaults to `"nothing"`** to avoid a macOS Ventura performance bug where printing many logs in Hammerspoon console causes slowness.
 - Settings are stored persistently by Hammerspoon's `hs.settings` — use `hotswitchHs.clearSettings()` to reset key registrations during development.
+
+## Finder Window Limitations
+
+Showing all real Finder windows in the panel was attempted (commit `a2e893a`, then reverted) and could not be made to work reliably. The constraints are fundamental to how Hammerspoon and Finder interact:
+
+**Stale subscription cache (phantom windows):**
+`hs.window.filter` uses a `windowVisible` event subscription for performance — without it, `getWindows()` is prohibitively slow. When the user merges Finder windows into a tab group, Finder does not fire the proper `AXUIElement` hidden/destroyed accessibility notification. The filter's internal cache therefore retains the now-phantom window objects from before the merge. These phantoms are indistinguishable from real windows via the subscription cache. A fresh accessibility query (`hs.window.filter:getWindows()` without cache, or `application:visibleWindows()`) can identify real windows, but the IDs returned by these fresh queries may not match the IDs stored in the subscription cache, causing real windows to be incorrectly dropped.
+
+**`window:focus()` resets Finder to first tab:**
+`window:focus()` internally calls `becomeMain()` (sets `AXMain = true`), which causes Finder to jump to the first tab in the tab group instead of preserving the currently active tab. Using `raise()` + `application:activate(true)` avoids the `AXMain` side-effect but does not resolve the phantom-entry problem above.
+
+**Current approach:** `removeUnusableFinderWindows` keeps only the first Finder window in focus order (most recently focused), stored as `lastFinderWindowId`. Focusing uses `launchOrFocusByBundleID`, which brings whatever window Finder considers frontmost. This is deliberately conservative.
