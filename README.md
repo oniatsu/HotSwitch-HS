@@ -267,6 +267,16 @@ hs.hotkey.bind({"command", "option", "control"}, "r", hs.reload)
 hs.alert.show("Hammerspoon is reloaded")
 ```
 
+## Known issue: only one Finder window is shown in the panel
+
+When Finder has multiple windows open, HotSwitch-HS shows only the most recently focused one. Selecting it focuses Finder via `hs.application.launchOrFocusByBundleID`, which brings whatever window Finder considers frontmost.
+
+**Root cause — stale subscription cache:** HotSwitch-HS uses `hs.window.filter` with a `windowVisible` event subscription for performance. When Finder windows are merged into a tab group, Finder does not fire the proper accessibility notification (`AXUIElement` hidden/destroyed event). As a result, the filter's internal cache retains the now-phantom window objects from before the merge, and they continue to appear as real entries. There is no reliable way from within Hammerspoon to tell a phantom cache entry apart from a real window without a fresh accessibility query, and fresh queries defeat the subscription-cache performance benefit.
+
+**Focusing quirk:** Even if phantom entries could be filtered, `window:focus()` internally calls `becomeMain()` (sets `AXMain = true`), which causes Finder to jump to the first tab instead of the tab that was active before switching away. Alternative APIs (`raise()` + `application:activate()`) avoid the tab reset but did not reliably resolve the phantom-entry problem.
+
+Until a clean solution exists within Hammerspoon's window filter API, the panel is limited to showing one Finder window.
+
 ---
 
 # Update manually
