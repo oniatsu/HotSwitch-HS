@@ -6,6 +6,7 @@ local mainController = MainController.new()
 
 return {
     togglePanel = function() mainController:togglePanel() end,
+    openOrClose = function() mainController:togglePanel() end, -- Backward-compatible alias for togglePanel()
     cycleWithModifier = function(modifiers, key) mainController:cycleWithModifier(modifiers, key) end,
     cycleNext = function() mainController:cycleNext() end,
     cyclePrevious = function() mainController:cyclePrevious() end,
