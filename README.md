@@ -277,6 +277,8 @@ When Finder has multiple windows open, HotSwitch-HS shows only the most recently
 
 Until a clean solution exists within Hammerspoon's window filter API, the panel is limited to showing one Finder window.
 
+**Recommended workaround:** Use Finder's tab feature to keep all folders in a single window. With all folders open as tabs, HotSwitch-HS can reach Finder in one keystroke, and you can switch folders within Finder using its own tab bar or `command + {` / `command + }`.
+
 ---
 
 # Update manually
