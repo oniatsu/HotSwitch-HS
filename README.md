@@ -54,7 +54,7 @@ hs.hotkey.bind({"command", "shift"}, "a", hotswitchHs.togglePanel) -- command + 
 
 See [hs.hotkey.bind() reference](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) for details.
 
-### Using command + tab (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
+### command + tab (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
 
 macOS reserves `command + tab`, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it to a free key:
 
@@ -116,21 +116,27 @@ The window-assigned key is always the same. That is what makes this mode the fas
 
 Hold a modifier key and press a key repeatedly to cycle through windows. Release the modifier to focus the selected window. Windows are ordered by most-recently-focused.
 
-## option + tab (recommended)
+## Setup
 
-No Karabiner needed. `cycleWithModifier` handles key repeat and modifier-release detection entirely within Hammerspoon.
+`cycleWithModifier` handles key repeat and modifier-release detection entirely within Hammerspoon. Any non-reserved modifier+key combination works — for example:
 
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
+
+-- option + tab / option + shift + tab
 hs.hotkey.bind({"option"}, "tab", function() hotswitchHs.cycleWithModifier({"option"}, "tab") end)
 hs.hotkey.bind({"option", "shift"}, "tab", function() hotswitchHs.cycleWithModifier({"option", "shift"}, "tab") end)
+
+-- command + . / command + shift + .
+hs.hotkey.bind({"command"}, ".", function() hotswitchHs.cycleWithModifier({"command"}, ".") end)
+hs.hotkey.bind({"command", "shift"}, ".", function() hotswitchHs.cycleWithModifier({"command", "shift"}, ".") end)
 ```
 
-- `option + tab` — cycle forward
-- `option + shift + tab` — cycle backward
-- Release `option` — focus the selected window
+- Forward key (`tab` / `.`) — cycle forward
+- Backward key with `shift` — cycle backward
+- Release the modifier — focus the selected window
 
-## command + tab cycling (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
+### command + tab cycling (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
 
 macOS reserves `command + tab`, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it, then bind in Hammerspoon for full AltTab-style cycling.
 
