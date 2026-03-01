@@ -14,6 +14,7 @@ WindowModel.new = function()
 
     obj.cachedOrderedWindows = nil
     obj.previousWindow = nil
+    obj.lastFinderWindowId = 0
 
     obj.windowFilter = hs.window.filter.defaultCurrentSpace
     -- obj.windowFilter = hs.window.filter.default
@@ -115,11 +116,41 @@ WindowModel.new = function()
     end
 
     obj.removeUnusableFinderWindows = function(self, orderedWindows)
-        return orderedWindows
+        local cleanedOrderedWindows = {}
+        local finderWindowsCount = 0
+        for i = 1, #orderedWindows do
+            local window = orderedWindows[i]
+            local bundleID = window:application():bundleID()
+            if bundleID == FINDER_BUNDLE_ID then
+                finderWindowsCount = finderWindowsCount + 1
+                if finderWindowsCount == 1 then
+                    self.lastFinderWindowId = window:id()
+                    table.insert(cleanedOrderedWindows, window)
+                end
+            else
+                table.insert(cleanedOrderedWindows, window)
+            end
+        end
+        return cleanedOrderedWindows
     end
 
     obj.removeUnusableFinderWindowsForCreatedOrderedWindows = function(self, orderedWindows)
-        return orderedWindows
+        local cleanedOrderedWindows = {}
+        local finderWindowsCount = 0
+        for i = 1, #orderedWindows do
+            local window = orderedWindows[i]
+            local bundleID = window:application():bundleID()
+            if bundleID == FINDER_BUNDLE_ID then
+                local windowId = window:id()
+                if finderWindowsCount == 0 and windowId == self.lastFinderWindowId then
+                    table.insert(cleanedOrderedWindows, window)
+                    finderWindowsCount = finderWindowsCount + 1
+                end
+            else
+                table.insert(cleanedOrderedWindows, window)
+            end
+        end
+        return cleanedOrderedWindows
     end
 
     obj.focusPreviousWindowForCancel = function(self)
@@ -141,6 +172,13 @@ WindowModel.new = function()
 
     -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
     obj.focusWindow = function(self, targetWindow)
+        -- if Finder window should be focused, then focus Finder application not but the specific window.
+        -- that is because Finder window is not created collectively by HammerSpoon.
+        if targetWindow:application():bundleID() == FINDER_BUNDLE_ID then
+            hs.application.launchOrFocusByBundleID(FINDER_BUNDLE_ID)
+            return
+        end
+
         local targetAppliation = targetWindow:application()
         local applicationMainWindow = targetAppliation:mainWindow()
         if applicationMainWindow == nil then
