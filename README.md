@@ -327,6 +327,16 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.0: Rename public API for consistency
+  - `openOrClose()` → `togglePanel()`
+  - `openOrSelectWithModifier()` → `cycleWithModifier()`
+  - `openOrSelectNext()` / `openOrSelectPrevious()` → `cycleNext()` / `cyclePrevious()`
+  - `focusOpenOrSelectNextWindow()` → `commitCycle()`
+  - `openOrClose()` is kept as a backward-compatible alias
+  - Fix focusing non-standard windows (AXDialog / AXFloating, e.g. iTerm2 Settings)
+  - Show fixed "Finder" label instead of window title for Finder entries in the panel
+  - Updater: switch to tags API and include CHANGELOG in update notification
+  - Revert showing all Finder windows (only the most recently focused Finder window is shown)
 - v2.4.2: Add `switchToPreviousWindow()`
   - `hotswitchHs.switchToPreviousWindow()` — focus the least-recently-used window (reverse of `switchToNextWindow`)
 - v2.4.1: Bug fixes
