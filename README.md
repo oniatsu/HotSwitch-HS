@@ -1,146 +1,64 @@
-# What is HotSwitch-HS
+# HotSwitch-HS
 
 ![top](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/doc/img/top.png)
 
-HotSwitch-HS is a window switcher using **2 stroke hotkey** for macOS.
+HotSwitch-HS is a [Hammerspoon](https://www.hammerspoon.org/) module for macOS that gives you fast, predictable window switching.
 
-It provides fastest window switching, no matter how many windows there are.
-HotSwitch-HS uses [Hammerspoon](https://www.hammerspoon.org/), and is rewritten for a substitution of [HotSwitch](https://github.com/oniatsu/HotSwitch).
+It supports two main modes:
 
-You can switch any windows by like `command + .` + `x` (this key is always fixed).
+- **Fixed-key mode** — Register a fixed hotkey to each window once. Then open the panel and press that key to jump to the window instantly. The key never changes, so you can switch without thinking.
+- **AltTab mode** — Hold a modifier (e.g. `option`) and press `tab` repeatedly to cycle through windows. Release the modifier to focus.
 
-HotSwitch-HS's window switching steps is these.
-
-1. Register **a fixed key** to windows on list. (Press `Space`. It's easy and fast.)
-2. Switch any windows by using the key you registered. (You can switch in a flash without thinking time.)
-
-In addition, HotSwitch-HS provides auto generated keys before your key registration.
-However, I highly recommend that you register keys, because it enable you to switch windows faster than ever.
-
-# Usage
-
-## Simple way
-
-Try it. It's easy and fast to understand.
-
-| Key | Action |
-| --- | ------ |
-| The key you set | Open or close the HotSwitch-HS panel |
-| `Space` | Toggle registration mode |
-| `Tab` or `Down` | Select a next window |
-| `Shift+Tab` or `Up` | Select a previous window |
-| `Delete` | Delete the key on the selected window |
-| `Return` | Focus the selected window |
-| `Escape` | Close the panal |
-| `[a-zA-Z0-9]` | Focus the window or register the key |
-| `-` or `[` or `]` or `.` or `/` | Focus the window or register the key |
-
-## Details
-
-Concretely, HotSwitch-HS's window switching steps is these.
-
-1. Register **a fixed key** to windows on list.
-2. Switch any windows by using the key you registered.
-
-### 1. Register **a fixed key** to windows on list.
-
-1. Open HotSwitch-HS panel. (Press `command + .` that you registered)
-2. Select a window on lists. (Press `Tab` or cursor keys.)
-3. Chanege the panel to registeration mode. (Press `Space`)
-4. Register **a fixed key** to the window. (Press any character keys. `a`, `b`, `c`, etc.)
-
-The registered key become a reserversion key, so the key doesn't appear as auto generated keys.
-
-If you want to delete a registered key combined with the window, select the window on lists and press `Delete`.
-
-### 2. Switch any windows by using the key you registered.
-
-1. Open HotSwitch-HS panel. (Press `command + .` that you registered)
-2. Switch the target window by using **a fixed key**. (Press the key you registered.)
-
-It looks like that 2 stroke hotkey is working to focus any windows.
-The important thing is that **the 2 stroke key bind is fixed anytime**.
-
-That is why window switching by HotSwitch-HS is always fastest.
+---
 
 # Installation
 
 ## 1. Install [Hammerspoon](https://www.hammerspoon.org/)
 
+Hammerspoon is a macOS automation tool that lets you write Lua scripts to control windows, hotkeys, and system events. HotSwitch-HS runs as a Hammerspoon module — Hammerspoon must be installed and running for it to work.
+
 ## 2. Download HotSwitch-HS
 
-In terminal, execute a command. You need to place a directory to `hotswitch-hs`.
 ```bash
 git clone https://github.com/oniatsu/HotSwitch-HS.git ~/.hammerspoon/hotswitch-hs
 ```
 
-Directory tree is like this:
-```
-~/.hammerspoon/
-├── init.lua
-└── hotswitch-hs/
-  ├── lib/
-  ├── LICENSE
-  ├── README.md
-  └── hotswitch-hs.lua
-```
+---
 
-If you have installed Hammerspoon just right now, `~/.hammerspoon/init.lua` doesn't exist yet.
+# Mode 1: Fixed-key switching
 
-## 3. Put a code at your Hammerspoon's `~/.hammerspoon/init.lua`
-If the file does not exist, create it and add the codes.
+Register a fixed hotkey to each window. Use a 2-stroke key (e.g. `command + .` → `s`) to focus it instantly. The key is always the same — no searching, no thinking.
+
+## Setup
+
+Add to `~/.hammerspoon/init.lua`:
 
 ```lua
 local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
-hotswitchHs.enableAutoUpdate() -- If you don't want to update automatically, remove this line.
-hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel) -- Set a keybind you like to open HotSwitch-HS panel.
+hotswitchHs.enableAutoUpdate() -- optional: auto-update via git pull
+hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel)
 ```
 
-For example, you can set the keybind to open HotSwitch-HS like these.
+Any keybind works for the trigger:
 
 ```lua
--- These are valid.
-hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel) -- command + .
-hs.hotkey.bind({"command"}, ";", hotswitchHs.togglePanel) -- command + ;
-hs.hotkey.bind({"option"}, "tab", hotswitchHs.togglePanel) -- option + tab
-hs.hotkey.bind({"control"}, 'space', hotswitchHs.togglePanel) -- control + space
+hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel)     -- command + .
+hs.hotkey.bind({"command"}, ";", hotswitchHs.togglePanel)     -- command + ;
+hs.hotkey.bind({"control"}, "space", hotswitchHs.togglePanel) -- control + space
 hs.hotkey.bind({"command", "shift"}, "a", hotswitchHs.togglePanel) -- command + shift + a
 
--- These are NOT valid normally. Hammerspoon cannot override the keys, because the keys may be registered and used by macOS.
-hs.hotkey.bind({"command"}, "tab", hotswitchHs.togglePanel) -- command + tab
-hs.hotkey.bind({"command"}, "space", hotswitchHs.togglePanel) -- command + space
+-- These are NOT valid — macOS reserves them:
+-- hs.hotkey.bind({"command"}, "tab", hotswitchHs.togglePanel)
+-- hs.hotkey.bind({"command"}, "space", hotswitchHs.togglePanel)
 ```
 
-[Here](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) is how to set `hs.hotkey.bind()`.
+See [hs.hotkey.bind() reference](https://www.hammerspoon.org/docs/hs.hotkey.html#bind) for details.
 
-### Advanced option — AltTab-like cycling
+### Using command + tab (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
 
-Hold a modifier key and press a key repeatedly to cycle through windows. Release the modifier to focus the selected window.
+macOS reserves `command + tab`, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it to a free key:
 
-#### option + tab (recommended, no Karabiner needed)
-
-Use `cycleWithModifier`. It handles key repeat and modifier release detection entirely within Hammerspoon via `hs.eventtap`.
-
-##### `~/.hammerspoon/init.lua`
-
-```lua
-hs.hotkey.bind({"option"}, "tab",
-    function() hotswitchHs.cycleWithModifier({"option"}, "tab") end)
-hs.hotkey.bind({"option", "shift"}, "tab",
-    function() hotswitchHs.cycleWithModifier({"option", "shift"}, "tab") end)
-```
-
-- `option + tab` — cycle forward (next)
-- `option + shift + tab` — cycle backward (previous)
-- Release `option` — focus the selected window
-
-#### command + tab replacement (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
-
-macOS reserves `command + tab` at the system level, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it to a free key, then bind that key in Hammerspoon.
-
-**Simple version** — open/close toggle only, using `togglePanel`:
-
-##### `~/.config/karabiner/karabiner.json`
+`~/.config/karabiner/karabiner.json`:
 
 ```json
 {
@@ -153,15 +71,70 @@ macOS reserves `command + tab` at the system level, so Hammerspoon cannot interc
 }
 ```
 
-##### `~/.hammerspoon/init.lua`
+`~/.hammerspoon/init.lua`:
 
 ```lua
 hs.hotkey.bind({}, "f13", hotswitchHs.togglePanel)
 ```
 
-**Cycling version** — hold command, press tab to cycle forward / shift+tab to cycle backward, release command to focus, using `cycleNext` + `cyclePrevious` + `commitCycle`:
+Press `command + tab` to open/close the panel, then use `Tab` and `Return` to navigate.
 
-##### `~/.config/karabiner/karabiner.json`
+## Panel key bindings
+
+| Key | Action |
+| --- | ------ |
+| Your trigger key | Open / close the panel |
+| `Space` | Toggle registration mode |
+| `Tab` or `Down` | Select next window |
+| `Shift+Tab` or `Up` | Select previous window |
+| `Return` | Focus the selected window |
+| `Delete` | Remove the registered key from the selected window |
+| `Escape` | Close the panel |
+| `[a-zA-Z0-9]`, `-`, `[`, `]`, `.`, `/` | Focus the window (or register the key in registration mode) |
+
+## How to register a key to a window
+
+1. Open the panel (press your trigger key).
+2. Select a window with `Tab` or arrow keys.
+3. Press `Space` to enter registration mode.
+4. Press any character key — that key is now fixed to this window.
+
+Once registered, a key is reserved and will not appear as an auto-generated key for other windows. To remove a registration, select the window and press `Delete`.
+
+## How to switch windows
+
+1. Open the panel (press your trigger key, e.g. `command + .`).
+2. Press the fixed key registered to the target window.
+
+The 2-stroke key binding is always the same. That is what makes this mode the fastest.
+
+> **Auto-generated keys:** Before you register any keys, HotSwitch-HS assigns keys automatically so you can start using it right away. Registering your own fixed keys is recommended for maximum speed.
+
+---
+
+# Mode 2: AltTab cycling
+
+Hold a modifier key and press a key repeatedly to cycle through windows. Release the modifier to focus the selected window. Windows are ordered by most-recently-focused.
+
+## option + tab (recommended)
+
+No Karabiner needed. `cycleWithModifier` handles key repeat and modifier-release detection entirely within Hammerspoon.
+
+```lua
+local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
+hs.hotkey.bind({"option"}, "tab", function() hotswitchHs.cycleWithModifier({"option"}, "tab") end)
+hs.hotkey.bind({"option", "shift"}, "tab", function() hotswitchHs.cycleWithModifier({"option", "shift"}, "tab") end)
+```
+
+- `option + tab` — cycle forward
+- `option + shift + tab` — cycle backward
+- Release `option` — focus the selected window
+
+## command + tab cycling (requires [Karabiner-Elements](https://karabiner-elements.pqrs.org/))
+
+macOS reserves `command + tab`, so Hammerspoon cannot intercept it directly. Use Karabiner-Elements to remap it, then bind in Hammerspoon for full AltTab-style cycling.
+
+`~/.config/karabiner/karabiner.json`:
 
 ```json
 [
@@ -193,7 +166,7 @@ hs.hotkey.bind({}, "f13", hotswitchHs.togglePanel)
 ]
 ```
 
-##### `~/.hammerspoon/init.lua`
+`~/.hammerspoon/init.lua`:
 
 ```lua
 hs.hotkey.bind({}, "f14", hotswitchHs.cycleNext)
@@ -201,123 +174,100 @@ hs.hotkey.bind({}, "f15", hotswitchHs.cyclePrevious)
 hs.hotkey.bind({}, "f16", hotswitchHs.commitCycle)
 ```
 
-- `command + tab` — cycle forward (next)
-- `command + shift + tab` — cycle backward (previous)
+- `command + tab` — cycle forward
+- `command + shift + tab` — cycle backward
 - Release `command` — focus the selected window
 
 > **Note:** The `to_after_key_up` on `left_command` fires on every command key release, not only after cmd+tab. `commitCycle` is a no-op unless `cycleNext` or `cyclePrevious` was called first, so spurious firings (e.g. after cmd+c) are harmless.
 
-### Advanced option — Direct window cycling (no panel)
+---
 
-Switch to the next or previous window immediately, without opening the HotSwitch-HS panel.
-Windows are ordered by most-recently-focused. "Next" moves toward older windows; "previous" wraps around to the oldest.
+# Direct window switch (no panel)
+
+Switch to the next or previous window immediately, without opening the panel. Windows are ordered by most-recently-focused.
 
 ```lua
 hs.hotkey.bind({"option"}, "n", hotswitchHs.switchToNextWindow)
 hs.hotkey.bind({"option"}, "p", hotswitchHs.switchToPreviousWindow)
 ```
 
-- `switchToNextWindow()` — focus the second most-recently-used window (equivalent to a simple next-window switch)
+- `switchToNextWindow()` — focus the second most-recently-used window
 - `switchToPreviousWindow()` — focus the least-recently-used window (cycles in reverse)
 
-## 4. Run Hammerspoon
-
-And open HotSwitch-HS panel by using the keybind you set.
-If you have some probrems, [check these](https://github.com/oniatsu/HotSwitch-HS#if-you-have-some-probrems).
+---
 
 # Preferences
 
-If you want to set some preferences, you can use some option by adding codes at `~/.hammerspoon/init.lua`.
-
-For example:
-
-```lua
-local hotswitchHs = require("hotswitch-hs/hotswitch-hs")
-hotswitchHs.enableAutoUpdate()
-hotswitchHs.setAutoGeneratedKeys({"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"})
-hotswitchHs.enableAllSpaceWindows()
-hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel)
-```
-
-See below to know what these means.
+Add any of these to `~/.hammerspoon/init.lua`.
 
 ## Auto update
 
-Add this. It will update HotSwitch-HS by `git pull` automatically when needed.
-
 ```lua
 hotswitchHs.enableAutoUpdate()
 ```
 
-## Auto generated keys
+Updates HotSwitch-HS via `git pull` automatically when needed.
 
-You can define auto generated keys.
-The order you specified will be used to generate keys.
+## Auto-generated keys
 
 ```lua
 hotswitchHs.setAutoGeneratedKeys({"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"})
 ```
 
-Default auto generated keys are [these](https://github.com/oniatsu/HotSwitch-HS/blob/main/lib/common/KeyConstants.lua#L24-L26).
+Defines which keys are auto-assigned to windows before you register your own. Default keys are [here](https://github.com/oniatsu/HotSwitch-HS/blob/main/lib/common/KeyConstants.lua#L24-L26).
 
-## Showing all space windows
-
-If you want to see all space windows on the lists, add this.
+## Show windows from all spaces
 
 ```lua
 hotswitchHs.enableAllSpaceWindows()
 ```
 
-Default: the current space windows are only shown.
+By default, only windows in the current space are shown. This shows windows from all spaces.
 
-## Additonal symbol keys
-
-You can add symbol keys to register windows. (Only the [Japanese keyboard layout symbols](https://github.com/oniatsu/HotSwitch-HS/blob/main/lib/common/KeyConstants.lua#L31) are available now.)
+## Additional symbol keys
 
 ```lua
 hotswitchHs.addJapaneseKeyboardLayoutSymbolKeys()
 ```
 
-## Always showing the panel on primary screen
+Adds [Japanese keyboard layout symbols](https://github.com/oniatsu/HotSwitch-HS/blob/main/lib/common/KeyConstants.lua#L31) as registerable keys.
 
-To show the panel not on main screen but on primary screen.
-Main screen is the one containing the currently focused window.
+## Always show panel on primary screen
 
 ```lua
 hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()
 ```
 
-## Set module log level
+By default the panel appears on the screen containing the currently focused window. This forces it to the primary screen instead.
 
-If you are on macOS Ventura 13.x, Hammerspoon works too slow when many logs are printed on the Hammerspoon console.
-So I recommend that you set the module log level to `nothing` not to print many logs.
-This is a [Hammerspoon's bug](https://github.com/Hammerspoon/hammerspoon/issues/3306).
+## Log level
+
 ```lua
--- Default: nothing
-hotswitchHs.setLogLevel("debug") -- can be 'nothing', 'error', 'warning', 'info', 'debug', or 'verbose'
+hotswitchHs.setLogLevel("nothing") -- default
+-- can be 'nothing', 'error', 'warning', 'info', 'debug', or 'verbose'
 ```
 
-# If you have some probrems,
+On macOS Ventura 13.x, printing many logs in Hammerspoon console causes slowness ([Hammerspoon bug](https://github.com/Hammerspoon/hammerspoon/issues/3306)). The default is `nothing`.
 
-Check these.
+---
 
-- If the keybind you set is not enabled, open Hammerspoon console and check some error messages. First, click Hammerspoon's menubar icon. Second, click `Console...`.
-- Update HotSwtich-HS. `cd ~/.hammerspoon/hotswitch-hs && git pull`
+# Troubleshooting
 
-## Known issues
+- **Keybind not working?** Open Hammerspoon Console (menubar icon → `Console...`) and check for error messages.
+- **Still broken?** Update HotSwitch-HS: `cd ~/.hammerspoon/hotswitch-hs && git pull`
 
-Sometimes, getting windows is failed after the macOS has woken up from sleep.
+## Known issue: windows not showing after wake from sleep
 
-It would be fixed by reloading Hammerspoon config. It's possibly Hammerspoon's bug.
-I recommend that you add a keybind to reload Hammerpoon config quickly.
+Reload Hammerspoon config to fix it. This is likely a Hammerspoon bug.
+
+Tip: add a reload keybind for quick recovery:
 
 ```lua
--- For example: you can reload by "command + option + control + r".
 hs.hotkey.bind({"command", "option", "control"}, "r", hs.reload)
-hs.hotkey.bind({"command"}, ".", hotswitchHs.togglePanel)
--- It's message showing the completion of reloading.
 hs.alert.show("Hammerspoon is reloaded")
 ```
+
+---
 
 # Update manually
 
@@ -332,6 +282,8 @@ git pull
 rm -rf ~/.hammerspoon/hotswitch-hs
 ```
 
+---
+
 # Development
 
 ## Requirements
@@ -340,31 +292,27 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 ## Steps
 
-1. Edit codes.
-2. Reload Hammerspoon config and check that it's working correctly.
+1. Edit `.lua` files.
+2. Reload Hammerspoon config and verify behavior.
 
 ### Owner's steps
 
-3. Check latest git tag. (`git describe --tags --abbrev=0`)
+3. Check latest git tag: `git describe --tags --abbrev=0`
 4. Add a new git tag.
-5. Push the tag. Then, the release on GitHub is automatically created.
+5. Push the tag — GitHub Release is created automatically.
 
 ### Option
 
-If you would update the class diagram,
-1. Install PlantUML. (`brew install graphviz && brew install plantuml`)
+To update the class diagram:
+1. Install PlantUML: `brew install graphviz && brew install plantuml`
 2. Edit `doc/uml/class_diagram.pu`.
-3. Execute `plantuml doc/uml -o ../img` at your terminal.
-
-## Directory structure
-
-The class diagram is roughly like this.
-
-![class_diagram](https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/doc/img/class_diagram.png)
+3. Run `plantuml doc/uml -o ../img`.
 
 ## Note
 
-- Pay attention to Lua's garvage collection.
+- Pay attention to Lua's garbage collection.
+
+---
 
 # ChangeLogs
 
@@ -383,7 +331,7 @@ The class diagram is roughly like this.
 - v2.2.5: Add option to always show the panel on primary screen
   - `hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()`
 - v2.1.5: Change saving keys to use bundleID instead of app name
-  - If you used this app before this version, you need register keys again.
+  - If you used this app before this version, you need to register keys again.
 - v2.1.0: Add auto updater
   - `hotswitchHs.enableAutoUpdate()`
 - v2.0.0: Connect Git tag with GitHub Release
