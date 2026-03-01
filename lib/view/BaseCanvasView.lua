@@ -248,10 +248,15 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
 
     obj.showEachWindowTitle = function(self, i, window)
         -- local t = TimeChecker.new()
-        local windowName = window:title() -- sometimes slow
-        if windowName == "" then
-            windowName = window:application():name()
-            -- t:diff("get application name")
+        local windowName
+        if window:application():bundleID() == "com.apple.finder" then
+            windowName = "Finder"
+        else
+            windowName = window:title() -- sometimes slow
+            if windowName == "" then
+                windowName = window:application():name()
+                -- t:diff("get application name")
+            end
         end
         -- alternative way
         -- local windowName = window:application():name() -- more faster
