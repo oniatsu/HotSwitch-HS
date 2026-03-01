@@ -206,11 +206,19 @@ WindowModel.new = function()
 
             if previousWindow:application():pid() == targetAppliation:pid() then
                 if previousWindow:id() ~= targetWindow:id() then
-                    -- First focus another window of the same application, then focus the target window
-                    targetWindow:focus()
-                    hs.timer.doAfter(0.01, function()
+                    -- Non-standard windows (e.g. Settings/Preferences panels with subrole AXDialog or AXFloating)
+                    -- don't respond correctly to focus() because becomeMain() causes the app to redirect focus
+                    -- to its main window. Use raise() + activate(true) instead to avoid this side-effect.
+                    if targetWindow:subrole() ~= "AXStandardWindow" then
+                        targetWindow:raise()
+                        targetAppliation:activate(true)
+                    else
+                        -- First focus another window of the same application, then focus the target window
                         targetWindow:focus()
-                    end)
+                        hs.timer.doAfter(0.01, function()
+                            targetWindow:focus()
+                        end)
+                    end
                 else
                     -- Find the first window on a different screen to raise
                     local targetWindowScreenId = targetWindow:screen():id()
