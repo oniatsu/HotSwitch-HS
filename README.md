@@ -6,7 +6,7 @@ HotSwitch-HS is a [Hammerspoon](https://www.hammerspoon.org/) module for macOS t
 
 It supports two main modes:
 
-- **Fixed-key mode** — Register a fixed hotkey to each window once. Then open the panel and press that key to jump to the window instantly. The key never changes, so you can switch without thinking.
+- **Window-assigned key mode** — Register a window-assigned key to each window once. Then open the panel and press that key to jump to the window instantly. The key never changes, so you can switch without thinking.
 - **AltTab mode** — Hold a modifier (e.g. `option`) and press `tab` repeatedly to cycle through windows. Release the modifier to focus.
 
 ---
@@ -25,9 +25,9 @@ git clone https://github.com/oniatsu/HotSwitch-HS.git ~/.hammerspoon/hotswitch-h
 
 ---
 
-# Mode 1: Fixed-key switching
+# Mode 1: Window-assigned key switching
 
-Register a fixed hotkey to each window. Use a 2-stroke key (e.g. `command + .` → `s`) to focus it instantly. The key is always the same — no searching, no thinking.
+Register a window-assigned key to each window. Use it (e.g. `command + .` → `s`) to focus it instantly. The key is always the same — no searching, no thinking.
 
 ## Setup
 
@@ -88,7 +88,7 @@ Press `command + tab` to open/close the panel, then use `Tab` and `Return` to na
 | `Tab` or `Down` | Select next window |
 | `Shift+Tab` or `Up` | Select previous window |
 | `Return` | Focus the selected window |
-| `Delete` | Remove the registered key from the selected window |
+| `Delete` | Remove the window-assigned key from the selected window |
 | `Escape` | Close the panel |
 | `[a-zA-Z0-9]`, `-`, `[`, `]`, `.`, `/` | Focus the window (or register the key in registration mode) |
 
@@ -97,18 +97,18 @@ Press `command + tab` to open/close the panel, then use `Tab` and `Return` to na
 1. Open the panel (press your trigger key).
 2. Select a window with `Tab` or arrow keys.
 3. Press `Space` to enter registration mode.
-4. Press any character key — that key is now fixed to this window.
+4. Press any character key — that key is now assigned to this window.
 
 Once registered, a key is reserved and will not appear as an auto-generated key for other windows. To remove a registration, select the window and press `Delete`.
 
 ## How to switch windows
 
 1. Open the panel (press your trigger key, e.g. `command + .`).
-2. Press the fixed key registered to the target window.
+2. Press the window-assigned key for the target window.
 
-The 2-stroke key binding is always the same. That is what makes this mode the fastest.
+The window-assigned key is always the same. That is what makes this mode the fastest.
 
-> **Auto-generated keys:** Before you register any keys, HotSwitch-HS assigns keys automatically so you can start using it right away. Registering your own fixed keys is recommended for maximum speed.
+> **Auto-generated keys:** Before you register any keys, HotSwitch-HS assigns keys automatically so you can start using it right away. Registering your own window-assigned keys is recommended for maximum speed.
 
 ---
 
