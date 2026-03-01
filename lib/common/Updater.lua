@@ -1,45 +1,80 @@
 local Debugger = require("hotswitch-hs/lib/common/Debugger")
 local PreferenceModel = require("hotswitch-hs/lib/model/PreferenceModel")
 
-local URL = "https://api.github.com/repos/oniatsu/HotSwitch-HS/releases/latest"
+local TAGS_URL = "https://api.github.com/repos/oniatsu/HotSwitch-HS/tags"
+local README_URL = "https://raw.githubusercontent.com/oniatsu/HotSwitch-HS/main/README.md"
+local CHANGELOG_URL = "https://github.com/oniatsu/HotSwitch-HS#changelogs"
 local APPLE_SCRIPT_FOR_GIT_TAG = 'do shell script "cd ~/.hammerspoon/hotswitch-hs && git describe --tags --abbrev=0"'
 local APPLE_SCRIPT_FOR_UPDATE = 'do shell script "cd ~/.hammerspoon/hotswitch-hs && git pull"'
 
 local obj = {}
 
-local showDialog = function(remoteVersion)
+local function parseMajor(version)
+    if version == nil then return nil end
+    return tonumber(version:match("^v(%d+)%."))
+end
+
+local function extractChangelog(readmeContent, version)
+    local escaped = version:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]%]", "%%%1")
+    local start = readmeContent:find("- " .. escaped .. ":")
+    if start == nil then return nil end
+    local excerpt = readmeContent:sub(start, start + 400)
+    local nextEntry = excerpt:find("\n- v%d")
+    if nextEntry then
+        excerpt = excerpt:sub(1, nextEntry - 1)
+    end
+    return excerpt:gsub("^%s+", ""):gsub("%s+$", "")
+end
+
+local function truncate(text, maxLen)
+    if text == nil then return "" end
+    if #text <= maxLen then return text end
+    return text:sub(1, maxLen) .. "…"
+end
+
+local showDialog = function(remoteVersion, localVersion, changelog)
+    local remoteMajor = parseMajor(remoteVersion)
+    local localMajor  = parseMajor(localVersion)
+    local majorBump   = (remoteMajor ~= nil and localMajor ~= nil and remoteMajor > localMajor)
+    local keywordHit  = (changelog ~= nil and changelog:upper():find("BREAKING") ~= nil)
+    local isBreaking  = majorBump or keywordHit
+
+    local notes = truncate(changelog or "(No changelog found)", 250)
+    local informativeText = (isBreaking and "⚠ BREAKING CHANGES DETECTED\n" or "")
+        .. notes
+        .. "\n\n[Click here for full changelog]"
+
     hs.notify.new(function(notify)
-        local activationTypes = notify:activationType()
-        if activationTypes == hs.notify.activationTypes.contentsClicked then
-            -- none
-        elseif activationTypes == hs.notify.activationTypes.actionButtonClicked then
+        local activationType = notify:activationType()
+        if activationType == hs.notify.activationTypes.contentsClicked then
+            hs.urlevent.openURL(CHANGELOG_URL)
+        elseif activationType == hs.notify.activationTypes.actionButtonClicked then
             hs.notify.new(function() end, {
                 title = "HotSwitch-HS",
                 informativeText = "Updating ...",
                 withdrawAfter = 0,
             }):send()
-
-            local isSuccess, parsedOutput, rawOutput = hs.osascript.applescript(APPLE_SCRIPT_FOR_UPDATE)
+            local isSuccess = hs.osascript.applescript(APPLE_SCRIPT_FOR_UPDATE)
             if isSuccess then
-                Debugger.log("SUCCESS: updating")
                 hs.notify.new(function() end, {
                     title = "HotSwitch-HS",
-                    informativeText = "Updating is finished!",
+                    informativeText = "Updated to " .. remoteVersion .. ". Reloading...",
                     withdrawAfter = 0,
                 }):send()
                 hs.reload()
             else
-                Debugger.log("ERROR: updating")
                 hs.notify.new(function() end, {
                     title = "HotSwitch-HS",
-                    informativeText = "ERROR: Updating HotSwitch-HS has something errors.",
+                    informativeText = "ERROR: Update failed. Check Hammerspoon Console.",
                     withdrawAfter = 0,
                 }):send()
             end
         end
     end, {
-        title = "New HotSwitch-HS is available!",
-        informativeText = "Click 'Update' button.\nIt will update to " .. remoteVersion,
+        title = isBreaking
+            and "HotSwitch-HS: Update Available (Breaking Changes!)"
+            or  "New HotSwitch-HS is available! → " .. remoteVersion,
+        informativeText = informativeText,
         hasActionButton = true,
         actionButtonTitle = "Update",
         autoWithdraw = false,
@@ -49,48 +84,47 @@ end
 
 obj.check = function()
     Debugger.log("start checking")
-    -- if 1 == 1 then showDialog("v3.0.0") return end -- for debug
+    -- if 1 == 1 then showDialog("v2.4.1", "v2.3.0", "- v2.4.1: Bug fixes\n  - Show all Finder windows") return end -- for debug
 
     local currentDate = os.date("%Y-%m-%d")
-    local lastCheckedDate = PreferenceModel.autoUpdate.getLastCheckedDate()
-    -- lastCheckedDate = "2021-10-10" -- for debug
-    if lastCheckedDate == currentDate then
+    if PreferenceModel.autoUpdate.getLastCheckedDate() == currentDate then
         Debugger.log("Today is same as last checked date.")
         return
     end
     PreferenceModel.autoUpdate.setLastCheckedDate(currentDate)
 
-    Debugger.log("HTTP request")
-    hs.http.asyncGet(URL, nil, function(status, body, header)
-        if status == 200 then
-            local json = hs.json.decode(body)
-            local remoteVersion = json.tag_name
+    -- Step 1: Get latest version from tags API
+    hs.http.asyncGet(TAGS_URL, nil, function(status, body, header)
+        if status ~= 200 then Debugger.log("Error: http request") return end
 
-            local isSuccess, localVersion, rawOutput = hs.osascript.applescript(APPLE_SCRIPT_FOR_GIT_TAG)
-            if isSuccess then
-                -- localVersion = "v1.9.9" -- for debug
-                if localVersion == remoteVersion then
-                    Debugger.log("This HotSwitch-HS " .. localVersion .. " is latest.")
-                else
-                    local lastCheckedVersion = PreferenceModel.autoUpdate.getLastCheckedVersion()
-                    -- lastCheckedVersion = "v1.9.9" -- for debug
-                    if lastCheckedVersion == remoteVersion then
-                        Debugger.log("The version update was already checked.")
-                    else
-                        Debugger.log("This HotSwitch-HS can be updated.")
+        local tags = hs.json.decode(body)
+        if tags == nil or #tags == 0 then Debugger.log("Error: no tags found") return end
+        local remoteVersion = tags[1].name
 
-                        Debugger.log("setLastCheckedVersion(" .. remoteVersion .. ")")
-                        PreferenceModel.autoUpdate.setLastCheckedVersion(remoteVersion)
+        local isSuccess, localVersion = hs.osascript.applescript(APPLE_SCRIPT_FOR_GIT_TAG)
+        if not isSuccess then Debugger.log("Error: getting git tag") return end
 
-                        showDialog(remoteVersion)
-                    end
-                end
-            else
-                Debugger.log("Error: getting git tag")
-            end
-        else
-            Debugger.log("Error: http request")
+        if localVersion == remoteVersion then
+            Debugger.log("This HotSwitch-HS " .. localVersion .. " is latest.")
+            return
         end
+
+        if PreferenceModel.autoUpdate.getLastCheckedVersion() == remoteVersion then
+            Debugger.log("The version update was already checked.")
+            return
+        end
+
+        Debugger.log("This HotSwitch-HS can be updated.")
+        PreferenceModel.autoUpdate.setLastCheckedVersion(remoteVersion)
+
+        -- Step 2: Fetch README.md to extract changelog
+        hs.http.asyncGet(README_URL, nil, function(rStatus, rBody, rHeader)
+            local changelog = nil
+            if rStatus == 200 then
+                changelog = extractChangelog(rBody, remoteVersion)
+            end
+            showDialog(remoteVersion, localVersion, changelog)
+        end)
     end)
 end
 
