@@ -301,13 +301,6 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 4. Add a new git tag.
 5. Push the tag — GitHub Release is created automatically.
 
-### Option
-
-To update the class diagram:
-1. Install PlantUML: `brew install graphviz && brew install plantuml`
-2. Edit `doc/uml/class_diagram.pu`.
-3. Run `plantuml doc/uml -o ../img`.
-
 ## Note
 
 - Pay attention to Lua's garbage collection.
