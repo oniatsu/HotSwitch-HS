@@ -145,28 +145,28 @@ macOS reserves `command + tab`, so Hammerspoon cannot intercept it directly. Use
 ```json
 [
     {
-        "description": "cmd+tab → cycleNext (f14)",
-        "from": {
-            "key_code": "tab",
-            "modifiers": { "mandatory": [ "command" ] }
-        },
-        "to": [ { "key_code": "f14" } ],
+        "description": "command key release → commitCycle (f14)",
+        "from": { "key_code": "left_command" },
+        "to": [ { "key_code": "left_command" } ],
+        "to_after_key_up": [ { "key_code": "f14" } ],
         "type": "basic"
     },
     {
-        "description": "cmd+shift+tab → cyclePrevious (f15)",
+        "description": "cmd+tab → cycleNext (f15)",
         "from": {
             "key_code": "tab",
-            "modifiers": { "mandatory": [ "command", "shift" ] }
+            "modifiers": { "mandatory": [ "command" ] }
         },
         "to": [ { "key_code": "f15" } ],
         "type": "basic"
     },
     {
-        "description": "command key release → commitCycle (f16)",
-        "from": { "key_code": "left_command" },
-        "to": [ { "key_code": "left_command" } ],
-        "to_after_key_up": [ { "key_code": "f16" } ],
+        "description": "cmd+shift+tab → cyclePrevious (f16)",
+        "from": {
+            "key_code": "tab",
+            "modifiers": { "mandatory": [ "command", "shift" ] }
+        },
+        "to": [ { "key_code": "f16" } ],
         "type": "basic"
     }
 ]
@@ -175,9 +175,9 @@ macOS reserves `command + tab`, so Hammerspoon cannot intercept it directly. Use
 `~/.hammerspoon/init.lua`:
 
 ```lua
-hs.hotkey.bind({}, "f14", hotswitchHs.cycleNext)
-hs.hotkey.bind({}, "f15", hotswitchHs.cyclePrevious)
-hs.hotkey.bind({}, "f16", hotswitchHs.commitCycle)
+hs.hotkey.bind({}, "f14", hotswitchHs.commitCycle)
+hs.hotkey.bind({}, "f15", hotswitchHs.cycleNext, nil, hotswitchHs.cycleNext)
+hs.hotkey.bind({}, "f16", hotswitchHs.cyclePrevious, nil, hotswitchHs.cyclePrevious)
 ```
 
 - `command + tab` — cycle forward
