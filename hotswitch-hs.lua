@@ -18,6 +18,7 @@ return {
     end,
     enableAllSpaceWindows = function() mainController:enableAllSpaceWindows() end,
     enableAutoUpdate = function() mainController.checkUpdate() end,
+    checkUpdateNow = function() mainController.checkUpdateNow() end,
     addJapaneseKeyboardLayoutSymbolKeys = function() mainController:addJapaneseKeyboardLayoutSymbolKeys() end,
     setPanelToAlwaysShowOnPrimaryScreen = function() mainController:setPanelToAlwaysShowOnPrimaryScreen() end,
     clearSettings = function() mainController:clearSettings() end,

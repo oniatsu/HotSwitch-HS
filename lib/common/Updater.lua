@@ -15,7 +15,7 @@ local function parseMajor(version)
 end
 
 local function extractChangelog(readmeContent, version)
-    local escaped = version:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]%]", "%%%1")
+    local escaped = version:gsub("([%(%)%.%%%+%-%*%?%[%^%$%]])", "%%%1")
     local start = readmeContent:find("- " .. escaped .. ":")
     if start == nil then return nil end
     local excerpt = readmeContent:sub(start, start + 400)
@@ -82,17 +82,7 @@ local showDialog = function(remoteVersion, localVersion, changelog)
     }):send()
 end
 
-obj.check = function()
-    Debugger.log("start checking")
-    -- if 1 == 1 then showDialog("v2.4.1", "v2.3.0", "- v2.4.1: Bug fixes\n  - Show all Finder windows") return end -- for debug
-
-    local currentDate = os.date("%Y-%m-%d")
-    if PreferenceModel.autoUpdate.getLastCheckedDate() == currentDate then
-        Debugger.log("Today is same as last checked date.")
-        return
-    end
-    PreferenceModel.autoUpdate.setLastCheckedDate(currentDate)
-
+local function doCheck()
     -- Step 1: Get latest version from tags API
     hs.http.asyncGet(TAGS_URL, nil, function(status, body, header)
         if status ~= 200 then Debugger.log("Error: http request") return end
@@ -126,6 +116,25 @@ obj.check = function()
             showDialog(remoteVersion, localVersion, changelog)
         end)
     end)
+end
+
+obj.check = function()
+    Debugger.log("start checking")
+    -- if 1 == 1 then showDialog("v2.4.1", "v2.3.0", "- v2.4.1: Bug fixes\n  - Show all Finder windows") return end -- for debug
+
+    local currentDate = os.date("%Y-%m-%d")
+    if PreferenceModel.autoUpdate.getLastCheckedDate() == currentDate then
+        Debugger.log("Today is same as last checked date.")
+        return
+    end
+    PreferenceModel.autoUpdate.setLastCheckedDate(currentDate)
+
+    doCheck()
+end
+
+obj.checkNow = function()
+    Debugger.log("start checking (forced)")
+    doCheck()
 end
 
 return obj

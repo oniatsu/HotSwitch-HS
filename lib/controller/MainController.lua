@@ -282,6 +282,10 @@ MainController.new = function()
         Updater.check();
     end
 
+    obj.checkUpdateNow = function()
+        Updater.checkNow();
+    end
+
     obj.addJapaneseKeyboardLayoutSymbolKeys = function(self)
         self.hotkeyController:addJapaneseKeyboardLayoutSymbolKeys()
     end
