@@ -14,6 +14,7 @@ HotkeyController.new = function(mainController)
     obj.panelLayoutView = mainController.panelLayoutView
 
     obj.allHotkeys = {}
+    obj.mainController = mainController
 
     obj.createHotkeys = function(self)
         Debugger.log("DEBUG: createHotkeys")
@@ -340,9 +341,7 @@ HotkeyController.new = function(mainController)
     end
 
     obj.finish = function(self)
-        self.panelLayoutView:hide()
-        self:disableHotkeys()
-        self.appWatchModel:unwatchAppliationDeactivated()
+        self.mainController:finish()
     end
 
     obj.checkTableHasTheValue = function(table, value)
