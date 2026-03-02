@@ -327,6 +327,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.1: CycleMode improvements
+  - Support focusing a window-assigned key during cycling (pressing an assigned key while cycling now focuses that window directly)
 - v2.5.0: Rename public API for consistency
   - `openOrClose()` → `togglePanel()`
   - `openOrSelectWithModifier()` → `cycleWithModifier()`
