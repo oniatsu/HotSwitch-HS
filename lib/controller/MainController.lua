@@ -10,6 +10,8 @@ local PanelLayoutView = require("hotswitch-hs/lib/view/PanelLayoutView")
 local HotkeyController = require("hotswitch-hs/lib/controller/HotkeyController")
 local FrameCulculator = require("hotswitch-hs/lib/common/FrameCulculator")
 
+local SHOW_PANEL_DELAY = 0.05
+
 local MainController = {}
 MainController.new = function()
     local obj = Controller.new()
@@ -93,7 +95,7 @@ MainController.new = function()
                 self.showPanelTimer:stop()
                 self.showPanelTimer = nil
             end
-            self.showPanelTimer = hs.timer.doAfter(0.1, function()
+            self.showPanelTimer = hs.timer.doAfter(SHOW_PANEL_DELAY, function()
                 self.showPanelTimer = nil
                 self.hotkeyController:enableHotkeys()
                 self.panelLayoutView:activateHammerspoonWindow()
