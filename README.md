@@ -327,6 +327,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.3: Updater fixes
+  - Fix false update notifications when local version is ahead of the latest GitHub tag (add semver comparison)
 - v2.5.2: Reduce cycle panel show delay
   - Reduce panel show delay from 0.1s to 0.05s for snappier response
 - v2.5.1: CycleMode improvements
