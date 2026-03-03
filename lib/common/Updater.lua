@@ -9,9 +9,24 @@ local APPLE_SCRIPT_FOR_UPDATE = 'do shell script "cd ~/.hammerspoon/hotswitch-hs
 
 local obj = {}
 
+local function parseVersion(version)
+    if version == nil then return nil, nil, nil end
+    local maj, min, pat = version:match("^v(%d+)%.(%d+)%.(%d+)")
+    return tonumber(maj), tonumber(min), tonumber(pat)
+end
+
 local function parseMajor(version)
-    if version == nil then return nil end
-    return tonumber(version:match("^v(%d+)%."))
+    local maj = select(1, parseVersion(version))
+    return maj
+end
+
+local function isRemoteNewer(remoteVersion, localVersion)
+    local rMaj, rMin, rPat = parseVersion(remoteVersion)
+    local lMaj, lMin, lPat = parseVersion(localVersion)
+    if rMaj == nil or lMaj == nil then return remoteVersion ~= localVersion end
+    if rMaj ~= lMaj then return rMaj > lMaj end
+    if rMin ~= lMin then return rMin > lMin end
+    return rPat > lPat
 end
 
 local function extractChangelog(readmeContent, version)
@@ -82,7 +97,7 @@ local showDialog = function(remoteVersion, localVersion, changelog)
     }):send()
 end
 
-local function doCheck()
+local function doCheck(force)
     -- Step 1: Get latest version from tags API
     hs.http.asyncGet(TAGS_URL, nil, function(status, body, header)
         if status ~= 200 then Debugger.log("Error: http request") return end
@@ -94,12 +109,13 @@ local function doCheck()
         local isSuccess, localVersion = hs.osascript.applescript(APPLE_SCRIPT_FOR_GIT_TAG)
         if not isSuccess then Debugger.log("Error: getting git tag") return end
 
-        if localVersion == remoteVersion then
+        Debugger.log("remote: " .. remoteVersion .. " / local: " .. localVersion)
+        if not isRemoteNewer(remoteVersion, localVersion) then
             Debugger.log("This HotSwitch-HS " .. localVersion .. " is latest.")
             return
         end
 
-        if PreferenceModel.autoUpdate.getLastCheckedVersion() == remoteVersion then
+        if not force and PreferenceModel.autoUpdate.getLastCheckedVersion() == remoteVersion then
             Debugger.log("The version update was already checked.")
             return
         end
@@ -134,7 +150,7 @@ end
 
 obj.checkNow = function()
     Debugger.log("start checking (forced)")
-    doCheck()
+    doCheck(true)
 end
 
 return obj
