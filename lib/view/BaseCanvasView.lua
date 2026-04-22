@@ -123,6 +123,12 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
 
     obj.showWindowInfo = function(self, orderedWindows)
         -- local t = TimeChecker.new()
+        local appWindowCount = {}
+        for i = 1, #orderedWindows do
+            local bundleID = orderedWindows[i]:application():bundleID()
+            appWindowCount[bundleID] = (appWindowCount[bundleID] or 0) + 1
+        end
+
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
 
@@ -131,7 +137,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
             -- t:diff("showEachKeyText")
             self:showEachAppIcon(i, window)
             -- t:diff("showEachAppIcon")
-            self:showEachWindowTitle(i, window)
+            self:showEachWindowTitle(i, window, appWindowCount)
             -- t:diff("showEachWindowTitle")
         end
 
@@ -246,13 +252,14 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         end
     end
 
-    obj.showEachWindowTitle = function(self, i, window)
+    obj.showEachWindowTitle = function(self, i, window, appWindowCount)
         -- local t = TimeChecker.new()
         local windowName
-        if window:application():bundleID() == "com.apple.finder" then
+        local bundleID = window:application():bundleID()
+        if bundleID == "com.apple.finder" then
             windowName = "Finder"
-        elseif window:application():bundleID() == "com.tinyspeck.slackmacgap" then
-            windowName = "Slack"
+        elseif appWindowCount[bundleID] == 1 then
+            windowName = window:application():name()
         else
             windowName = window:title() -- sometimes slow
             if windowName == "" then
