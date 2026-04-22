@@ -45,6 +45,15 @@ MVC pattern. Entry point `hotswitch-hs.lua` exposes the public API and wires up 
 - **Log level defaults to `"nothing"`** to avoid a macOS Ventura performance bug where printing many logs in Hammerspoon console causes slowness.
 - Settings are stored persistently by Hammerspoon's `hs.settings` — use `hotswitchHs.clearSettings()` to reset key registrations during development.
 
+## Release Workflow
+
+When making a releasable change:
+
+1. Add a changelog entry to `README.md` under `# ChangeLogs` (newest entry at the top).
+2. Commit `README.md` together with the changed source files in a single commit.
+3. Tag the commit with the new version: `git tag vX.Y.Z`
+4. Version bumping: increment the **patch** version by default (`v2.5.4` → `v2.5.5`) unless otherwise specified.
+
 ## Finder Window Limitations
 
 Showing all real Finder windows in the panel was attempted (commit `a2e893a`, then reverted) and could not be made to work reliably. The constraints are fundamental to how Hammerspoon and Finder interact:
