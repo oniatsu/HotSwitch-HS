@@ -334,6 +334,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.7: Fix selected row background width when using setPanelToAlwaysShowAppName()
+  - The selection highlight was always drawn at full panel width (`PANEL_W = 520`) instead of the narrowed width (`PANEL_W_APP_NAME_ONLY = 300`)
 - v2.5.6: Add option to always show app name in panel
   - `hotswitchHs.setPanelToAlwaysShowAppName()` — always displays the app name instead of the window title, and narrows the panel width
 - v2.5.5: Show app name for single-window apps
