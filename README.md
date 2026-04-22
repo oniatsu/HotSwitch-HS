@@ -329,8 +329,6 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 - v2.5.5: Show app name for single-window apps
   - Display the app name instead of the window title when the app has only one window in the panel
   - Remove Slack-specific hardcoded app name handling (now covered by the general single-window logic)
-- v2.5.4: Show fixed app name for Slack windows
-  - Display "Slack" as the window title for all Slack windows instead of the channel/conversation name
 - v2.5.3: Updater fixes
   - Fix false update notifications when local version is ahead of the latest GitHub tag (add semver comparison)
 - v2.5.2: Reduce cycle panel show delay
