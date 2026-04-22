@@ -251,6 +251,8 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         local windowName
         if window:application():bundleID() == "com.apple.finder" then
             windowName = "Finder"
+        elseif window:application():bundleID() == "com.tinyspeck.slackmacgap" then
+            windowName = "Slack"
         else
             windowName = window:title() -- sometimes slow
             if windowName == "" then

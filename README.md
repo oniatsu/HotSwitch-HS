@@ -326,6 +326,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.4: Show fixed app name for Slack windows
+  - Display "Slack" as the window title for all Slack windows instead of the channel/conversation name
 - v2.5.3: Updater fixes
   - Fix false update notifications when local version is ahead of the latest GitHub tag (add semver comparison)
 - v2.5.2: Reduce cycle panel show delay
