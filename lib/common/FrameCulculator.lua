@@ -13,14 +13,15 @@ local function calcBaseCanvasFrame(orderedWindows)
     else
         targetScreenFrame = hs.screen.primaryScreen():frame()
     end
-    local panelX = targetScreenFrame.x + targetScreenFrame.w / 2 - CanvasConstants.PANEL_W / 2
+    local effectivePanelW = CanvasConstants.getEffectivePanelW()
+    local panelX = targetScreenFrame.x + targetScreenFrame.w / 2 - effectivePanelW / 2
     local panelY = targetScreenFrame.y + targetScreenFrame.h / 2 - panelH / 2
 
     local baseCanvasFrame = {
         x = panelX,
         y = panelY,
         h = panelH,
-        w = CanvasConstants.PANEL_W
+        w = effectivePanelW
     }
     return baseCanvasFrame
 end

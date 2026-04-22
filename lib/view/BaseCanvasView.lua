@@ -115,7 +115,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
                 x = CanvasConstants.PADDING,
                 y = CanvasConstants.PADDING,
                 h = #orderedWindows * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
-                w = CanvasConstants.PANEL_W - CanvasConstants.PADDING * 2
+                w = CanvasConstants.getEffectivePanelW() - CanvasConstants.PADDING * 2
             },
             type = "rectangle"
         })
@@ -256,7 +256,9 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         -- local t = TimeChecker.new()
         local windowName
         local bundleID = window:application():bundleID()
-        if bundleID == "com.apple.finder" then
+        if CanvasConstants.alwaysShowAppName then
+            windowName = window:application():name()
+        elseif bundleID == "com.apple.finder" then
             windowName = "Finder"
         elseif appWindowCount[bundleID] == 1 then
             windowName = window:application():name()
@@ -264,12 +266,8 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
             windowName = window:title() -- sometimes slow
             if windowName == "" then
                 windowName = window:application():name()
-                -- t:diff("get application name")
             end
         end
-        -- alternative way
-        -- local windowName = window:application():name() -- more faster
-        -- t:diff("get window title")
 
         self.baseCanvas:appendElements({
             frame = {
@@ -277,7 +275,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
                     CanvasConstants.APP_ICON_W,
                 y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
                 h = CanvasConstants.ROW_HEIGHT,
-                w = CanvasConstants.PANEL_W - CanvasConstants.KEY_W - CanvasConstants.APP_ICON_W -
+                w = CanvasConstants.getEffectivePanelW() - CanvasConstants.KEY_W - CanvasConstants.APP_ICON_W -
                     CanvasConstants.PADDING * 6
             },
             text = hs.styledtext.new(windowName, {

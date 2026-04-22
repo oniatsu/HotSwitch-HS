@@ -9,6 +9,7 @@ local AppWatchModel = require("hotswitch-hs/lib/model/AppWatchModel")
 local PanelLayoutView = require("hotswitch-hs/lib/view/PanelLayoutView")
 local HotkeyController = require("hotswitch-hs/lib/controller/HotkeyController")
 local FrameCulculator = require("hotswitch-hs/lib/common/FrameCulculator")
+local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
 
 local SHOW_PANEL_DELAY = 0.05
 
@@ -294,6 +295,10 @@ MainController.new = function()
 
     obj.setPanelToAlwaysShowOnPrimaryScreen = function(self)
         FrameCulculator.setShowingOnMainScreen(false)
+    end
+
+    obj.setPanelToAlwaysShowAppName = function(self)
+        CanvasConstants.alwaysShowAppName = true
     end
 
     obj.addKeyModifier = function(self)

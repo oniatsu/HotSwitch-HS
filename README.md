@@ -246,6 +246,14 @@ hotswitchHs.setPanelToAlwaysShowOnPrimaryScreen()
 
 By default the panel appears on the screen containing the currently focused window. This forces it to the primary screen instead.
 
+## Always show app name (compact panel)
+
+```lua
+hotswitchHs.setPanelToAlwaysShowAppName()
+```
+
+By default the panel shows the window title (or app name when an app has only one window). This always shows the app name instead, and narrows the panel width accordingly.
+
 ## Log level
 
 ```lua
@@ -326,6 +334,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.6: Add option to always show app name in panel
+  - `hotswitchHs.setPanelToAlwaysShowAppName()` — always displays the app name instead of the window title, and narrows the panel width
 - v2.5.5: Show app name for single-window apps
   - Display the app name instead of the window title when the app has only one window in the panel
   - Remove Slack-specific hardcoded app name handling (now covered by the general single-window logic)

@@ -2,6 +2,7 @@ local CanvasConstants = {
     FONT_SIZE = 17,
 
     PANEL_W = 520,
+    PANEL_W_APP_NAME_ONLY = 300,
 
     PADDING = 10,
     KEY_W = 24,
@@ -22,7 +23,17 @@ local CanvasConstants = {
     TOAST_H = 46,
     TOAST_ALPHA = 0.8,
     TOAST_FONT_SIZE = 20,
+
+    alwaysShowAppName = false,
 }
+
+function CanvasConstants.getEffectivePanelW()
+    if CanvasConstants.alwaysShowAppName then
+        return CanvasConstants.PANEL_W_APP_NAME_ONLY
+    else
+        return CanvasConstants.PANEL_W
+    end
+end
 
 -- for debug
 -- local BASE_ALPHA = 0.2
