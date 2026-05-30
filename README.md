@@ -334,6 +334,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.8: Filter out floating tool palettes (e.g. Clip Studio Paint panels) from window list
+  - Windows with subrole `AXDialog` and `isStandard=false` are now excluded; preferences/settings dialogs (`AXDialog` + `isStandard=true`) are still shown
 - v2.5.7: Fix selected row background width when using setPanelToAlwaysShowAppName()
   - The selection highlight was always drawn at full panel width (`PANEL_W = 520`) instead of the narrowed width (`PANEL_W_APP_NAME_ONLY = 300`)
 - v2.5.6: Add option to always show app name in panel

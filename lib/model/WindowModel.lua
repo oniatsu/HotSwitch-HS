@@ -86,30 +86,12 @@ WindowModel.new = function()
         local cleanedOrderedWindows = {}
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
-            -- local role = window:role()
             local subrole = window:subrole()
-            -- local id = window:id()
-            -- local isVisible = window:isVisible()
-            -- local isStandard = window:isStandard()
-            -- Debugger.log(window:application():name() .. " | " .. role ..
-            --     " : " ..
-            --     subrole ..
-            --     " | " .. id .. " | " .. tostring(isVisible) .. " | " .. tostring(isStandard) .. " | " .. tabCount)
-            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" and subrole ~= "AXFloatingWindow" then
+            -- AXDialog + non-standard = floating tool palette (e.g. Clip Studio Paint panels); exclude from switcher.
+            -- AXDialog + standard = preferences/settings window (e.g. iTerm2 Settings); keep.
+            local isFloatingToolPanel = subrole == "AXDialog" and not window:isStandard()
+            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" and subrole ~= "AXFloatingWindow" and not isFloatingToolPanel then
                 table.insert(cleanedOrderedWindows, window)
-
-                -- not work
-                -- local applicationName = window:application():name()
-                -- if applicationName == "Finder" then
-                --     local tabCount = window:tabCount()
-                --     Debugger.log(applicationName .. " | " .. tabCount)
-                --     table.insert(cleanedOrderedWindows, window)
-                --     if tabCount > 0 then
-                --         table.insert(cleanedOrderedWindows, window)
-                --     end
-                -- else
-                --     table.insert(cleanedOrderedWindows, window)
-                -- end
             end
         end
         return cleanedOrderedWindows
