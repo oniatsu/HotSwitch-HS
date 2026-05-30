@@ -95,7 +95,7 @@ WindowModel.new = function()
             --     " : " ..
             --     subrole ..
             --     " | " .. id .. " | " .. tostring(isVisible) .. " | " .. tostring(isStandard) .. " | " .. tabCount)
-            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" then
+            if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" and subrole ~= "AXFloatingWindow" then
                 table.insert(cleanedOrderedWindows, window)
 
                 -- not work
