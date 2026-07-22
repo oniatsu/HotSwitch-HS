@@ -25,7 +25,13 @@ local CanvasConstants = {
     TOAST_FONT_SIZE = 20,
 
     alwaysShowAppName = false,
+
+    customAppTitles = {},
 }
+
+function CanvasConstants.setCustomAppTitle(bundleID, title)
+    CanvasConstants.customAppTitles[bundleID] = title
+end
 
 function CanvasConstants.getEffectivePanelW()
     if CanvasConstants.alwaysShowAppName then

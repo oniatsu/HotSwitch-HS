@@ -256,7 +256,9 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         -- local t = TimeChecker.new()
         local windowName
         local bundleID = window:application():bundleID()
-        if CanvasConstants.alwaysShowAppName then
+        if CanvasConstants.customAppTitles[bundleID] then
+            windowName = CanvasConstants.customAppTitles[bundleID]
+        elseif CanvasConstants.alwaysShowAppName then
             windowName = window:application():name()
         elseif bundleID == "com.apple.finder" then
             windowName = "Finder"

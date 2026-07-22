@@ -22,6 +22,7 @@ return {
     addJapaneseKeyboardLayoutSymbolKeys = function() mainController:addJapaneseKeyboardLayoutSymbolKeys() end,
     setPanelToAlwaysShowOnPrimaryScreen = function() mainController:setPanelToAlwaysShowOnPrimaryScreen() end,
     setPanelToAlwaysShowAppName = function() mainController:setPanelToAlwaysShowAppName() end,
+    setCustomAppTitle = function(bundleID, title) mainController:setCustomAppTitle(bundleID, title) end,
     clearSettings = function() mainController:clearSettings() end,
     clearPreferences = function() PreferenceModel.clearPreferences() end,
     addKeyModifier = function() mainController:addKeyModifier() end,

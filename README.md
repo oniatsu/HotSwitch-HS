@@ -254,6 +254,14 @@ hotswitchHs.setPanelToAlwaysShowAppName()
 
 By default the panel shows the window title (or app name when an app has only one window). This always shows the app name instead, and narrows the panel width accordingly.
 
+## Custom title for a specific app
+
+```lua
+hotswitchHs.setCustomAppTitle("com.apple.finder", "My Finder")
+```
+
+Overrides the displayed title for windows belonging to the given bundle ID. Call multiple times to set titles for multiple apps. Takes priority over `setPanelToAlwaysShowAppName()` and the default window title/app name logic for that bundle ID.
+
 ## Log level
 
 ```lua
@@ -334,6 +342,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.9: Add option to set a custom display title per bundle ID
+  - `hotswitchHs.setCustomAppTitle(bundleID, title)` — overrides the displayed title for windows of a specific app, matched by bundle ID
 - v2.5.8: Filter out floating tool palettes (e.g. Clip Studio Paint panels) from window list
   - Windows with subrole `AXDialog` and `isStandard=false` are now excluded; preferences/settings dialogs (`AXDialog` + `isStandard=true`) are still shown
 - v2.5.7: Fix selected row background width when using setPanelToAlwaysShowAppName()

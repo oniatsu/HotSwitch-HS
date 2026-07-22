@@ -301,6 +301,10 @@ MainController.new = function()
         CanvasConstants.alwaysShowAppName = true
     end
 
+    obj.setCustomAppTitle = function(self, bundleID, title)
+        CanvasConstants.setCustomAppTitle(bundleID, title)
+    end
+
     obj.addKeyModifier = function(self)
         self.hotkeyController:addKeyModifier()
     end
