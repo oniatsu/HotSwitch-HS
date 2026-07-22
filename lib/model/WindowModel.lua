@@ -14,7 +14,6 @@ WindowModel.new = function()
 
     obj.cachedOrderedWindows = nil
     obj.previousWindow = nil
-    obj.lastFinderWindowId = 0
 
     obj.windowFilter = hs.window.filter.defaultCurrentSpace
     -- obj.windowFilter = hs.window.filter.default
@@ -97,17 +96,54 @@ WindowModel.new = function()
         return cleanedOrderedWindows
     end
 
+    -- windowFilter's windowVisible-subscription cache can retain stale/phantom Finder
+    -- window entries (Finder doesn't always fire proper AX notifications on tab merges).
+    -- A tab group itself is a single real AXWindow (its tabs are children of an internal
+    -- AXTabGroup, not separate windows), so a fresh accessibility query of the app's
+    -- windows gives the true, currently-correct window list. Use that instead of trying
+    -- to dedup whatever the filter cache handed us.
+    --
+    -- Deliberately not cached: caching this (tried and verified) reintroduces the same
+    -- staleness problem at a different layer. This query is scoped to a single already-
+    -- identified app (not a system-wide enumeration across all apps, which is why
+    -- windowFilter itself needs the subscribe() workaround), so re-querying every call
+    -- is cheap enough.
+    obj.getFreshFinderWindows = function()
+        local app = hs.application.get(FINDER_BUNDLE_ID)
+        if app == nil then
+            return {}
+        end
+
+        local freshWindows = {}
+        for _, window in ipairs(app:allWindows()) do
+            if window:subrole() == "AXStandardWindow" then
+                table.insert(freshWindows, window)
+            end
+        end
+
+        -- Sort by id, not by focus/AXMain: auto-generated keys are assigned by array
+        -- position (see KeyStatusModel), so this order must stay stable regardless of
+        -- which Finder window currently has focus, or the same key would end up
+        -- pointing at a different window every time focus changes.
+        table.sort(freshWindows, function(a, b)
+            return a:id() < b:id()
+        end)
+
+        return freshWindows
+    end
+
     obj.removeUnusableFinderWindows = function(self, orderedWindows)
         local cleanedOrderedWindows = {}
-        local finderWindowsCount = 0
+        local insertedFreshFinderWindows = false
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
             local bundleID = window:application():bundleID()
             if bundleID == FINDER_BUNDLE_ID then
-                finderWindowsCount = finderWindowsCount + 1
-                if finderWindowsCount == 1 then
-                    self.lastFinderWindowId = window:id()
-                    table.insert(cleanedOrderedWindows, window)
+                if not insertedFreshFinderWindows then
+                    insertedFreshFinderWindows = true
+                    for _, freshWindow in ipairs(self.getFreshFinderWindows()) do
+                        table.insert(cleanedOrderedWindows, freshWindow)
+                    end
                 end
             else
                 table.insert(cleanedOrderedWindows, window)
@@ -117,22 +153,7 @@ WindowModel.new = function()
     end
 
     obj.removeUnusableFinderWindowsForCreatedOrderedWindows = function(self, orderedWindows)
-        local cleanedOrderedWindows = {}
-        local finderWindowsCount = 0
-        for i = 1, #orderedWindows do
-            local window = orderedWindows[i]
-            local bundleID = window:application():bundleID()
-            if bundleID == FINDER_BUNDLE_ID then
-                local windowId = window:id()
-                if finderWindowsCount == 0 and windowId == self.lastFinderWindowId then
-                    table.insert(cleanedOrderedWindows, window)
-                    finderWindowsCount = finderWindowsCount + 1
-                end
-            else
-                table.insert(cleanedOrderedWindows, window)
-            end
-        end
-        return cleanedOrderedWindows
+        return self:removeUnusableFinderWindows(orderedWindows)
     end
 
     obj.focusPreviousWindowForCancel = function(self)
@@ -154,10 +175,12 @@ WindowModel.new = function()
 
     -- TODO: window:focus() don't work correctly, when a application has 2 windows and each windows are on different screen.
     obj.focusWindow = function(self, targetWindow)
-        -- if Finder window should be focused, then focus Finder application not but the specific window.
-        -- that is because Finder window is not created collectively by HammerSpoon.
+        -- Finder: use raise() + activate(true) instead of focus(). focus() calls becomeMain()
+        -- internally, which makes Finder jump to the first tab of the window's tab group
+        -- instead of preserving the tab the user actually selected.
         if targetWindow:application():bundleID() == FINDER_BUNDLE_ID then
-            hs.application.launchOrFocusByBundleID(FINDER_BUNDLE_ID)
+            targetWindow:raise()
+            targetWindow:application():activate(true)
             return
         end
 

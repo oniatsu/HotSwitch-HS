@@ -342,6 +342,10 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.10: Fix Finder window handling to show real windows instead of tabs
+  - Finder tabs merged into one window were being listed as separate panel entries due to a stale `hs.window.filter` cache; now queries Finder's windows fresh via the accessibility API instead
+  - Multiple real Finder windows are now shown individually (previously only the most recently focused one was shown)
+  - Focusing a Finder window now uses `raise()` + `activate(true)` instead of `launchOrFocusByBundleID`, so it targets the correct window instead of just bringing Finder forward
 - v2.5.9: Add option to set a custom display title per bundle ID
   - `hotswitchHs.setCustomAppTitle(bundleID, title)` — overrides the displayed title for windows of a specific app, matched by bundle ID
 - v2.5.8: Filter out floating tool palettes (e.g. Clip Studio Paint panels) from window list
