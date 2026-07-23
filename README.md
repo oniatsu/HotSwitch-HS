@@ -342,6 +342,9 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.12: Fix preferences/settings dialogs (e.g. iTerm2 Settings) being hidden and unfocusable
+  - The floating-tool-palette filter relied on `window:isStandard()`, which is always `false` for `AXDialog` windows by definition — this silently excluded every settings/preferences dialog in every app, not just tool palettes. Now uses an empty title to detect floating tool palettes instead
+  - Focusing a non-standard window (`AXDialog`/`AXFloatingWindow`) directly from a different app didn't work — the `raise()` + `activate(true)` workaround only ran when switching within the same app. It's now applied regardless of which app currently has focus
 - v2.5.11: Fix crash when a window's app has no bundle ID
   - `BaseCanvasView:showWindowInfo` crashed with `table index is nil` when `application:bundleID()` returned nil for a window; now falls back to an `"unknown:<appName>"` key that can't collide with a real bundle ID
 - v2.5.10: Fix Finder window handling to show real windows instead of tabs

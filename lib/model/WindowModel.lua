@@ -86,9 +86,12 @@ WindowModel.new = function()
         for i = 1, #orderedWindows do
             local window = orderedWindows[i]
             local subrole = window:subrole()
-            -- AXDialog + non-standard = floating tool palette (e.g. Clip Studio Paint panels); exclude from switcher.
-            -- AXDialog + standard = preferences/settings window (e.g. iTerm2 Settings); keep.
-            local isFloatingToolPanel = subrole == "AXDialog" and not window:isStandard()
+            -- AXDialog windows are never "standard" (hs.window:isStandard() is false for any
+            -- non-AXStandardWindow subrole by definition), so isStandard() can't distinguish a
+            -- floating tool palette (e.g. Clip Studio Paint docked panels) from a real dialog
+            -- (e.g. iTerm2 Settings). Use title instead: tool palettes are typically untitled,
+            -- while real dialogs/settings windows have a title.
+            local isFloatingToolPanel = subrole == "AXDialog" and window:title() == ""
             if subrole ~= "AXUnknown" and subrole ~= "AXSystemDialog" and subrole ~= "" and subrole ~= "AXFloatingWindow" and not isFloatingToolPanel then
                 table.insert(cleanedOrderedWindows, window)
             end
@@ -206,24 +209,29 @@ WindowModel.new = function()
             -- This cannot be prevented as long as it raised a window.
             -- However, this situation is very limited, so it is acceptable.
 
+            -- Non-standard windows (e.g. Settings/Preferences panels with subrole AXDialog or AXFloating)
+            -- don't respond correctly to focus() because becomeMain() causes the app to redirect focus
+            -- to its main window. Use raise() + activate(true) instead to avoid this side-effect.
+            -- This must be checked before the same-app/cross-app branching below: it applies
+            -- regardless of which app currently has focus, not just when switching within the
+            -- same app (previously this check only ran in that one branch, so focusing a dialog
+            -- directly from a different app fell through to the buggy focus() path below).
+            if targetWindow:subrole() ~= "AXStandardWindow" then
+                targetWindow:raise()
+                targetAppliation:activate(true)
+                return
+            end
+
             local cachedWindows = self:getCachedOrderedWindowsOrFetch()
             local previousWindow = cachedWindows[1]
 
             if previousWindow:application():pid() == targetAppliation:pid() then
                 if previousWindow:id() ~= targetWindow:id() then
-                    -- Non-standard windows (e.g. Settings/Preferences panels with subrole AXDialog or AXFloating)
-                    -- don't respond correctly to focus() because becomeMain() causes the app to redirect focus
-                    -- to its main window. Use raise() + activate(true) instead to avoid this side-effect.
-                    if targetWindow:subrole() ~= "AXStandardWindow" then
-                        targetWindow:raise()
-                        targetAppliation:activate(true)
-                    else
-                        -- First focus another window of the same application, then focus the target window
+                    -- First focus another window of the same application, then focus the target window
+                    targetWindow:focus()
+                    hs.timer.doAfter(0.01, function()
                         targetWindow:focus()
-                        hs.timer.doAfter(0.01, function()
-                            targetWindow:focus()
-                        end)
-                    end
+                    end)
                 else
                     -- Find the first window on a different screen to raise
                     local targetWindowScreenId = targetWindow:screen():id()
