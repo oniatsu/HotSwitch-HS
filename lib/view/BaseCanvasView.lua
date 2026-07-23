@@ -6,6 +6,14 @@ local View = require("hotswitch-hs/lib/view/View")
 local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
 local FrameCulculator = require("hotswitch-hs/lib/common/FrameCulculator")
 
+-- application:bundleID() can return nil (e.g. some helper/background apps have no bundle ID),
+-- and a nil key would crash a table write (appWindowCount[bundleID] = ...) or silently
+-- lump unrelated apps together. Fall back to an "unknown:<appName>" key, which can never
+-- collide with a real bundle ID since those are always reverse-DNS formatted without ":".
+local getBundleIDOrFallback = function(application)
+    return application:bundleID() or ("unknown:" .. application:name())
+end
+
 local BaseCanvasView = {}
 BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     local obj = View.new()
@@ -125,7 +133,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         -- local t = TimeChecker.new()
         local appWindowCount = {}
         for i = 1, #orderedWindows do
-            local bundleID = orderedWindows[i]:application():bundleID()
+            local bundleID = getBundleIDOrFallback(orderedWindows[i]:application())
             appWindowCount[bundleID] = (appWindowCount[bundleID] or 0) + 1
         end
 
@@ -255,7 +263,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     obj.showEachWindowTitle = function(self, i, window, appWindowCount)
         -- local t = TimeChecker.new()
         local windowName
-        local bundleID = window:application():bundleID()
+        local bundleID = getBundleIDOrFallback(window:application())
         if CanvasConstants.customAppTitles[bundleID] then
             windowName = CanvasConstants.customAppTitles[bundleID]
         elseif CanvasConstants.alwaysShowAppName then

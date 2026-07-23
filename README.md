@@ -342,6 +342,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.11: Fix crash when a window's app has no bundle ID
+  - `BaseCanvasView:showWindowInfo` crashed with `table index is nil` when `application:bundleID()` returned nil for a window; now falls back to an `"unknown:<appName>"` key that can't collide with a real bundle ID
 - v2.5.10: Fix Finder window handling to show real windows instead of tabs
   - Finder tabs merged into one window were being listed as separate panel entries due to a stale `hs.window.filter` cache; now queries Finder's windows fresh via the accessibility API instead
   - Multiple real Finder windows are now shown individually (previously only the most recently focused one was shown)
