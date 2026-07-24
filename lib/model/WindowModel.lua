@@ -190,6 +190,11 @@ WindowModel.new = function()
         local targetAppliation = targetWindow:application()
         local applicationMainWindow = targetAppliation:mainWindow()
         if applicationMainWindow == nil then
+            -- Some windows never become AXMain, so application:mainWindow() returns nil
+            -- for them. Fall back to a direct raise() + activate() instead of silently
+            -- doing nothing.
+            targetWindow:raise()
+            targetAppliation:activate(true)
             return
         end
 

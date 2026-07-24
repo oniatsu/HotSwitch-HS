@@ -342,6 +342,8 @@ rm -rf ~/.hammerspoon/hotswitch-hs
 
 # ChangeLogs
 
+- v2.5.13: Fix focus failing for windows with no AXMain window
+  - `WindowModel.focusWindow()` returned early without focusing anything when `application:mainWindow()` was nil. Some windows never become AXMain, so they appeared in the panel but could not be focused. Now falls back to `raise()` + `activate(true)` in that case
 - v2.5.12: Fix preferences/settings dialogs (e.g. iTerm2 Settings) being hidden and unfocusable
   - The floating-tool-palette filter relied on `window:isStandard()`, which is always `false` for `AXDialog` windows by definition — this silently excluded every settings/preferences dialog in every app, not just tool palettes. Now uses an empty title to detect floating tool palettes instead
   - Focusing a non-standard window (`AXDialog`/`AXFloatingWindow`) directly from a different app didn't work — the `raise()` + `activate(true)` workaround only ran when switching within the same app. It's now applied regardless of which app currently has focus
